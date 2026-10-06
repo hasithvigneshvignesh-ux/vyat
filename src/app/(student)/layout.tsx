@@ -1,7 +1,7 @@
 import { redirect } from 'next/navigation';
 import { createClient } from '@/lib/supabase/server';
 import { cookies } from 'next/headers';
-import StudentSidebar from '@/components/layout/StudentSidebar';
+import SidebarShell from '@/components/layout/SidebarShell';
 
 export default async function StudentLayout({
   children,
@@ -15,12 +15,9 @@ export default async function StudentLayout({
 
   if (demoRole === 'student') {
     return (
-      <div className="sidebar-layout">
-        <StudentSidebar userName={demoUser?.full_name || 'Demo Student'} />
-        <main className="main-content">
-          {children}
-        </main>
-      </div>
+      <SidebarShell userName={demoUser?.full_name || 'Demo Student'}>
+        {children}
+      </SidebarShell>
     );
   }
 
@@ -46,11 +43,8 @@ export default async function StudentLayout({
   }
 
   return (
-    <div className="sidebar-layout">
-      <StudentSidebar userName={profile.full_name} />
-      <main className="main-content">
-        {children}
-      </main>
-    </div>
+    <SidebarShell userName={profile.full_name}>
+      {children}
+    </SidebarShell>
   );
 }

@@ -22,6 +22,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     if (saved) {
       setThemeState(saved);
       document.documentElement.setAttribute('data-theme', saved);
+      document.documentElement.classList.toggle('dark', saved === 'dark');
+    } else {
+      document.documentElement.classList.add('dark');
     }
   }, []);
 
@@ -30,6 +33,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     if (typeof window !== 'undefined') {
       localStorage.setItem('vyat-theme', newTheme);
       document.documentElement.setAttribute('data-theme', newTheme);
+      document.documentElement.classList.toggle('dark', newTheme === 'dark');
     }
   };
 

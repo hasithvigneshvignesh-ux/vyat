@@ -46,7 +46,7 @@ export default function SkillDetailClient({
   const nextLesson = lessons.find(l => !isLessonCompleted(l.id));
 
   return (
-    <div className="page-container space-y-6 animate-fade-in">
+    <div className="page-container flex flex-col gap-8 animate-fade-in">
       {/* Back button */}
       <Link href="/skills">
         <Button variant="ghost" size="sm" icon={<ArrowLeft size={16} />}>
@@ -54,75 +54,113 @@ export default function SkillDetailClient({
         </Button>
       </Link>
 
-      {/* Skill header */}
-      <Card className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/5 to-violet-600/5 pointer-events-none" />
-        <div className="relative">
-          <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
-            <div>
-              <p className="text-xs font-medium mb-1" style={{ color: 'var(--text-tertiary)' }}>
-                {skill.course?.branch?.name} → {skill.course?.name}
-              </p>
-              <h1 className="text-2xl font-bold mb-2" style={{ color: 'var(--text-primary)' }}>
-                {skill.name}
-              </h1>
-              <p className="text-sm mb-4 max-w-xl" style={{ color: 'var(--text-secondary)' }}>
-                {skill.description || 'Master this skill through structured lessons and hands-on practice.'}
-              </p>
-              <div className="flex flex-wrap gap-2">
-                {access && (
-                  <Badge variant={isCompleted ? 'success' : 'info'}>
-                    {isCompleted ? <><CheckCircle2 size={12} /> Completed</> : 'Active'}
-                  </Badge>
-                )}
-                {skill.difficulty && (
-                  <Badge variant={skill.difficulty === 'beginner' ? 'success' : skill.difficulty === 'intermediate' ? 'warning' : 'error'}>
-                    {skill.difficulty}
-                  </Badge>
-                )}
-                {skill.estimated_hours && (
-                  <Badge><Clock size={12} /> {skill.estimated_hours}h estimated</Badge>
-                )}
-                <Badge><BookOpen size={12} /> {lessons.length} lessons</Badge>
-                <Badge><HelpCircle size={12} /> {questions.length} questions</Badge>
-              </div>
+      {/* ── 1. PREMIUM HERO CARD (Matched Course Detail Style) ── */}
+      <div className="rounded-[32px] p-6 sm:p-8 md:p-10 shadow-[0_12px_40px_rgba(37,99,235,0.15)] relative overflow-hidden flex flex-col bg-gradient-to-br from-[#2563eb] via-[#7c3aed] to-[#d946ef] text-white mb-2">
+        
+        {/* Subtle background layering pattern */}
+        <div className="absolute top-0 right-0 w-full h-full overflow-hidden pointer-events-none opacity-20">
+          <div className="absolute -top-32 -right-32 w-[32rem] h-[32rem] rounded-full bg-white/20 blur-3xl"></div>
+          <div className="absolute -bottom-20 left-20 w-64 h-64 rounded-full bg-blue-300/30 blur-2xl"></div>
+        </div>
+
+        <div className="relative z-10 flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6 m-6 sm:m-8" style={{ marginTop: '24px', marginLeft: '24px', marginBottom: '24px' }}>
+          
+          <div className="flex flex-col gap-6 max-w-5xl">
+            {/* Badges */}
+            <div className="flex flex-wrap items-center gap-3">
+              <span className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-black tracking-widest uppercase bg-white/20 text-white border border-white/30 backdrop-blur-md shadow-sm">
+                <span className="text-sm leading-none">{skill.course?.branch?.icon || '💻'}</span>
+                {skill.course?.branch?.name || 'Curriculum'} → {skill.course?.name || 'Course'}
+              </span>
+              
+              {access && (
+                <span className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-black tracking-widest uppercase text-white border backdrop-blur-md shadow-sm ${
+                  isCompleted ? 'bg-emerald-500/90 border-emerald-400/50' : 'bg-blue-500/90 border-blue-400/50'
+                }`}>
+                  {isCompleted ? <><CheckCircle2 size={14} strokeWidth={2.5} /> Completed</> : 'Active'}
+                </span>
+              )}
+
+              {skill.difficulty && (
+                <span className={`inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-black tracking-widest uppercase text-white border backdrop-blur-md shadow-sm ${
+                  skill.difficulty === 'beginner' ? 'bg-emerald-500/90 border-emerald-400/50' : 
+                  skill.difficulty === 'intermediate' ? 'bg-amber-500/90 border-amber-400/50' : 
+                  'bg-red-500/90 border-red-400/50'
+                }`}>
+                  {skill.difficulty}
+                </span>
+              )}
             </div>
 
-            {/* Certificate status */}
-            {certificate && (
-              <div className="text-right">
-                {certificate.status === 'unlocked' ? (
-                  <div className="inline-flex flex-col items-center gap-2 p-4 rounded-xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 border border-amber-500/20">
-                    <Award size={24} className="text-amber-400" />
-                    <p className="text-sm font-medium" style={{ color: 'var(--text-primary)' }}>Certificate Available</p>
-                    <Button size="sm" variant="success" icon={<Award size={14} />}>
-                      Download
-                    </Button>
-                  </div>
-                ) : (
-                  <div className="inline-flex flex-col items-center gap-2 p-4 rounded-xl" style={{ backgroundColor: 'var(--bg-tertiary)' }}>
-                    <Lock size={24} style={{ color: 'var(--text-muted)' }} />
-                    <p className="text-xs" style={{ color: 'var(--text-muted)' }}>Complete to unlock</p>
-                  </div>
-                )}
+            {/* Title */}
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-5xl xl:text-6xl font-extrabold tracking-tight leading-[1.1] drop-shadow-md">
+              {skill.name}
+            </h1>
+
+            {/* Description */}
+            <p className="text-lg sm:text-xl text-white/90 leading-relaxed max-w-3xl font-medium mt-1">
+              {skill.description || 'Master this skill through structured lessons and hands-on practice.'}
+            </p>
+
+            {/* Stats Row */}
+            <div className="flex flex-wrap items-center gap-4 mt-2 text-sm font-bold text-slate-800">
+              <div className="flex items-center gap-2.5 bg-white px-5 py-2.5 rounded-2xl shadow-sm">
+                <BookOpen size={18} className="text-[#3b82f6]" strokeWidth={2.5} />
+                <span>{lessons.length} Lessons</span>
+              </div>
+              <div className="flex items-center gap-2.5 bg-white px-5 py-2.5 rounded-2xl shadow-sm">
+                <HelpCircle size={18} className="text-[#8b5cf6]" strokeWidth={2.5} />
+                <span>{questions.length} Questions</span>
+              </div>
+              {skill.estimated_hours && (
+                <div className="flex items-center gap-2.5 bg-white px-5 py-2.5 rounded-2xl shadow-sm">
+                  <Clock size={18} className="text-[#ec4899]" strokeWidth={2.5} />
+                  <span>{skill.estimated_hours} Hours</span>
+                </div>
+              )}
+            </div>
+
+            {/* Progress */}
+            {hasAccess && (
+              <div className="mt-4 max-w-2xl">
+                <div className="flex items-center justify-between text-sm mb-3">
+                  <span className="font-bold text-white/90 uppercase tracking-wider text-xs">Progress</span>
+                  <span className="font-bold text-white">
+                    {completedLessons}/{lessons.length} lessons · {progress}%
+                  </span>
+                </div>
+                <div className="w-full bg-white/20 rounded-full h-3 backdrop-blur-sm overflow-hidden">
+                  <div 
+                    className={`h-3 rounded-full transition-all duration-500 ${isCompleted ? 'bg-emerald-400' : 'bg-white'}`}
+                    style={{ width: `${progress}%` }}
+                  ></div>
+                </div>
               </div>
             )}
           </div>
 
-          {/* Progress */}
-          {hasAccess && (
-            <div className="mt-6">
-              <div className="flex items-center justify-between text-sm mb-2">
-                <span style={{ color: 'var(--text-secondary)' }}>Progress</span>
-                <span className="font-semibold" style={{ color: 'var(--text-primary)' }}>
-                  {completedLessons}/{lessons.length} lessons · {progress}%
-                </span>
-              </div>
-              <ProgressBar value={progress} size="lg" color={isCompleted ? 'success' : 'brand'} />
+          {/* Certificate status */}
+          {certificate && (
+            <div className="text-right shrink-0">
+              {certificate.status === 'unlocked' ? (
+                <div className="inline-flex flex-col items-center gap-3 p-5 rounded-2xl bg-white/10 border border-white/20 backdrop-blur-md">
+                  <Award size={32} className="text-amber-300 drop-shadow-md" />
+                  <p className="text-sm font-bold text-white">Certificate Available</p>
+                  <button className="px-4 py-2 bg-amber-500 hover:bg-amber-400 text-white rounded-xl font-bold shadow-sm transition-colors flex items-center gap-2">
+                    <Award size={16} /> Download
+                  </button>
+                </div>
+              ) : (
+                <div className="inline-flex flex-col items-center gap-2 p-5 rounded-2xl bg-black/10 border border-white/10 backdrop-blur-md">
+                  <Lock size={28} className="text-white/50" />
+                  <p className="text-xs font-medium text-white/70">Complete to unlock</p>
+                </div>
+              )}
             </div>
           )}
+
         </div>
-      </Card>
+      </div>
 
       {/* Locked state */}
       {!hasAccess && (
@@ -144,13 +182,13 @@ export default function SkillDetailClient({
 
       {/* Lessons list */}
       {hasAccess && (
-        <div>
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-lg font-semibold" style={{ color: 'var(--text-primary)' }}>
+        <div className="bg-white dark:bg-[#14141e] border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
               Lessons
             </h2>
             {nextLesson && (
-              <Link href={`/skills/${skill.id}/lessons/${nextLesson.id}`}>
+              <Link href={`/skills/${skill.id}/lessons/${nextLesson.id}`} className="shrink-0">
                 <Button size="sm" icon={<PlayCircle size={14} />}>
                   {completedLessons > 0 ? 'Continue' : 'Start Learning'}
                 </Button>
@@ -158,7 +196,7 @@ export default function SkillDetailClient({
             )}
           </div>
 
-          <div className="space-y-2">
+          <div className="flex flex-col gap-4">
             {lessons.map((lesson, idx) => {
               const completed = isLessonCompleted(lesson.id);
               const started = isLessonStarted(lesson.id);
@@ -167,57 +205,50 @@ export default function SkillDetailClient({
                 <Link key={lesson.id} href={`/skills/${skill.id}/lessons/${lesson.id}`}>
                   <div
                     className={`
-                      flex items-center gap-4 p-4 rounded-xl border transition-all
-                      hover:bg-[var(--bg-card-hover)]
-                      ${completed ? 'border-emerald-500/20' : started ? 'border-blue-500/20' : ''}
+                      flex items-center gap-4 p-4 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#1a1a24] shadow-sm hover:shadow-md transition-all
+                      ${completed ? 'border-emerald-200 dark:border-emerald-800/30' : started ? 'border-blue-200 dark:border-blue-800/30' : 'hover:border-indigo-300 dark:hover:border-indigo-700'}
                     `}
-                    style={{
-                      backgroundColor: 'var(--bg-card)',
-                      borderColor: completed ? undefined : started ? undefined : 'var(--border-secondary)',
-                    }}
                   >
                     {/* Lesson number */}
                     <div className={`
-                      w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 text-sm font-bold
+                      w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 text-sm font-bold
                       ${completed
-                        ? 'bg-emerald-500/10 text-emerald-400'
+                        ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400'
                         : started
-                        ? 'bg-blue-500/10 text-blue-400'
-                        : ''
+                        ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400'
+                        : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400'
                       }
                     `}
-                    style={!completed && !started ? {
-                      backgroundColor: 'var(--bg-tertiary)',
-                      color: 'var(--text-muted)',
-                    } : undefined}
                     >
                       {completed ? <CheckCircle2 size={18} /> : idx + 1}
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium truncate" style={{ color: 'var(--text-primary)' }}>
+                      <p className="text-base font-bold truncate text-gray-900 dark:text-gray-100">
                         {lesson.title}
                       </p>
-                      <div className="flex items-center gap-3 mt-0.5 text-xs" style={{ color: 'var(--text-muted)' }}>
+                      <div className="flex items-center gap-3 mt-1.5 text-xs text-gray-500 dark:text-gray-400 font-medium">
                         {lesson.duration_minutes && (
-                          <span className="flex items-center gap-1">
-                            <Clock size={10} /> {lesson.duration_minutes} min
+                          <span className="flex items-center gap-1.5">
+                            <Clock size={12} className="text-pink-500" /> {lesson.duration_minutes} min
                           </span>
                         )}
                         {lesson.video_path && (
-                          <span className="flex items-center gap-1">
-                            <PlayCircle size={10} /> Video
+                          <span className="flex items-center gap-1.5">
+                            <PlayCircle size={12} className="text-indigo-500" /> Video
                           </span>
                         )}
                         {lesson.notes_content && (
-                          <span className="flex items-center gap-1">
-                            <FileText size={10} /> Notes
+                          <span className="flex items-center gap-1.5">
+                            <FileText size={12} className="text-amber-500" /> Notes
                           </span>
                         )}
                       </div>
                     </div>
 
-                    <ArrowRight size={16} style={{ color: 'var(--text-muted)' }} />
+                    <div className="flex-shrink-0 pl-2">
+                       <ArrowRight size={18} className="text-gray-400 group-hover:text-indigo-600 transition-colors" />
+                    </div>
                   </div>
                 </Link>
               );

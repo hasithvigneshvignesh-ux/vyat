@@ -19,12 +19,10 @@ export const STORAGE_BUCKETS = {
 // Navigation items
 export const STUDENT_NAV_ITEMS = [
   { label: 'Dashboard', href: '/dashboard', icon: 'LayoutDashboard' },
+  { label: 'Classes', href: '/classes', icon: 'Compass' },
   { label: 'My Skills', href: '/skills', icon: 'BookOpen' },
-  { label: 'Explore Skills', href: '/explore', icon: 'Compass' },
   { label: 'Roadmaps', href: '/roadmaps', icon: 'Map' },
-  { label: 'Practice', href: '/practice', icon: 'Code' },
   { label: 'Certificates', href: '/certificates', icon: 'Award' },
-  { label: 'Profile', href: '/profile', icon: 'User' },
 ] as const;
 
 export const ADMIN_NAV_ITEMS = [

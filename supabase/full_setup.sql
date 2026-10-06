@@ -709,7 +709,18 @@ CREATE TRIGGER trigger_generate_cert_number
   FOR EACH ROW EXECUTE FUNCTION generate_certificate_number();
 
 -- ============================================================
--- 5. POPULATE INITIAL SEED DATA
+-- 5. STORAGE BUCKETS
+-- ============================================================
+INSERT INTO storage.buckets (id, name, public) VALUES 
+  ('lesson-videos', 'lesson-videos', false),
+  ('lesson-resources', 'lesson-resources', false),
+  ('certificates', 'certificates', true),
+  ('certificate-templates', 'certificate-templates', false),
+  ('avatars', 'avatars', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- ============================================================
+-- 6. POPULATE INITIAL SEED DATA
 -- ============================================================
 
 TRUNCATE TABLE 

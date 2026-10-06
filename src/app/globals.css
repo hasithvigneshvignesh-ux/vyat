@@ -436,10 +436,11 @@ body:has(.sidebar-layout) {
   max-height: 100vh;
   width: 100%;
   overflow: hidden;
+  transition: grid-template-columns 250ms cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* When sidebar is collapsed, shrink the first column */
-.sidebar-layout:has(.sidebar.collapsed) {
+/* Compact rail: sidebar becomes a narrow icon rail */
+.sidebar-layout.sidebar-collapsed {
   grid-template-columns: var(--sidebar-collapsed-width) 1fr;
 }
 
@@ -450,7 +451,10 @@ body:has(.sidebar-layout) {
   min-width: var(--sidebar-width);
   max-width: var(--sidebar-width);
   flex-shrink: 0;
-  transition: width var(--transition-base), min-width var(--transition-base);
+  transition: width 250ms cubic-bezier(0.4, 0, 0.2, 1),
+              min-width 250ms cubic-bezier(0.4, 0, 0.2, 1),
+              max-width 250ms cubic-bezier(0.4, 0, 0.2, 1),
+              transform 250ms cubic-bezier(0.4, 0, 0.2, 1);
   position: sticky;
   top: 0;
   height: 100vh;
@@ -458,14 +462,16 @@ body:has(.sidebar-layout) {
   overflow-y: auto;
   overflow-x: hidden;
   z-index: 40;
-  /* Hard visual divider between sidebar and content */
   border-right: 1px solid var(--border-primary);
 }
 
-.sidebar.collapsed {
+/* Compact rail: override width and maintain border */
+.sidebar-layout.sidebar-collapsed .sidebar {
   width: var(--sidebar-collapsed-width) !important;
   min-width: var(--sidebar-collapsed-width) !important;
   max-width: var(--sidebar-collapsed-width) !important;
+  border-right: 1px solid var(--border-primary);
+  overflow: hidden;
 }
 
 .main-content {
@@ -546,10 +552,22 @@ body:has(.sidebar-layout) {
   }
 }
 
-/* ============================================================
-   Sidebar nav interactive hover states
-   (inline styles can't express :hover, so we use CSS classes)
-   ============================================================ */
+/* Floating reopen button hover */
+.sidebar-reopen-btn:hover {
+  background-color: var(--bg-tertiary) !important;
+  border-color: rgba(59, 130, 246, 0.35) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Sidebar collapse button hover (inside aside header) */
+aside.sidebar button[aria-label="Collapse sidebar"]:hover {
+  background-color: var(--bg-tertiary) !important;
+  border-color: rgba(59, 130, 246, 0.35) !important;
+  color: var(--text-primary) !important;
+}
+
+/* Sidebar nav interactive hover states
+   (inline styles can't express :hover, so we use CSS classes) */
 aside.sidebar nav a:hover {
   background-color: var(--bg-tertiary) !important;
   color: var(--text-primary) !important;
@@ -580,7 +598,7 @@ aside.sidebar button[title="Sign Out"]:hover {
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 24px;
+  gap: 20px;
   align-items: stretch;
 }
 
@@ -609,16 +627,21 @@ aside.sidebar button[title="Sign Out"]:hover {
   flex-direction: column;
   justify-content: space-between;
   padding: 24px;
-  border-radius: 12px;
+  border-radius: 14px;
   border: 1px solid var(--border-primary);
   background-color: var(--bg-card);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.06);
   transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
-  min-height: 140px;
+  min-height: 136px;
   transform: translateZ(0);
   will-change: transform;
   backface-visibility: hidden;
   contain: content;
+}
+
+.stat-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.10);
+  border-color: var(--hover-border, rgba(59,130,246,0.25));
 }
 
 /* Skill program cards — 3-col grid with equal-height flex cards */
@@ -645,10 +668,10 @@ aside.sidebar button[title="Sign Out"]:hover {
   display: flex;
   flex-direction: column;
   padding: 28px;
-  border-radius: 12px;
+  border-radius: 14px;
   border: 1px solid var(--border-primary);
   background-color: var(--bg-card);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.06);
   transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
   transform: translateZ(0);
   will-change: transform;
@@ -657,8 +680,8 @@ aside.sidebar button[title="Sign Out"]:hover {
 }
 
 .skill-card:hover {
-  border-color: rgba(59, 130, 246, 0.4);
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  border-color: rgba(59, 130, 246, 0.35);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10), 0 12px 40px rgba(59, 130, 246, 0.08);
 }
 
 /* The top content area of skill cards grows to fill available space */
@@ -671,7 +694,7 @@ aside.sidebar button[title="Sign Out"]:hover {
 /* Push progress + button to the bottom of every skill card */
 .skill-card-footer {
   margin-top: auto;
-  padding-top: 24px;
+  padding-top: 20px;
   border-top: 1px solid var(--border-secondary);
 }
 

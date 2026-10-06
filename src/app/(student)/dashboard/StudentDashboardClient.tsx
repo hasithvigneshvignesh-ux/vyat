@@ -118,7 +118,7 @@ const WelcomeBanner = memo(function WelcomeBanner({
   }, [profile.full_name]);
 
   return (
-    <div className="relative overflow-hidden rounded-3xl p-8 sm:p-10 lg:p-12 bg-gradient-to-br from-blue-600/15 via-violet-600/10 to-indigo-600/10 border border-blue-500/30 shadow-xl min-h-[340px] flex flex-col justify-center gpu-layer">
+    <div className="relative overflow-hidden rounded-3xl p-8 sm:p-10 lg:p-12 bg-gradient-to-br from-blue-600/15 via-violet-600/10 to-indigo-600/10 border border-blue-500/20 shadow-lg min-h-[340px] flex flex-col justify-center gpu-layer">
       {/* Ambient background glow */}
       <div
         className="absolute -top-32 -right-32 w-96 h-96 rounded-full bg-blue-500/15 blur-3xl pointer-events-none"
@@ -129,7 +129,7 @@ const WelcomeBanner = memo(function WelcomeBanner({
         style={{ pointerEvents: 'none' }}
       />
 
-      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center">
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-12 items-center">
         {/* Left Column: Greeting, Title, Description & Action Buttons */}
         <div className="lg:col-span-7 xl:col-span-7">
           {/* Top Badges */}
@@ -183,11 +183,12 @@ const WelcomeBanner = memo(function WelcomeBanner({
 
           {/* Welcome Header */}
           <h1
-            className="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight"
+            className="text-2xl sm:text-3xl lg:text-[2.25rem] font-bold tracking-tight"
             style={{
               color: 'var(--text-primary)',
-              marginBottom: '12px',
-              lineHeight: 1.25,
+              marginBottom: '10px',
+              lineHeight: 1.2,
+              letterSpacing: '-0.03em',
             }}
           >
             Welcome back, {firstName}!
@@ -195,11 +196,12 @@ const WelcomeBanner = memo(function WelcomeBanner({
 
           {/* Description Text */}
           <p
-            className="text-sm sm:text-base font-normal max-w-xl"
+            className="text-sm sm:text-base font-normal max-w-lg"
             style={{
-              color: '#475569',
-              lineHeight: 1.6,
-              marginBottom: '24px',
+              color: 'var(--text-secondary)',
+              lineHeight: 1.65,
+              marginBottom: '28px',
+              opacity: 0.85,
             }}
           >
             {hasActiveSkills
@@ -324,67 +326,161 @@ const WelcomeBanner = memo(function WelcomeBanner({
         {hasActiveSkills && (
           <div className="lg:col-span-5 xl:col-span-5 w-full">
             <div
-              className="rounded-3xl border shadow-xl flex flex-col justify-between"
+              className="rounded-2xl border flex flex-col"
               style={{
                 backgroundColor: 'var(--bg-card)',
                 borderColor: 'var(--border-primary)',
-                padding: '24px 28px',
-                gap: '18px',
+                padding: '32px 36px',
+                gap: '0',
+                boxShadow: '0 1px 4px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.08)',
               }}
             >
-              {/* Header Row */}
-              <div className="flex items-center justify-between">
-                <div className="space-y-1">
-                  <p className="text-xs font-bold uppercase tracking-wider" style={{ color: 'var(--text-tertiary)' }}>
+              {/* Header Row: Label + Fire Icon */}
+              <div className="flex items-start justify-between" style={{ marginBottom: '20px' }}>
+                <div>
+                  <p
+                    style={{
+                      fontSize: '10px',
+                      fontWeight: 600,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.1em',
+                      color: 'var(--text-tertiary)',
+                      marginBottom: '10px',
+                    }}
+                  >
                     Overall Progress
                   </p>
-                  <div className="flex items-baseline gap-2">
-                    <span className="text-3xl sm:text-4xl font-black text-blue-600 dark:text-blue-400 font-mono tracking-tight">
-                      {overallProgress}%
-                    </span>
-                  </div>
+                  <span
+                    style={{
+                      display: 'block',
+                      fontSize: 'clamp(2.5rem, 5vw, 3.25rem)',
+                      fontWeight: 700,
+                      letterSpacing: '-0.04em',
+                      lineHeight: 1,
+                      color: '#3b82f6',
+                      fontFamily: 'var(--font-mono, monospace)',
+                    }}
+                  >
+                    {overallProgress}%
+                  </span>
                 </div>
-                <div className="w-12 h-12 rounded-2xl bg-amber-500/15 border border-amber-500/25 flex items-center justify-center text-amber-500 shadow-sm flex-shrink-0">
-                  <Flame size={22} className="animate-pulse" />
+                <div
+                  style={{
+                    width: 48,
+                    height: 48,
+                    borderRadius: 14,
+                    backgroundColor: 'rgba(245,158,11,0.12)',
+                    border: '1px solid rgba(245,158,11,0.20)',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#f59e0b',
+                    flexShrink: 0,
+                  }}
+                >
+                  <Flame size={20} />
                 </div>
               </div>
 
               {/* Progress track */}
-              <div className="w-full h-3 rounded-full bg-slate-200 dark:bg-slate-800 overflow-hidden border border-slate-300/30 dark:border-slate-700/40">
+              <div
+                style={{
+                  width: '100%',
+                  height: 6,
+                  borderRadius: 999,
+                  backgroundColor: 'var(--border-primary)',
+                  overflow: 'hidden',
+                  marginBottom: '28px',
+                }}
+              >
                 <div
-                  className="h-full rounded-full bg-gradient-to-r from-blue-500 via-indigo-500 to-violet-500 transition-all duration-500"
-                  style={{ width: `${Math.min(100, Math.max(0, overallProgress))}%` }}
+                  style={{
+                    height: '100%',
+                    borderRadius: 999,
+                    background: 'linear-gradient(90deg, #3b82f6, #6366f1, #8b5cf6)',
+                    width: `${Math.min(100, Math.max(0, overallProgress))}%`,
+                    transition: 'width 600ms cubic-bezier(0.4, 0, 0.2, 1)',
+                  }}
                 />
               </div>
 
+              {/* Divider */}
+              <div style={{ borderTop: '1px solid var(--border-secondary)', marginBottom: '20px' }} />
+
               {/* Metrics Breakdown Grid */}
-              <div className="grid grid-cols-2 gap-3 pt-2 border-t text-xs" style={{ borderColor: 'var(--border-secondary)' }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
                 <div
-                  className="p-3.5 rounded-2xl border"
                   style={{
+                    padding: '16px 18px',
+                    borderRadius: 12,
+                    border: '1px solid var(--border-secondary)',
                     backgroundColor: 'var(--bg-tertiary)',
-                    borderColor: 'var(--border-secondary)',
                   }}
                 >
-                  <span className="block text-[11px] font-semibold uppercase tracking-wider mb-1" style={{ color: 'var(--text-tertiary)' }}>
+                  <span
+                    style={{
+                      display: 'block',
+                      fontSize: '10px',
+                      fontWeight: 600,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.08em',
+                      color: 'var(--text-tertiary)',
+                      marginBottom: '8px',
+                    }}
+                  >
                     Lectures Completed
                   </span>
-                  <span className="font-mono font-bold text-sm sm:text-base" style={{ color: 'var(--text-primary)' }}>
-                    {completedLessonsAll} <span className="text-xs font-normal text-slate-400">/ {totalLessonsAll}</span>
+                  <span
+                    style={{
+                      display: 'flex',
+                      alignItems: 'baseline',
+                      gap: '4px',
+                      fontFamily: 'var(--font-mono, monospace)',
+                      fontWeight: 700,
+                      fontSize: '1.125rem',
+                      color: 'var(--text-primary)',
+                      letterSpacing: '-0.02em',
+                    }}
+                  >
+                    {completedLessonsAll}
+                    <span style={{ fontSize: '0.8rem', fontWeight: 400, color: 'var(--text-tertiary)' }}>/ {totalLessonsAll}</span>
                   </span>
                 </div>
                 <div
-                  className="p-3.5 rounded-2xl border"
                   style={{
+                    padding: '16px 18px',
+                    borderRadius: 12,
+                    border: '1px solid var(--border-secondary)',
                     backgroundColor: 'var(--bg-tertiary)',
-                    borderColor: 'var(--border-secondary)',
                   }}
                 >
-                  <span className="block text-[11px] font-semibold uppercase tracking-wider mb-1" style={{ color: 'var(--text-tertiary)' }}>
+                  <span
+                    style={{
+                      display: 'block',
+                      fontSize: '10px',
+                      fontWeight: 600,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.08em',
+                      color: 'var(--text-tertiary)',
+                      marginBottom: '8px',
+                    }}
+                  >
                     Active Modules
                   </span>
-                  <span className="font-mono font-bold text-sm sm:text-base text-emerald-600 dark:text-emerald-400">
-                    {activeSkillsCount} <span className="text-xs font-normal text-slate-400">Enrolled</span>
+                  <span
+                    style={{
+                      display: 'flex',
+                      alignItems: 'baseline',
+                      gap: '4px',
+                      fontFamily: 'var(--font-mono, monospace)',
+                      fontWeight: 700,
+                      fontSize: '1.125rem',
+                      color: '#10b981',
+                      letterSpacing: '-0.02em',
+                    }}
+                  >
+                    {activeSkillsCount}
+                    <span style={{ fontSize: '0.8rem', fontWeight: 400, color: 'var(--text-tertiary)' }}>Enrolled</span>
                   </span>
                 </div>
               </div>
@@ -417,18 +513,18 @@ const StatsCardsGrid = memo(function StatsCardsGrid({
       <div className="stat-card" style={{ '--hover-border': 'rgba(59,130,246,0.4)' } as React.CSSProperties}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>
           <div>
-            <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--text-tertiary)' }}>
+            <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: 'var(--text-tertiary)', letterSpacing: '0.09em' }}>
               Active Programs
             </p>
-            <p className="text-4xl font-extrabold tracking-tight" style={{ color: 'var(--text-primary)' }}>
+            <p className="text-[2.25rem] font-bold tracking-tight leading-none" style={{ color: 'var(--text-primary)', letterSpacing: '-0.03em', fontFamily: 'var(--font-mono, monospace)' }}>
               {activeCount}
             </p>
           </div>
-          <div style={{ width: 56, height: 56, borderRadius: 12, backgroundColor: 'rgba(59,130,246,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b82f6', flexShrink: 0 }}>
-            <BookOpen size={24} />
+          <div style={{ width: 48, height: 48, borderRadius: 12, backgroundColor: 'rgba(59,130,246,0.10)', border: '1px solid rgba(59,130,246,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#3b82f6', flexShrink: 0 }}>
+            <BookOpen size={20} />
           </div>
         </div>
-        <p className="text-xs font-semibold text-blue-500" style={{ marginTop: 8 }}>
+        <p className="text-xs font-medium text-blue-500 mt-4" style={{ opacity: 0.85 }}>
           In-progress modules
         </p>
       </div>
@@ -436,57 +532,57 @@ const StatsCardsGrid = memo(function StatsCardsGrid({
       <div className="stat-card">
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>
           <div>
-            <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--text-tertiary)' }}>
+            <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: 'var(--text-tertiary)', letterSpacing: '0.09em' }}>
               Completed Skills
             </p>
-            <p className="text-4xl font-extrabold tracking-tight" style={{ color: 'var(--text-primary)' }}>
+            <p className="text-[2.25rem] font-bold tracking-tight leading-none" style={{ color: 'var(--text-primary)', letterSpacing: '-0.03em', fontFamily: 'var(--font-mono, monospace)' }}>
               {completedCount}
             </p>
           </div>
-          <div style={{ width: 56, height: 56, borderRadius: 12, backgroundColor: 'rgba(16,185,129,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981', flexShrink: 0 }}>
-            <CheckCircle2 size={24} />
+          <div style={{ width: 48, height: 48, borderRadius: 12, backgroundColor: 'rgba(16,185,129,0.10)', border: '1px solid rgba(16,185,129,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#10b981', flexShrink: 0 }}>
+            <CheckCircle2 size={20} />
           </div>
         </div>
-        <p className="text-xs font-semibold text-emerald-500 flex items-center gap-1" style={{ marginTop: 8 }}>
-          <CheckCircle2 size={12} /> Passed assessments
+        <p className="text-xs font-medium text-emerald-500 flex items-center gap-1 mt-4" style={{ opacity: 0.85 }}>
+          <CheckCircle2 size={11} /> Passed assessments
         </p>
       </div>
 
       <div className="stat-card">
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>
           <div>
-            <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--text-tertiary)' }}>
+            <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: 'var(--text-tertiary)', letterSpacing: '0.09em' }}>
               Certificates Issued
             </p>
-            <p className="text-4xl font-extrabold tracking-tight" style={{ color: 'var(--text-primary)' }}>
+            <p className="text-[2.25rem] font-bold tracking-tight leading-none" style={{ color: 'var(--text-primary)', letterSpacing: '-0.03em', fontFamily: 'var(--font-mono, monospace)' }}>
               {unlockedCertsCount}
             </p>
           </div>
-          <div style={{ width: 56, height: 56, borderRadius: 12, backgroundColor: 'rgba(245,158,11,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f59e0b', flexShrink: 0 }}>
-            <Award size={24} />
+          <div style={{ width: 48, height: 48, borderRadius: 12, backgroundColor: 'rgba(245,158,11,0.10)', border: '1px solid rgba(245,158,11,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#f59e0b', flexShrink: 0 }}>
+            <Award size={20} />
           </div>
         </div>
-        <p className="text-xs font-semibold text-amber-500 flex items-center gap-1" style={{ marginTop: 8 }}>
-          <ShieldCheck size={12} /> 100% Verified
+        <p className="text-xs font-medium text-amber-500 flex items-center gap-1 mt-4" style={{ opacity: 0.85 }}>
+          <ShieldCheck size={11} /> 100% Verified
         </p>
       </div>
 
       <div className="stat-card">
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: '12px' }}>
           <div>
-            <p className="text-xs font-bold uppercase tracking-wider mb-2" style={{ color: 'var(--text-tertiary)' }}>
+            <p className="text-xs font-semibold uppercase tracking-widest mb-3" style={{ color: 'var(--text-tertiary)', letterSpacing: '0.09em' }}>
               Total Mastery
             </p>
-            <p className="text-4xl font-extrabold tracking-tight" style={{ color: 'var(--text-primary)' }}>
+            <p className="text-[2.25rem] font-bold tracking-tight leading-none" style={{ color: 'var(--text-primary)', letterSpacing: '-0.03em', fontFamily: 'var(--font-mono, monospace)' }}>
               {overallProgress}%
             </p>
           </div>
-          <div style={{ width: 56, height: 56, borderRadius: 12, backgroundColor: 'rgba(139,92,246,0.12)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8b5cf6', flexShrink: 0 }}>
-            <Target size={24} />
+          <div style={{ width: 48, height: 48, borderRadius: 12, backgroundColor: 'rgba(139,92,246,0.10)', border: '1px solid rgba(139,92,246,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#8b5cf6', flexShrink: 0 }}>
+            <Target size={20} />
           </div>
         </div>
-        <p className="text-xs font-semibold text-violet-500 flex items-center gap-1" style={{ marginTop: 8 }}>
-          <TrendingUp size={12} /> Curriculum Progress
+        <p className="text-xs font-medium text-violet-500 flex items-center gap-1 mt-4" style={{ opacity: 0.85 }}>
+          <TrendingUp size={11} /> Curriculum Progress
         </p>
       </div>
     </div>

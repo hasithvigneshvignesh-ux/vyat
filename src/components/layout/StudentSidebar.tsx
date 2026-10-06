@@ -7,9 +7,10 @@ import { createClient } from '@/lib/supabase/client';
 import { STUDENT_NAV_ITEMS } from '@/lib/constants';
 import {
   LayoutDashboard, BookOpen, Compass, Map, Code, Award, User,
-  LogOut, Menu, X, ChevronLeft, Moon, Sun, BookOpenCheck,
+  LogOut, Menu, X, ChevronLeft, ChevronRight, Moon, Sun, BookOpenCheck,
 } from 'lucide-react';
 import { useTheme } from '@/providers/ThemeProvider';
+import React from 'react';
 
 const iconMap: Record<string, React.ReactNode> = {
   LayoutDashboard: <LayoutDashboard size={18} />,
@@ -23,15 +24,22 @@ const iconMap: Record<string, React.ReactNode> = {
 
 interface StudentSidebarProps {
   userName?: string;
+  /** Controlled: whether the sidebar is fully collapsed (0 width). */
+  isCollapsed?: boolean;
+  /** Controlled: callback to toggle collapsed state from outside. */
+  onToggleCollapse?: () => void;
 }
 
-export default function StudentSidebar({ userName = 'Student' }: StudentSidebarProps) {
+export default function StudentSidebar({
+  userName = 'Student',
+  isCollapsed = false,
+  onToggleCollapse,
+}: StudentSidebarProps) {
   const pathname = usePathname();
   const router = useRouter();
   const supabase = createClient();
   const { theme, toggleTheme } = useTheme();
   const [isOpen, setIsOpen] = useState(false);
-  const [isCollapsed, setIsCollapsed] = useState(false);
 
   const handleLogout = async () => {
     try {
@@ -54,8 +62,8 @@ export default function StudentSidebar({ userName = 'Student' }: StudentSidebarP
     display: 'flex',
     alignItems: 'center',
     gap: 12,
-    padding: '10px 12px',
-    borderRadius: 8,
+    padding: '11px 14px',
+    borderRadius: 10,
     textDecoration: 'none',
     fontSize: 14,
     fontWeight: 500,
@@ -165,9 +173,9 @@ export default function StudentSidebar({ userName = 'Student' }: StudentSidebarP
           style={{
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'space-between',
+            justifyContent: isCollapsed ? 'center' : 'space-between',
             height: 64,
-            padding: '0 16px',
+            padding: isCollapsed ? '0' : '0 16px',
             borderBottom: '1px solid var(--border-primary)',
             flexShrink: 0,
           }}
@@ -202,53 +210,60 @@ export default function StudentSidebar({ userName = 'Student' }: StudentSidebarP
               </div>
             </Link>
           ) : (
-            <div style={{ display: 'flex', justifyContent: 'center', flex: 1 }}>
-              <div style={{
-                width: 36, height: 36, borderRadius: 10,
-                background: 'linear-gradient(135deg, #2563eb, #7c3aed)',
+            <button
+              onClick={onToggleCollapse}
+              title="Expand sidebar"
+              aria-label="Expand sidebar"
+              style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 2px 8px rgba(37,99,235,0.25)',
-              }} title="Vyat Student">
-                <BookOpenCheck size={18} color="#fff" />
-              </div>
-            </div>
+                width: 32, height: 32, borderRadius: 8, flexShrink: 0,
+                border: '1px solid var(--border-primary)',
+                backgroundColor: 'var(--bg-card)',
+                color: 'var(--text-secondary)', cursor: 'pointer',
+                transition: 'background 150ms, border-color 150ms',
+                boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+              }}
+            >
+              <ChevronRight size={16} strokeWidth={2.25} />
+            </button>
           )}
 
           {/* Mobile: close | Desktop: collapse */}
-          <button
-            onClick={() => setIsOpen(false)}
-            aria-label="Close menu"
-            className="lg:hidden"
-            style={{
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              width: 32, height: 32, borderRadius: 8, flexShrink: 0,
-              border: 'none', backgroundColor: 'transparent',
-              color: 'var(--text-tertiary)', cursor: 'pointer',
-              transition: 'background 150ms',
-            }}
-          >
-            <X size={18} />
-          </button>
-          <button
-            onClick={() => setIsCollapsed(!isCollapsed)}
-            title={isCollapsed ? 'Expand sidebar' : 'Collapse sidebar'}
-            className="hidden lg:flex"
-            style={{
-              alignItems: 'center', justifyContent: 'center',
-              width: 32, height: 32, borderRadius: 8, flexShrink: 0,
-              border: 'none', backgroundColor: 'transparent',
-              color: 'var(--text-tertiary)', cursor: 'pointer',
-              transition: 'background 150ms',
-            }}
-          >
-            <ChevronLeft
-              size={18}
-              style={{
-                transition: 'transform 200ms',
-                transform: isCollapsed ? 'rotate(180deg)' : 'rotate(0deg)',
-              }}
-            />
-          </button>
+          {!isCollapsed && (
+            <>
+              <button
+                onClick={() => setIsOpen(false)}
+                aria-label="Close menu"
+                className="lg:hidden"
+                style={{
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  width: 32, height: 32, borderRadius: 8, flexShrink: 0,
+                  border: 'none', backgroundColor: 'transparent',
+                  color: 'var(--text-tertiary)', cursor: 'pointer',
+                  transition: 'background 150ms',
+                }}
+              >
+                <X size={18} />
+              </button>
+              <button
+                onClick={onToggleCollapse}
+                title="Collapse sidebar"
+                aria-label="Collapse sidebar"
+                className="hidden lg:flex"
+                style={{
+                  alignItems: 'center', justifyContent: 'center',
+                  width: 32, height: 32, borderRadius: 8, flexShrink: 0,
+                  border: '1px solid var(--border-primary)',
+                  backgroundColor: 'var(--bg-card)',
+                  color: 'var(--text-secondary)', cursor: 'pointer',
+                  transition: 'background 150ms, border-color 150ms',
+                  boxShadow: '0 1px 3px rgba(0,0,0,0.08)',
+                }}
+              >
+                <ChevronLeft size={16} strokeWidth={2.25} />
+              </button>
+            </>
+          )}
         </div>
 
         {/* ── 2. Navigation ── */}
@@ -257,10 +272,10 @@ export default function StudentSidebar({ userName = 'Student' }: StudentSidebarP
             flex: 1,
             overflowY: 'auto',
             overflowX: 'hidden',
-            padding: '12px 10px',
+            padding: '16px 12px',
             display: 'flex',
             flexDirection: 'column',
-            gap: 4,
+            gap: 6,
             minHeight: 0,
           }}
         >
@@ -275,8 +290,12 @@ export default function StudentSidebar({ userName = 'Student' }: StudentSidebarP
                 style={{
                   ...NAV_ITEM_BASE,
                   justifyContent: isCollapsed ? 'center' : 'flex-start',
-                  backgroundColor: active ? 'rgba(59,130,246,0.12)' : 'transparent',
-                  color: active ? '#3b82f6' : 'var(--text-secondary)',
+                  backgroundColor: active
+                    ? (theme === 'dark' ? 'rgba(79, 124, 255, 0.15)' : '#EEF2FF')
+                    : 'transparent',
+                  color: active
+                    ? '#4F7CFF'
+                    : 'var(--text-secondary)',
                   fontWeight: active ? 600 : 500,
                 }}
               >
@@ -288,7 +307,7 @@ export default function StudentSidebar({ userName = 'Student' }: StudentSidebarP
                   alignItems: 'center',
                   justifyContent: 'center',
                   flexShrink: 0,
-                  color: active ? '#3b82f6' : 'var(--text-tertiary)',
+                  color: active ? '#4F7CFF' : 'var(--text-tertiary)',
                 }}>
                   {iconMap[item.icon]}
                 </span>
@@ -303,8 +322,8 @@ export default function StudentSidebar({ userName = 'Student' }: StudentSidebarP
                 {active && !isCollapsed && (
                   <span style={{
                     width: 6, height: 6, borderRadius: '50%',
-                    backgroundColor: '#3b82f6', flexShrink: 0,
-                    boxShadow: '0 0 6px rgba(59,130,246,0.6)',
+                    backgroundColor: '#4F7CFF', flexShrink: 0,
+                    boxShadow: '0 0 6px rgba(79,124,255,0.6)',
                   }} />
                 )}
               </Link>
@@ -316,11 +335,11 @@ export default function StudentSidebar({ userName = 'Student' }: StudentSidebarP
         <div
           style={{
             flexShrink: 0,
-            padding: '12px 10px',
+            padding: '16px 12px',
             borderTop: '1px solid var(--border-primary)',
             display: 'flex',
             flexDirection: 'column',
-            gap: 8,
+            gap: 10,
             backgroundColor: 'var(--bg-secondary)',
           }}
         >
@@ -336,7 +355,7 @@ export default function StudentSidebar({ userName = 'Student' }: StudentSidebarP
               title={theme === 'dark' ? 'Light Mode' : 'Dark Mode'}
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                gap: 6, padding: '8px 0', borderRadius: 8,
+                gap: 6, padding: '9px 0', borderRadius: 10,
                 border: '1px solid var(--border-primary)',
                 backgroundColor: 'transparent',
                 color: 'var(--text-secondary)',
@@ -359,7 +378,7 @@ export default function StudentSidebar({ userName = 'Student' }: StudentSidebarP
               title="Sign Out"
               style={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                gap: 6, padding: '8px 0', borderRadius: 8,
+                gap: 6, padding: '9px 0', borderRadius: 10,
                 border: '1px solid var(--border-primary)',
                 backgroundColor: 'transparent',
                 color: 'var(--text-secondary)',
@@ -377,18 +396,18 @@ export default function StudentSidebar({ userName = 'Student' }: StudentSidebarP
             <div style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 10,
-              padding: '10px 12px',
-              borderRadius: 8,
+              gap: 12,
+              padding: '12px 14px',
+              borderRadius: 12,
               backgroundColor: 'var(--bg-tertiary)',
               border: '1px solid var(--border-primary)',
             }}>
               {/* Avatar */}
               <div style={{
-                width: 34, height: 34, borderRadius: '50%', flexShrink: 0,
-                background: 'linear-gradient(135deg, #3b82f6, #7c3aed)',
+                width: 36, height: 36, borderRadius: '50%', flexShrink: 0,
+                background: 'linear-gradient(135deg, #4F7CFF, #7c3aed)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 1px 4px rgba(59,130,246,0.3)',
+                boxShadow: '0 2px 6px rgba(79,124,255,0.25)',
               }}>
                 <span style={{ fontSize: 13, fontWeight: 700, color: '#fff', lineHeight: 1 }}>
                   {userName.charAt(0).toUpperCase()}
@@ -405,7 +424,7 @@ export default function StudentSidebar({ userName = 'Student' }: StudentSidebarP
                   {userName}
                 </p>
                 <p style={{
-                  fontSize: 11, fontWeight: 600, color: '#60a5fa', lineHeight: 1.3,
+                  fontSize: 11, fontWeight: 600, color: '#4F7CFF', lineHeight: 1.3,
                   margin: 0, marginTop: 2,
                 }}>
                   Student Account
