@@ -233,7 +233,7 @@ export default function SkillDetailClient({
                             <Clock size={12} className="text-pink-500" /> {lesson.duration_minutes} min
                           </span>
                         )}
-                        {lesson.video_path && (
+                        {lesson.video_url && (
                           <span className="flex items-center gap-1.5">
                             <PlayCircle size={12} className="text-indigo-500" /> Video
                           </span>

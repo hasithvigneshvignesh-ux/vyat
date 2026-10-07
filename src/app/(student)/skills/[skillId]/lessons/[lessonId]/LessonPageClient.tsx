@@ -13,6 +13,8 @@ import {
   FileText, HelpCircle, Download, ChevronRight,
   Menu, X, BookOpen, Sparkles, RefreshCw, Award
 } from 'lucide-react';
+import { formatGoogleDriveUrl } from '@/lib/drive-utils';
+import DriveEmbedPlayer from '@/components/video/drive-embed-player';
 
 interface Props {
   lesson: Lesson & { skill: { id: string; name: string; course: { name: string; branch: { name: string } } } };
@@ -109,21 +111,7 @@ export default function LessonPageClient({
     markStarted();
   }, [lesson.id]); // eslint-disable-line react-hooks/exhaustive-deps
 
-  // Fetch video URL
-  useEffect(() => {
-    const fetchVideo = async () => {
-      if (lesson.video_path) {
-        try {
-          const res = await fetch(`/api/video/${lesson.id}`);
-          const data = await res.json();
-          if (data.url) setVideoUrl(data.url);
-        } catch {
-          // Video unavailable
-        }
-      }
-    };
-    fetchVideo();
-  }, [lesson.id, lesson.video_path]);
+  // Removed fetch video URL logic as we now use Google Drive embed links
 
   const handleMarkComplete = async () => {
     try {
@@ -284,17 +272,10 @@ export default function LessonPageClient({
             </div>
 
             {/* Video Player Section */}
-            <div className="video-container relative aspect-video w-full rounded-2xl overflow-hidden border bg-black shadow-xl" style={{ borderColor: 'var(--border-primary)' }}>
-              {videoUrl ? (
-                <video
-                  controls
-                  controlsList="nodownload"
-                  className="w-full h-full object-contain"
-                  src={videoUrl}
-                >
-                  Your browser does not support the video element.
-                </video>
-              ) : (
+            {lesson.video_url ? (
+              <DriveEmbedPlayer embedUrl={formatGoogleDriveUrl(lesson.video_url).embedUrl} />
+            ) : (
+              <div className="video-container relative aspect-video w-full rounded-2xl overflow-hidden border bg-black shadow-xl" style={{ borderColor: 'var(--border-primary)' }}>
                 <div className="w-full h-full flex flex-col items-center justify-center bg-gradient-to-br from-gray-900 via-slate-900 to-black p-6 text-center">
                   <div className="w-16 h-16 rounded-2xl bg-blue-500/20 border border-blue-500/30 flex items-center justify-center text-blue-400 mb-3 animate-pulse">
                     <PlayCircle size={36} />
@@ -304,8 +285,9 @@ export default function LessonPageClient({
                     Streaming masterclass on: <span className="text-blue-300 font-medium">{lesson.title}</span>. Complete the video and test your understanding with the topic MCQs below!
                   </p>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
+
 
             {/* Notes */}
             {lesson.notes_content && (

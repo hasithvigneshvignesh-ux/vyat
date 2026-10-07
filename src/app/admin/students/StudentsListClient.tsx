@@ -9,7 +9,8 @@ import Input from '@/components/ui/Input';
 import Badge from '@/components/ui/Badge';
 import EmptyState from '@/components/ui/EmptyState';
 import Link from 'next/link';
-import { UserPlus, Search, Users, ArrowRight } from 'lucide-react';
+import { UserPlus, Search, Users, ArrowRight, Trash2 } from 'lucide-react';
+import { useToast } from '@/providers/ToastProvider';
 
 interface Props {
   initialStudents: Profile[];
@@ -20,6 +21,8 @@ export default function StudentsListClient({ initialStudents, totalCount }: Prop
   const [students, setStudents] = useState(initialStudents);
   const [search, setSearch] = useState('');
   const [isSearching, setIsSearching] = useState(false);
+  const [isDeleting, setIsDeleting] = useState<string | null>(null);
+  const { addToast } = useToast();
 
   const handleSearch = async (query: string) => {
     setSearch(query);
@@ -39,6 +42,31 @@ export default function StudentsListClient({ initialStudents, totalCount }: Prop
       // Keep current data on error
     } finally {
       setIsSearching(false);
+    }
+  };
+
+  const handleDelete = async (studentId: string) => {
+    if (!confirm('Are you sure you want to delete this student account? This action cannot be undone.')) {
+      return;
+    }
+
+    setIsDeleting(studentId);
+    try {
+      const res = await fetch(`/api/admin/students/${studentId}`, {
+        method: 'DELETE',
+      });
+
+      if (res.ok) {
+        setStudents(prev => prev.filter(s => s.id !== studentId));
+        addToast('Student account deleted successfully.', 'success');
+      } else {
+        const data = await res.json();
+        addToast(data.error || 'Failed to delete student', 'error');
+      }
+    } catch (err: any) {
+      addToast(err.message || 'Error deleting student', 'error');
+    } finally {
+      setIsDeleting(null);
     }
   };
 
@@ -147,11 +175,22 @@ export default function StudentsListClient({ initialStudents, totalCount }: Prop
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      <Link href={`/admin/students/${student.id}`}>
-                        <Button variant="ghost" size="sm">
-                          <ArrowRight size={14} />
+                      <div className="flex items-center justify-end gap-2">
+                        <Link href={`/admin/students/${student.id}`}>
+                          <Button variant="ghost" size="sm">
+                            <ArrowRight size={14} />
+                          </Button>
+                        </Link>
+                        <Button 
+                          variant="ghost" 
+                          size="sm" 
+                          className="text-red-500 hover:bg-red-500/10 hover:text-red-400"
+                          onClick={() => handleDelete(student.id)}
+                          isLoading={isDeleting === student.id}
+                        >
+                          <Trash2 size={14} />
                         </Button>
-                      </Link>
+                      </div>
                     </td>
                   </tr>
                 ))}

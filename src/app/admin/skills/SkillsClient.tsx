@@ -78,15 +78,7 @@ export default function SkillsClient({ initialSkills, courses }: Props) {
         .single();
 
       if (error) {
-        // Fallback for offline/mock demo mode
-        const mockCreated = {
-          id: 'skill-' + Date.now(),
-          ...newSkill,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          course: { name: selectedCourse?.name || 'Computer Science' },
-        } as any;
-        setSkills((prev) => [...prev, mockCreated]);
+        throw error;
       } else if (data) {
         setSkills((prev) => [...prev, { ...data, course: { name: selectedCourse?.name || 'Computer Science' } }]);
       }
@@ -109,6 +101,20 @@ export default function SkillsClient({ initialSkills, courses }: Props) {
       addToast(err?.message || 'Failed to add skill', 'error');
     } finally {
       setIsSubmitting(false);
+    }
+  };
+
+  const handleDelete = async (id: string, name: string) => {
+    if (!confirm(`Are you sure you want to delete the skill "${name}"? This cannot be undone.`)) return;
+    
+    try {
+      const { error } = await supabase.from('skills').delete().eq('id', id);
+      if (error) throw error;
+      
+      setSkills(prev => prev.filter(s => s.id !== id));
+      addToast(`Skill deleted successfully`, 'success');
+    } catch (err: any) {
+      addToast(err?.message || 'Failed to delete skill', 'error');
     }
   };
 
@@ -167,6 +173,7 @@ export default function SkillsClient({ initialSkills, courses }: Props) {
                 <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider hidden lg:table-cell" style={{ color: 'var(--text-tertiary)' }}>Difficulty</th>
                 <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-tertiary)' }}>Price</th>
                 <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-tertiary)' }}>Status</th>
+                <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-right" style={{ color: 'var(--text-tertiary)' }}>Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y" style={{ borderColor: 'var(--border-secondary)' }}>
@@ -191,6 +198,15 @@ export default function SkillsClient({ initialSkills, courses }: Props) {
                     <Badge variant={skill.is_active ? 'success' : 'error'}>
                       {skill.is_active ? 'Active' : 'Inactive'}
                     </Badge>
+                  </td>
+                  <td className="px-5 py-4 text-right">
+                    <button 
+                      onClick={() => handleDelete(skill.id, skill.name)}
+                      className="text-red-500 hover:text-red-600 transition-colors"
+                      title="Delete Skill"
+                    >
+                      Delete
+                    </button>
                   </td>
                 </tr>
               ))}

@@ -10,7 +10,7 @@ import { useToast } from '@/providers/ToastProvider';
 import {
   UserPlus, ArrowLeft, Mail, Phone, School,
   Hash, GitBranch, Calendar, Lock, User, Award,
-  Sparkles, UploadCloud, CheckCircle2, FileCheck, Loader2, X, Link2
+  Sparkles, UploadCloud, CheckCircle2, FileCheck, Loader2, X, Link2, CreditCard, BookOpen
 } from 'lucide-react';
 import Link from 'next/link';
 import { createClient } from '@/lib/supabase/client';
@@ -19,7 +19,7 @@ export default function CreateStudentPage() {
   const router = useRouter();
   const { addToast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
-  const [skills, setSkills] = useState<{ id: string; name: string }[]>([]);
+  const [skills, setSkills] = useState<{ id: string; name: string; lessons?: { id: string; title: string; sort_order: number }[] }[]>([]);
   const supabase = createClient();
 
   // Certificate upload states
@@ -44,29 +44,46 @@ export default function CreateStudentPage() {
     branch_name: '',
     year: '',
     password: '',
+    amount_paid: '',
+    number_of_courses: '',
     // Certificate Awarding
     award_certificate: false,
     certificate_skill_id: '',
     certificate_number: generateCertId(),
     certificate_file_path: '',
     certificate_issue_date: new Date().toISOString().split('T')[0],
+    // Course Access
+    grant_course_access: false,
+    course_accesses: {} as Record<string, string[]>,
   });
 
   useEffect(() => {
     async function loadSkills() {
-      const { data } = await supabase.from('skills').select('id, name').order('name');
+      const { data } = await supabase.from('skills').select('id, name, lessons(id, title, sort_order)').order('name');
       if (data && data.length > 0) {
-        setSkills(data);
-        setForm((prev) => ({ ...prev, certificate_skill_id: data[0].id }));
+        // Sort lessons inside each skill
+        const sortedData = data.map(skill => ({
+          ...skill,
+          lessons: (skill.lessons as any[])?.sort((a, b) => a.sort_order - b.sort_order) || []
+        }));
+        setSkills(sortedData);
+        setForm((prev) => ({ 
+          ...prev, 
+          certificate_skill_id: sortedData[0].id,
+          // Removed single default selection
+        }));
       } else {
         const defaultSkills = [
-          { id: 'a1000000-0000-0000-0000-000000000001', name: 'Data Structures & Algorithms in C++' },
-          { id: 'a2000000-0000-0000-0000-000000000003', name: 'Machine Learning Fundamentals' },
-          { id: 'a4000000-0000-0000-0000-000000000001', name: 'Network Security & Penetration Testing' },
-          { id: 'a3000000-0000-0000-0000-000000000001', name: 'Exploratory Data Analysis with Pandas' },
+          { id: 'a1000000-0000-0000-0000-000000000001', name: 'Data Structures & Algorithms in C++', lessons: [] },
+          { id: 'a2000000-0000-0000-0000-000000000003', name: 'Machine Learning Fundamentals', lessons: [] },
+          { id: 'a4000000-0000-0000-0000-000000000001', name: 'Network Security & Penetration Testing', lessons: [] },
+          { id: 'a3000000-0000-0000-0000-000000000001', name: 'Exploratory Data Analysis with Pandas', lessons: [] },
         ];
         setSkills(defaultSkills);
-        setForm((prev) => ({ ...prev, certificate_skill_id: defaultSkills[0].id }));
+        setForm((prev) => ({ 
+          ...prev, 
+          certificate_skill_id: defaultSkills[0].id
+        }));
       }
     }
     loadSkills();
@@ -164,6 +181,66 @@ export default function CreateStudentPage() {
     { value: '3', label: '3rd Year' },
     { value: '4', label: '4th Year' },
   ];
+
+  const toggleCourseSelection = (skillId: string) => {
+    setForm(prev => {
+      const isSelected = !!prev.course_accesses[skillId];
+      if (isSelected) {
+        const newAccesses = { ...prev.course_accesses };
+        delete newAccesses[skillId];
+        return { ...prev, course_accesses: newAccesses };
+      } else {
+        const skill = skills.find(s => s.id === skillId);
+        return {
+          ...prev,
+          course_accesses: {
+            ...prev.course_accesses,
+            [skillId]: skill?.lessons?.map(l => l.id) || []
+          }
+        };
+      }
+    });
+  };
+
+  const toggleLesson = (skillId: string, lessonId: string) => {
+    setForm(prev => {
+      const selectedLessons = prev.course_accesses[skillId] || [];
+      const isSelected = selectedLessons.includes(lessonId);
+      
+      return {
+        ...prev,
+        course_accesses: {
+          ...prev.course_accesses,
+          [skillId]: isSelected 
+            ? selectedLessons.filter(id => id !== lessonId)
+            : [...selectedLessons, lessonId]
+        }
+      };
+    });
+  };
+
+  const selectAllLessons = (skillId: string) => {
+    const selectedSkill = skills.find(s => s.id === skillId);
+    if (selectedSkill && selectedSkill.lessons) {
+      setForm(prev => ({
+        ...prev,
+        course_accesses: {
+          ...prev.course_accesses,
+          [skillId]: selectedSkill.lessons!.map(l => l.id)
+        }
+      }));
+    }
+  };
+
+  const deselectAllLessons = (skillId: string) => {
+    setForm(prev => ({
+      ...prev,
+      course_accesses: {
+        ...prev.course_accesses,
+        [skillId]: []
+      }
+    }));
+  };
 
   return (
     <div className="page-container max-w-2xl mx-auto animate-fade-in">
@@ -278,6 +355,141 @@ export default function CreateStudentPage() {
               required
               hint="Minimum 6 characters. You will share this with the student."
             />
+          </div>
+
+          {/* Payment Details */}
+          <div
+            className="pt-5 border-t"
+            style={{ borderColor: 'var(--border-primary)' }}
+          >
+            <h3 className="text-sm font-semibold mb-4 flex items-center gap-2" style={{ color: 'var(--text-secondary)' }}>
+              <CreditCard size={16} /> Payment Details
+            </h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <Input
+                label="Amount Paid (₹)"
+                type="number"
+                placeholder="e.g. 1500"
+                value={form.amount_paid}
+                onChange={(e) => updateField('amount_paid', e.target.value)}
+                icon={<span className="font-bold text-gray-500">₹</span>}
+              />
+              <Input
+                label="Number of Courses"
+                type="number"
+                placeholder="e.g. 3"
+                value={form.number_of_courses}
+                onChange={(e) => updateField('number_of_courses', e.target.value)}
+                icon={<BookOpen size={16} />}
+              />
+            </div>
+          </div>
+
+          {/* Course & Lesson Access Section */}
+          <div
+            className="pt-5 border-t"
+            style={{ borderColor: 'var(--border-primary)' }}
+          >
+            <div className="flex items-center justify-between mb-3">
+              <div className="flex items-center gap-2">
+                <div className="w-7 h-7 rounded-lg bg-indigo-500/10 flex items-center justify-center text-indigo-400">
+                  <Sparkles size={16} />
+                </div>
+                <div>
+                  <h3 className="text-sm font-semibold" style={{ color: 'var(--text-primary)' }}>
+                    Course & Lesson Access
+                  </h3>
+                  <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>
+                    Grant immediate access to a specific course and select lessons
+                  </p>
+                </div>
+              </div>
+
+              <label className="relative inline-flex items-center cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={form.grant_course_access}
+                  onChange={(e) => updateField('grant_course_access', e.target.checked)}
+                  className="sr-only peer"
+                />
+                <div className="w-11 h-6 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-indigo-500"></div>
+              </label>
+            </div>
+
+            {form.grant_course_access && (
+              <div className="p-4 rounded-xl border border-indigo-500/20 bg-indigo-500/5 space-y-4 mt-3 animate-fade-in">
+                <p className="text-xs text-indigo-400 mb-2">Select the courses you want to grant access to:</p>
+                <div className="space-y-4">
+                  {skills.map(skill => (
+                    <div key={skill.id} className="border border-white/10 bg-black/20 rounded-lg overflow-hidden">
+                      {/* Course Header Checkbox */}
+                      <label className="flex items-center gap-3 p-3 hover:bg-black/40 cursor-pointer transition-colors">
+                        <input
+                          type="checkbox"
+                          checked={!!form.course_accesses[skill.id]}
+                          onChange={() => toggleCourseSelection(skill.id)}
+                          className="w-4 h-4 text-indigo-500 bg-gray-800 border-gray-600 rounded focus:ring-indigo-500"
+                        />
+                        <span className={`text-sm font-medium ${form.course_accesses[skill.id] ? 'text-indigo-300' : 'text-gray-300'}`}>
+                          {skill.name}
+                        </span>
+                      </label>
+
+                      {/* Expandable Lessons Selection */}
+                      {form.course_accesses[skill.id] && (
+                        <div className="p-3 border-t border-white/5 bg-black/10">
+                          <div className="flex items-center justify-between mb-2">
+                            <span className="text-xs text-gray-400">Allowed Lessons</span>
+                            <div className="flex gap-2">
+                              <button
+                                type="button"
+                                onClick={() => selectAllLessons(skill.id)}
+                                className="text-[11px] text-indigo-400 hover:text-indigo-300 hover:underline"
+                              >
+                                Select All
+                              </button>
+                              <span className="text-gray-600 text-[11px]">|</span>
+                              <button
+                                type="button"
+                                onClick={() => deselectAllLessons(skill.id)}
+                                className="text-[11px] text-gray-500 hover:text-gray-300 hover:underline"
+                              >
+                                Clear
+                              </button>
+                            </div>
+                          </div>
+
+                          <div className="max-h-48 overflow-y-auto space-y-1.5 pr-2 custom-scrollbar">
+                            {skill.lessons && skill.lessons.length > 0 ? (
+                              skill.lessons.map((lesson, idx) => {
+                                const isLessonSelected = form.course_accesses[skill.id].includes(lesson.id);
+                                return (
+                                  <label key={lesson.id} className="flex items-start gap-3 p-2 rounded bg-black/20 hover:bg-black/40 border border-white/5 cursor-pointer transition-colors">
+                                    <div className="flex items-center h-5">
+                                      <input
+                                        type="checkbox"
+                                        checked={isLessonSelected}
+                                        onChange={() => toggleLesson(skill.id, lesson.id)}
+                                        className="w-4 h-4 text-indigo-500 bg-gray-800 border-gray-600 rounded focus:ring-indigo-500"
+                                      />
+                                    </div>
+                                    <span className={`text-xs flex-1 truncate ${isLessonSelected ? 'text-white' : 'text-gray-500'}`}>
+                                      {idx + 1}. {lesson.title}
+                                    </span>
+                                  </label>
+                                );
+                              })
+                            ) : (
+                              <p className="text-xs text-gray-500 italic">No lessons available.</p>
+                            )}
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Upload / Award Certificate Section */}

@@ -86,7 +86,8 @@ export interface Lesson {
   skill_id: string;
   title: string;
   description: string | null;
-  video_path: string | null;
+  video_url: string | null;
+  drive_file_id: string | null;
   notes_content: string | null;
   sort_order: number;
   duration_minutes: number | null;

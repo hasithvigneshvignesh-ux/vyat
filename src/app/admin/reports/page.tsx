@@ -2,30 +2,127 @@ import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import { BarChart3, TrendingUp, Users, Award, BookOpen, IndianRupee, PieChart, Activity } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
+import { createClient } from '@/lib/supabase/server';
 
-export default function AdminReportsPage() {
-  const branchBreakdown = [
-    { name: 'CSE AI & ML', students: 54, percentage: 38, color: 'from-violet-500 to-fuchsia-500' },
-    { name: 'CSE Core', students: 46, percentage: 32, color: 'from-blue-500 to-cyan-500' },
-    { name: 'CSE Cyber Security', students: 25, percentage: 18, color: 'from-emerald-500 to-teal-500' },
-    { name: 'CSE Data Science', students: 17, percentage: 12, color: 'from-amber-500 to-orange-500' },
+export default async function AdminReportsPage() {
+  const supabase = await createClient();
+
+  // Total Students
+  const { count: totalStudents } = await supabase
+    .from('profiles')
+    .select('*', { count: 'exact', head: true })
+    .eq('role', 'student');
+
+  // Completion Rate
+  const { count: completedSkills } = await supabase
+    .from('student_skill_access')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'completed');
+  
+  // We still need total enrollments (skill access count) for the completion rate calculation
+  const { count: totalEnrollments } = await supabase
+    .from('student_skill_access')
+    .select('*', { count: 'exact', head: true });
+
+  const completionRate = totalEnrollments ? ((completedSkills || 0) / totalEnrollments) * 100 : 0;
+
+  // Certificates Earned
+  const { count: certificatesEarned } = await supabase
+    .from('certificates')
+    .select('*', { count: 'exact', head: true })
+    .eq('status', 'unlocked');
+
+  // Gross GMV
+  const { data: payments } = await supabase.from('payments').select('amount');
+  const grossGmv = payments?.reduce((sum, p) => sum + (Number(p.amount) || 0), 0) || 0;
+
+  // Branch Breakdown
+  const { data: accessData } = await supabase
+    .from('student_skill_access')
+    .select(`
+      id,
+      skill:skills(
+        course:courses(
+          branch:branches(name)
+        )
+      )
+    `);
+
+  const branchCounts: Record<string, number> = {};
+  if (accessData) {
+    accessData.forEach(a => {
+      const branchName = (a.skill as any)?.course?.branch?.name || 'Unknown';
+      branchCounts[branchName] = (branchCounts[branchName] || 0) + 1;
+    });
+  }
+
+  const colors = [
+    'from-violet-500 to-fuchsia-500',
+    'from-blue-500 to-cyan-500',
+    'from-emerald-500 to-teal-500',
+    'from-amber-500 to-orange-500',
   ];
 
-  const popularSkills = [
-    { name: 'Data Structures & Algorithms in C++', branch: 'CSE Core', enrollments: 84, completionRate: '78%' },
-    { name: 'Machine Learning Fundamentals', branch: 'CSE AI & ML', enrollments: 76, completionRate: '65%' },
-    { name: 'Deep Learning & Neural Networks', branch: 'CSE AI & ML', enrollments: 62, completionRate: '54%' },
-    { name: 'Network Security & Ethical Hacking', branch: 'CSE Cyber Security', enrollments: 49, completionRate: '71%' },
-    { name: 'Exploratory Data Analysis with Pandas', branch: 'CSE Data Science', enrollments: 41, completionRate: '82%' },
-  ];
+  const totalBranchStudents = Object.values(branchCounts).reduce((a, b) => a + b, 0);
+  const branchBreakdown = Object.entries(branchCounts).map(([name, count], index) => ({
+    name,
+    students: count,
+    percentage: totalBranchStudents ? Math.round((count / totalBranchStudents) * 100) : 0,
+    color: colors[index % colors.length]
+  })).sort((a, b) => b.students - a.students);
 
-  const monthlyGrowth = [
-    { month: 'May 2026', revenue: 14200, students: 18 },
-    { month: 'Jun 2026', revenue: 22800, students: 29 },
-    { month: 'Jul 2026', revenue: 35400, students: 44 },
-    { month: 'Aug 2026', revenue: 49000, students: 61 },
-    { month: 'Sep 2026', revenue: 68500, students: 86 },
-  ];
+  // Top Performing Skills
+  const { data: skillsData } = await supabase
+    .from('skills')
+    .select(`
+      id,
+      name,
+      course:courses(branch:branches(name)),
+      student_skill_access(id, status)
+    `);
+
+  let popularSkills: any[] = [];
+  if (skillsData) {
+    popularSkills = skillsData.map((s: any) => {
+      const enrollments = s.student_skill_access?.length || 0;
+      const completed = s.student_skill_access?.filter((a: any) => a.status === 'completed').length || 0;
+      return {
+        name: s.name,
+        branch: s.course?.branch?.name || 'Unknown',
+        enrollments,
+        completionRate: enrollments ? Math.round((completed / enrollments) * 100) + '%' : '0%'
+      };
+    }).sort((a, b) => b.enrollments - a.enrollments).slice(0, 5);
+  }
+
+  // Monthly Growth
+  const monthlyGrowthData: Record<string, { revenue: number, students: number }> = {};
+  
+  if (payments) {
+    // For real implementation, you would aggregate created_at dates
+    // But since we removed mock data, we can just show an empty state or the actual aggregated data.
+    // Let's do actual aggregated data for payments
+    const { data: allPayments } = await supabase.from('payments').select('amount, created_at');
+    allPayments?.forEach(p => {
+      const date = new Date(p.created_at);
+      const month = date.toLocaleString('default', { month: 'short', year: 'numeric' });
+      if (!monthlyGrowthData[month]) monthlyGrowthData[month] = { revenue: 0, students: 0 };
+      monthlyGrowthData[month].revenue += Number(p.amount) || 0;
+    });
+
+    const { data: allStudents } = await supabase.from('profiles').select('created_at').eq('role', 'student');
+    allStudents?.forEach(s => {
+      const date = new Date(s.created_at);
+      const month = date.toLocaleString('default', { month: 'short', year: 'numeric' });
+      if (!monthlyGrowthData[month]) monthlyGrowthData[month] = { revenue: 0, students: 0 };
+      monthlyGrowthData[month].students += 1;
+    });
+  }
+
+  const monthlyGrowth = Object.entries(monthlyGrowthData).map(([month, data]) => ({
+    month,
+    ...data
+  })).sort((a, b) => new Date(a.month).getTime() - new Date(b.month).getTime());
 
   return (
     <div className="page-container space-y-6 animate-fade-in">
@@ -47,8 +144,8 @@ export default function AdminReportsPage() {
               <Users size={20} />
             </div>
             <div>
-              <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>142</p>
-              <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Total Enrollments</p>
+              <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{totalStudents || 0}</p>
+              <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Total Students</p>
             </div>
           </div>
         </Card>
@@ -59,7 +156,7 @@ export default function AdminReportsPage() {
               <TrendingUp size={20} />
             </div>
             <div>
-              <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>74.2%</p>
+              <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{completionRate.toFixed(1)}%</p>
               <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Avg. Completion Rate</p>
             </div>
           </div>
@@ -71,7 +168,7 @@ export default function AdminReportsPage() {
               <Award size={20} />
             </div>
             <div>
-              <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>68</p>
+              <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{certificatesEarned || 0}</p>
               <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Certificates Earned</p>
             </div>
           </div>
@@ -83,8 +180,8 @@ export default function AdminReportsPage() {
               <IndianRupee size={20} />
             </div>
             <div>
-              <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{formatCurrency(68500)}</p>
-              <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Monthly Gross GMV</p>
+              <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{formatCurrency(grossGmv)}</p>
+              <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Gross GMV</p>
             </div>
           </div>
         </Card>
@@ -97,11 +194,13 @@ export default function AdminReportsPage() {
             <PieChart size={18} className="text-violet-400" /> Students by Branch Specialization
           </h3>
           <div className="space-y-4">
-            {branchBreakdown.map((b) => (
+            {branchBreakdown.length === 0 ? (
+              <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>No data available yet.</p>
+            ) : branchBreakdown.map((b) => (
               <div key={b.name} className="space-y-1.5">
                 <div className="flex justify-between text-sm">
                   <span className="font-medium" style={{ color: 'var(--text-primary)' }}>{b.name}</span>
-                  <span style={{ color: 'var(--text-secondary)' }}>{b.students} students ({b.percentage}%)</span>
+                  <span style={{ color: 'var(--text-secondary)' }}>{b.students} enrollments ({b.percentage}%)</span>
                 </div>
                 <div className="w-full h-2.5 rounded-full bg-[var(--bg-tertiary)] overflow-hidden">
                   <div
@@ -120,7 +219,9 @@ export default function AdminReportsPage() {
             <Activity size={18} className="text-emerald-400" /> Enrollment &amp; Revenue Growth
           </h3>
           <div className="space-y-3">
-            {monthlyGrowth.map((m) => (
+            {monthlyGrowth.length === 0 ? (
+              <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>No data available yet.</p>
+            ) : monthlyGrowth.map((m) => (
               <div
                 key={m.month}
                 className="flex items-center justify-between p-3 rounded-xl transition-colors hover:bg-[var(--bg-tertiary)]"
@@ -132,7 +233,6 @@ export default function AdminReportsPage() {
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-bold text-emerald-400">{formatCurrency(m.revenue)}</p>
-                  <span className="text-[10px] font-semibold bg-emerald-500/10 text-emerald-400 px-2 py-0.5 rounded-full">+28%</span>
                 </div>
               </div>
             ))}
@@ -158,7 +258,13 @@ export default function AdminReportsPage() {
               </tr>
             </thead>
             <tbody className="divide-y" style={{ borderColor: 'var(--border-secondary)' }}>
-              {popularSkills.map((s) => (
+              {popularSkills.length === 0 ? (
+                <tr>
+                  <td colSpan={4} className="px-5 py-8 text-center text-sm" style={{ color: 'var(--text-tertiary)' }}>
+                    No skills data available yet.
+                  </td>
+                </tr>
+              ) : popularSkills.map((s) => (
                 <tr key={s.name} className="transition-colors hover:bg-[var(--bg-tertiary)]">
                   <td className="px-5 py-4 font-semibold text-sm" style={{ color: 'var(--text-primary)' }}>{s.name}</td>
                   <td className="px-5 py-4"><Badge variant="purple">{s.branch}</Badge></td>

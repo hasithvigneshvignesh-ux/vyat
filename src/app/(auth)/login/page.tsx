@@ -16,6 +16,7 @@ export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [demoLoading, setDemoLoading] = useState<'admin' | 'student' | null>(null);
   const [copiedRole, setCopiedRole] = useState<string | null>(null);
+  const [isAdminMode, setIsAdminMode] = useState(false);
 
   // Standard login handler
   const handleLogin = async (e: React.FormEvent) => {
@@ -179,106 +180,6 @@ export default function LoginPage() {
           </div>
         </div>
 
-        {/* Instant Demo Testing Card */}
-        <div
-          style={{
-            backgroundColor: 'rgba(15, 23, 42, 0.85)',
-            backdropFilter: 'blur(16px)',
-            borderRadius: '20px',
-            border: '1px solid rgba(96, 165, 250, 0.35)',
-            boxShadow: '0 12px 36px -8px rgba(30, 58, 138, 0.35)',
-            padding: 'clamp(18px, 4vw, 24px)',
-            display: 'flex',
-            flexDirection: 'column',
-            gap: '16px',
-          }}
-        >
-          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-              <Sparkles size={16} color="#fbbf24" />
-              <span style={{ fontSize: '12px', fontWeight: '700', letterSpacing: '0.06em', color: '#93c5fd', textTransform: 'uppercase' }}>
-                Instant Testing Mode
-              </span>
-            </div>
-            <span
-              style={{
-                fontSize: '11px',
-                fontWeight: '600',
-                backgroundColor: 'rgba(59, 130, 246, 0.2)',
-                color: '#bfdbfe',
-                padding: '3px 10px',
-                borderRadius: '999px',
-                border: '1px solid rgba(59, 130, 246, 0.4)',
-              }}
-            >
-              1-Click Demo
-            </span>
-          </div>
-
-          <p style={{ fontSize: '13px', color: '#cbd5e1', margin: 0, lineHeight: '1.5' }}>
-            Click below to instantly explore either portal without entering credentials:
-          </p>
-
-          {/* Quick Login Buttons (Grid on PC/Tablet, Stack on small Mobile) */}
-          <div
-            style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))',
-              gap: '12px',
-            }}
-          >
-            <a
-              href="/api/auth/demo?role=admin"
-              id="btn-admin-portal"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                padding: '13px 16px',
-                borderRadius: '12px',
-                background: 'linear-gradient(135deg, #4f46e5, #2563eb)',
-                color: '#ffffff',
-                fontSize: '13px',
-                fontWeight: '600',
-                border: '1px solid rgba(255, 255, 255, 0.25)',
-                boxShadow: '0 4px 14px rgba(79, 70, 229, 0.4)',
-                cursor: 'pointer',
-                textDecoration: 'none',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              <ShieldCheck size={17} />
-              <span>Admin Portal</span>
-            </a>
-
-            <a
-              href="/api/auth/demo?role=student"
-              id="btn-student-portal"
-              style={{
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '8px',
-                padding: '13px 16px',
-                borderRadius: '12px',
-                background: 'linear-gradient(135deg, #7c3aed, #9333ea)',
-                color: '#ffffff',
-                fontSize: '13px',
-                fontWeight: '600',
-                border: '1px solid rgba(255, 255, 255, 0.25)',
-                boxShadow: '0 4px 14px rgba(124, 58, 237, 0.4)',
-                cursor: 'pointer',
-                textDecoration: 'none',
-                transition: 'all 0.2s ease',
-              }}
-            >
-              <GraduationCap size={17} />
-              <span>Student Portal</span>
-            </a>
-          </div>
-        </div>
-
         {/* Regular Account Sign In Card */}
         <div
           style={{
@@ -295,10 +196,10 @@ export default function LoginPage() {
         >
           <div>
             <h2 style={{ fontSize: '19px', fontWeight: '700', color: '#f8fafc', margin: 0 }}>
-              Account Sign In
+              {isAdminMode ? 'Admin Sign In' : 'Student Sign In'}
             </h2>
             <p style={{ fontSize: '13px', color: '#94a3b8', margin: '4px 0 0 0' }}>
-              Sign in with your email and password
+              {isAdminMode ? 'Access your administrator dashboard' : 'Sign in with your email and password'}
             </p>
           </div>
 
@@ -345,7 +246,7 @@ export default function LoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@vyat.com"
+                  placeholder={isAdminMode ? "accounts@vyatai.com" : "student@vyatai.com"}
                   required
                   autoComplete="email"
                   style={{
@@ -457,108 +358,6 @@ export default function LoginPage() {
             </button>
           </form>
 
-          {/* Quick Autofill & 1-Click Login Selector */}
-          <div style={{ paddingTop: '16px', borderTop: '1px solid rgba(51, 65, 85, 0.6)', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <div style={{ fontSize: '11px', fontWeight: '700', color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '0.05em' }}>
-              Click to Auto-Fill &amp; Enter Instantly
-            </div>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <a
-                href="/api/auth/demo?role=admin"
-                id="btn-login-admin-fill"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '12px 14px',
-                  borderRadius: '10px',
-                  backgroundColor: 'rgba(15, 23, 42, 0.95)',
-                  border: '1px solid rgba(79, 70, 229, 0.5)',
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                  width: '100%',
-                  color: '#ffffff',
-                  textDecoration: 'none',
-                  boxSizing: 'border-box',
-                  transition: 'all 0.2s ease',
-                  position: 'relative',
-                  zIndex: 10,
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px' }}>
-                  <div style={{ backgroundColor: 'rgba(99, 102, 241, 0.2)', padding: '6px', borderRadius: '8px' }}>
-                    <ShieldCheck size={18} color="#818cf8" />
-                  </div>
-                  <div>
-                    <div style={{ fontWeight: '600', color: '#f8fafc', fontSize: '13px' }}>Admin Demo Login</div>
-                    <div style={{ color: '#94a3b8', fontFamily: 'monospace', fontSize: '11px' }}>admin@vyat.com / admin123</div>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    fontSize: '11px',
-                    fontWeight: '700',
-                    color: '#ffffff',
-                    backgroundColor: '#4f46e5',
-                    padding: '6px 12px',
-                    borderRadius: '8px',
-                    boxShadow: '0 2px 8px rgba(79, 70, 229, 0.4)',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  Log In ⚡
-                </div>
-              </a>
-
-              <a
-                href="/api/auth/demo?role=student"
-                id="btn-login-student-fill"
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'space-between',
-                  padding: '12px 14px',
-                  borderRadius: '10px',
-                  backgroundColor: 'rgba(15, 23, 42, 0.95)',
-                  border: '1px solid rgba(147, 51, 234, 0.5)',
-                  cursor: 'pointer',
-                  textAlign: 'left',
-                  width: '100%',
-                  color: '#ffffff',
-                  textDecoration: 'none',
-                  boxSizing: 'border-box',
-                  transition: 'all 0.2s ease',
-                  position: 'relative',
-                  zIndex: 10,
-                }}
-              >
-                <div style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '13px' }}>
-                  <div style={{ backgroundColor: 'rgba(168, 85, 247, 0.2)', padding: '6px', borderRadius: '8px' }}>
-                    <GraduationCap size={18} color="#c084fc" />
-                  </div>
-                  <div>
-                    <div style={{ fontWeight: '600', color: '#f8fafc', fontSize: '13px' }}>Student Demo Login</div>
-                    <div style={{ color: '#94a3b8', fontFamily: 'monospace', fontSize: '11px' }}>student@vyat.com / student123</div>
-                  </div>
-                </div>
-                <div
-                  style={{
-                    fontSize: '11px',
-                    fontWeight: '700',
-                    color: '#ffffff',
-                    backgroundColor: '#7c3aed',
-                    padding: '6px 12px',
-                    borderRadius: '8px',
-                    boxShadow: '0 2px 8px rgba(124, 58, 237, 0.4)',
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  Log In ⚡
-                </div>
-              </a>
-            </div>
-          </div>
         </div>
 
         {/* Responsive Compatibility Indicators & Footer */}
@@ -577,8 +376,23 @@ export default function LoginPage() {
             </span>
           </div>
 
-          <p style={{ fontSize: '11px', color: '#475569', margin: 0 }}>
-            &copy; {new Date().getFullYear()} Vyat. Production-Ready Platform.
+          <p style={{ fontSize: '11px', color: '#475569', margin: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}>
+            &copy; {new Date().getFullYear()} Vyat. Learn and Grow. 
+            <span>|</span>
+            <button 
+              onClick={() => setIsAdminMode(!isAdminMode)}
+              style={{
+                background: 'none',
+                border: 'none',
+                color: '#64748b',
+                fontSize: '11px',
+                cursor: 'pointer',
+                padding: 0,
+                textDecoration: 'underline'
+              }}
+            >
+              {isAdminMode ? 'Student Login' : 'Admin Login'}
+            </button>
           </p>
         </div>
       </div>

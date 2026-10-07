@@ -12,7 +12,7 @@ export interface LessonItem {
   id: string;
   title: string;
   duration_minutes?: number | null;
-  video_path?: string | null;
+  video_url?: string | null;
   sort_order?: number;
   is_completed?: boolean;
 }

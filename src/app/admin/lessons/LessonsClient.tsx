@@ -12,10 +12,10 @@ import { createClient } from '@/lib/supabase/client';
 import { useToast } from '@/providers/ToastProvider';
 import { generateSlug } from '@/lib/utils';
 import {
-  PlayCircle, Plus, Search, Video, Clock, HelpCircle,
-  UploadCloud, FileVideo, CheckCircle2, Loader2, Link2, X
+  PlayCircle, Plus, Search, Video, Clock, HelpCircle
 } from 'lucide-react';
 import Link from 'next/link';
+import DriveLinkInput from '@/components/video/drive-link-input';
 
 interface Props {
   initialLessons: (Lesson & { skill?: { name: string; slug: string } })[];
@@ -28,13 +28,6 @@ export default function LessonsClient({ initialLessons, skills }: Props) {
   const [search, setSearch] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
-  // Video source mode: 'upload' (local file) vs 'url' (stream link)
-  const [videoMode, setVideoMode] = useState<'upload' | 'url'>('upload');
-  const [isUploading, setIsUploading] = useState(false);
-  const [uploadedFileName, setUploadedFileName] = useState<string | null>(null);
-  const [uploadedFileSize, setUploadedFileSize] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
 
   // Quick MCQ modal state
   const [mcqModalLesson, setMcqModalLesson] = useState<any | null>(null);
@@ -58,6 +51,7 @@ export default function LessonsClient({ initialLessons, skills }: Props) {
     title: '',
     slug: '',
     video_url: '',
+    drive_file_id: null as string | null,
     duration_minutes: 15,
     sort_order: (initialLessons.length + 1) * 10,
     is_preview: false,
@@ -73,69 +67,6 @@ export default function LessonsClient({ initialLessons, skills }: Props) {
     }));
   };
 
-  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-
-    // Check if it is a video file
-    if (!file.type.startsWith('video/') && !file.name.match(/\.(mp4|mkv|webm|mov|avi)$/i)) {
-      addToast('Please upload a valid video file (.mp4, .webm, .mov, etc.)', 'warning');
-    }
-
-    setIsUploading(true);
-    setUploadedFileName(file.name);
-    setUploadedFileSize((file.size / (1024 * 1024)).toFixed(2) + ' MB');
-
-    // Auto calculate duration from video metadata
-    try {
-      const tempVideo = document.createElement('video');
-      tempVideo.preload = 'metadata';
-      tempVideo.src = URL.createObjectURL(file);
-      tempVideo.onloadedmetadata = () => {
-        window.URL.revokeObjectURL(tempVideo.src);
-        const mins = Math.max(1, Math.round(tempVideo.duration / 60));
-        setForm((prev) => ({ ...prev, duration_minutes: mins }));
-      };
-    } catch {
-      // Ignore duration calculation error
-    }
-
-    try {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('category', 'videos');
-
-      const res = await fetch('/api/admin/upload', {
-        method: 'POST',
-        body: formData,
-      });
-
-      const data = await res.json();
-      if (!res.ok) {
-        addToast(data.error || 'Failed to upload video', 'error');
-        return;
-      }
-
-      setForm((prev) => ({
-        ...prev,
-        video_url: data.url || data.localUrl,
-      }));
-
-      addToast(`Video "${file.name}" uploaded successfully!`, 'success');
-    } catch (err: any) {
-      addToast(err?.message || 'Error uploading video from local files', 'error');
-    } finally {
-      setIsUploading(false);
-    }
-  };
-
-  const handleRemoveUploadedFile = () => {
-    setUploadedFileName(null);
-    setUploadedFileSize(null);
-    setForm((prev) => ({ ...prev, video_url: '' }));
-    if (fileInputRef.current) fileInputRef.current.value = '';
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.title.trim() || !form.skill_id) {
@@ -149,11 +80,10 @@ export default function LessonsClient({ initialLessons, skills }: Props) {
       const newLesson = {
         skill_id: form.skill_id,
         title: form.title.trim(),
-        slug: form.slug.trim() || generateSlug(form.title),
-        video_path: form.video_url.trim() || null,
+        video_url: form.video_url.trim() || null,
+        drive_file_id: form.drive_file_id,
         duration_minutes: Number(form.duration_minutes) || 10,
         sort_order: Number(form.sort_order) || 1,
-        is_preview: form.is_preview,
         notes_content: form.content.trim(),
         is_active: form.is_active,
       };
@@ -165,15 +95,7 @@ export default function LessonsClient({ initialLessons, skills }: Props) {
         .single();
 
       if (error) {
-        // Fallback for offline/mock demo mode
-        const mockCreated = {
-          id: 'lesson-' + Date.now(),
-          ...newLesson,
-          created_at: new Date().toISOString(),
-          updated_at: new Date().toISOString(),
-          skill: { name: selectedSkill?.name || 'Skill Lesson', slug: selectedSkill?.slug || 'skill' },
-        } as any;
-        setLessons((prev) => [...prev, mockCreated]);
+        throw error;
       } else if (data) {
         setLessons((prev) => [
           ...prev,
@@ -186,13 +108,12 @@ export default function LessonsClient({ initialLessons, skills }: Props) {
 
       addToast(`Lesson "${form.title}" added successfully!`, 'success');
       setIsModalOpen(false);
-      setUploadedFileName(null);
-      setUploadedFileSize(null);
       setForm({
         skill_id: skills[0]?.id || '',
         title: '',
         slug: '',
         video_url: '',
+        drive_file_id: null,
         duration_minutes: 15,
         sort_order: (lessons.length + 2) * 10,
         is_preview: false,
@@ -258,6 +179,20 @@ export default function LessonsClient({ initialLessons, skills }: Props) {
     }
   };
 
+  const handleDelete = async (id: string, title: string) => {
+    if (!confirm(`Are you sure you want to delete the lesson "${title}"? This cannot be undone.`)) return;
+    
+    try {
+      const { error } = await supabase.from('lessons').delete().eq('id', id);
+      if (error) throw error;
+      
+      setLessons(prev => prev.filter(l => l.id !== id));
+      addToast(`Lesson deleted successfully`, 'success');
+    } catch (err: any) {
+      addToast(err?.message || 'Failed to delete lesson', 'error');
+    }
+  };
+
   const filteredLessons = lessons.filter((l) => {
     const matchesSkill = selectedSkillFilter === 'all' || l.skill_id === selectedSkillFilter;
     const matchesSearch = !search || l.title.toLowerCase().includes(search.toLowerCase());
@@ -320,7 +255,7 @@ export default function LessonsClient({ initialLessons, skills }: Props) {
                 <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-tertiary)' }}>Duration</th>
                 <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider hidden lg:table-cell" style={{ color: 'var(--text-tertiary)' }}>Access</th>
                 <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider" style={{ color: 'var(--text-tertiary)' }}>Status</th>
-                <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-right" style={{ color: 'var(--text-tertiary)' }}>Topic MCQs</th>
+                <th className="px-5 py-3.5 text-xs font-semibold uppercase tracking-wider text-right" style={{ color: 'var(--text-tertiary)' }}>Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y" style={{ borderColor: 'var(--border-secondary)' }}>
@@ -335,7 +270,7 @@ export default function LessonsClient({ initialLessons, skills }: Props) {
                         <p className="text-sm font-semibold truncate" style={{ color: 'var(--text-primary)' }}>
                           {lesson.title}
                         </p>
-                        {(lesson.video_url || lesson.video_path) && (
+                        {(lesson.video_url || lesson.video_url) && (
                           <span className="text-[11px] font-mono text-blue-400 flex items-center gap-1 mt-0.5">
                             <Video size={11} /> Video Attached
                           </span>
@@ -363,13 +298,22 @@ export default function LessonsClient({ initialLessons, skills }: Props) {
                     </Badge>
                   </td>
                   <td className="px-5 py-4 text-right">
-                    <button
-                      onClick={() => handleOpenQuickMcq(lesson)}
-                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors"
-                      title="Add MCQ specifically after this video"
-                    >
-                      <Plus size={13} /> Add MCQ
-                    </button>
+                    <div className="flex items-center justify-end gap-2">
+                      <button
+                        onClick={() => handleOpenQuickMcq(lesson)}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-medium bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors"
+                        title="Add MCQ specifically after this video"
+                      >
+                        <Plus size={13} /> Add MCQ
+                      </button>
+                      <button
+                        onClick={() => handleDelete(lesson.id, lesson.title)}
+                        className="text-red-500 hover:text-red-600 transition-colors text-xs font-medium ml-2"
+                        title="Delete Lesson"
+                      >
+                        Delete
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}
@@ -411,106 +355,11 @@ export default function LessonsClient({ initialLessons, skills }: Props) {
             />
           </div>
 
-          {/* Video Attachment Mode: Local Upload vs Stream URL */}
           <div className="space-y-2">
-            <div className="flex items-center justify-between">
-              <label className="text-xs font-semibold" style={{ color: 'var(--text-secondary)' }}>
-                Lesson Video Content *
-              </label>
-              <div className="flex items-center gap-1 bg-white/5 p-0.5 rounded-lg border border-white/10 text-xs">
-                <button
-                  type="button"
-                  onClick={() => setVideoMode('upload')}
-                  className={`px-2.5 py-1 rounded-md transition-colors flex items-center gap-1 ${
-                    videoMode === 'upload'
-                      ? 'bg-blue-600 text-white font-medium shadow-sm'
-                      : 'text-gray-400 hover:text-white'
-                  }`}
-                >
-                  <UploadCloud size={13} /> Upload Local File
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setVideoMode('url')}
-                  className={`px-2.5 py-1 rounded-md transition-colors flex items-center gap-1 ${
-                    videoMode === 'url'
-                      ? 'bg-blue-600 text-white font-medium shadow-sm'
-                      : 'text-gray-400 hover:text-white'
-                  }`}
-                >
-                  <Link2 size={13} /> Stream URL
-                </button>
-              </div>
-            </div>
-
-            {videoMode === 'upload' ? (
-              <div>
-                <input
-                  type="file"
-                  ref={fileInputRef}
-                  onChange={handleFileUpload}
-                  accept="video/mp4,video/webm,video/ogg,video/quicktime,video/x-matroska,.mp4,.webm,.mov,.mkv"
-                  className="hidden"
-                  id="video-file-upload"
-                />
-
-                {!uploadedFileName && !form.video_url ? (
-                  <label
-                    htmlFor="video-file-upload"
-                    className="flex flex-col items-center justify-center border-2 border-dashed rounded-xl p-6 cursor-pointer transition-all hover:border-blue-500/50 hover:bg-blue-500/5"
-                    style={{ borderColor: 'var(--border-primary)', backgroundColor: 'var(--bg-secondary)' }}
-                  >
-                    {isUploading ? (
-                      <div className="flex flex-col items-center gap-2">
-                        <Loader2 size={32} className="animate-spin text-blue-400" />
-                        <p className="text-xs font-medium text-blue-300">Uploading video from local files...</p>
-                      </div>
-                    ) : (
-                      <>
-                        <div className="w-12 h-12 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-400 mb-2">
-                          <UploadCloud size={24} />
-                        </div>
-                        <p className="text-sm font-semibold text-white">Click to browse or drag &amp; drop video</p>
-                        <p className="text-xs text-gray-400 mt-1">MP4, WebM, MOV, MKV up to 500MB</p>
-                      </>
-                    )}
-                  </label>
-                ) : (
-                  <div className="p-3.5 rounded-xl border border-emerald-500/30 bg-emerald-500/10 flex items-center justify-between animate-fade-in">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center">
-                        <FileVideo size={20} />
-                      </div>
-                      <div>
-                        <p className="text-sm font-semibold text-emerald-200 truncate max-w-xs">
-                          {uploadedFileName || 'Video File Ready'}
-                        </p>
-                        <p className="text-xs text-emerald-400/80 flex items-center gap-2">
-                          {uploadedFileSize && <span>{uploadedFileSize}</span>}
-                          <span className="flex items-center gap-1">
-                            <CheckCircle2 size={12} /> Direct local file uploaded
-                          </span>
-                        </p>
-                      </div>
-                    </div>
-                    <button
-                      type="button"
-                      onClick={handleRemoveUploadedFile}
-                      className="p-1.5 rounded-lg text-gray-400 hover:text-red-400 hover:bg-red-500/10 transition-colors"
-                      title="Remove file"
-                    >
-                      <X size={16} />
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <Input
-                placeholder="https://www.youtube.com/watch?v=... or https://cloud.server/video.mp4"
-                value={form.video_url}
-                onChange={(e) => setForm({ ...form, video_url: e.target.value })}
-              />
-            )}
+            <DriveLinkInput 
+              value={form.video_url} 
+              onChange={(url, fileId) => setForm({ ...form, video_url: url, drive_file_id: fileId })} 
+            />
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -579,7 +428,7 @@ export default function LessonsClient({ initialLessons, skills }: Props) {
             <Button type="button" variant="ghost" onClick={() => setIsModalOpen(false)}>
               Cancel
             </Button>
-            <Button type="submit" isLoading={isSubmitting || isUploading}>
+            <Button type="submit" isLoading={isSubmitting}>
               Create Lesson
             </Button>
           </div>

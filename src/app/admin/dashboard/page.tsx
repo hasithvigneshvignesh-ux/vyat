@@ -80,56 +80,19 @@ export default async function AdminDashboardPage() {
     .order('created_at', { ascending: false })
     .limit(5);
 
-  // Fallback demo data for immediate testing
-  const fallbackStudents = [
-    { id: 'std-1', full_name: 'Aarav Patel', email: 'aarav.patel@college.edu', branch: 'CSE Core', year_of_study: 3, is_active: true, created_at: new Date(Date.now() - 3600000).toISOString() },
-    { id: 'std-2', full_name: 'Priya Sharma', email: 'priya.s@university.edu', branch: 'CSE AI & ML', year_of_study: 4, is_active: true, created_at: new Date(Date.now() - 86400000).toISOString() },
-    { id: 'std-3', full_name: 'Rahul Varma', email: 'rahul.v@tech.edu', branch: 'CSE Cyber Security', year_of_study: 2, is_active: true, created_at: new Date(Date.now() - 172800000).toISOString() },
-    { id: 'std-4', full_name: 'Sneha Reddy', email: 'sneha.r@college.edu', branch: 'CSE Data Science', year_of_study: 3, is_active: true, created_at: new Date(Date.now() - 259200000).toISOString() },
-  ];
-
-  const fallbackCompletions = [
-    {
-      id: 'comp-1',
-      completion_date: new Date(Date.now() - 4 * 3600000).toISOString(),
-      student: { full_name: 'Aarav Patel', email: 'aarav.patel@college.edu' },
-      skill: { name: 'Data Structures & Algorithms in C++' },
-    },
-    {
-      id: 'comp-2',
-      completion_date: new Date(Date.now() - 26 * 3600000).toISOString(),
-      student: { full_name: 'Priya Sharma', email: 'priya.s@university.edu' },
-      skill: { name: 'Machine Learning Fundamentals' },
-    },
-    {
-      id: 'comp-3',
-      completion_date: new Date(Date.now() - 48 * 3600000).toISOString(),
-      student: { full_name: 'Sneha Reddy', email: 'sneha.r@college.edu' },
-      skill: { name: 'Exploratory Data Analysis' },
-    },
-  ];
-
-  const fallbackPayments = [
-    { id: 'pay-1', student: { full_name: 'Aarav Patel' }, amount: 1499, payment_method: 'upi', payment_status: 'paid', transaction_reference: 'UPI/2026/0928/847291', created_at: new Date().toISOString() },
-    { id: 'pay-2', student: { full_name: 'Priya Sharma' }, amount: 2999, payment_method: 'upi', payment_status: 'paid', transaction_reference: 'UPI/2026/0927/109283', created_at: new Date(Date.now() - 86400000).toISOString() },
-    { id: 'pay-3', student: { full_name: 'Rahul Varma' }, amount: 999, payment_method: 'card', payment_status: 'paid', transaction_reference: 'CRD-TXN-99412', created_at: new Date(Date.now() - 172800000).toISOString() },
-  ];
-
-  const hasData = recentStudents && recentStudents.length > 0;
-
   return (
     <AdminDashboardClient
       stats={{
-        totalStudents: hasData ? (totalStudents || 0) : 48,
-        activeStudents: hasData ? activeStudents : 42,
-        totalActiveSkills: hasData ? (totalActiveSkills || 0) : 136,
-        completedSkills: hasData ? (completedSkillsCount || 0) : 29,
-        certificatesIssued: hasData ? (certificatesIssued || 0) : 18,
-        expiringAccess: hasData ? (expiringAccess || 0) : 4,
+        totalStudents: totalStudents || 0,
+        activeStudents: activeStudents || 0,
+        totalActiveSkills: totalActiveSkills || 0,
+        completedSkills: completedSkillsCount || 0,
+        certificatesIssued: certificatesIssued || 0,
+        expiringAccess: expiringAccess || 0,
       }}
-      recentStudents={hasData ? recentStudents : (fallbackStudents as any)}
-      recentCompletions={(recentCompletions && recentCompletions.length > 0) ? recentCompletions : (fallbackCompletions as any)}
-      recentPayments={(recentPayments && recentPayments.length > 0) ? recentPayments : (fallbackPayments as any)}
+      recentStudents={recentStudents || []}
+      recentCompletions={recentCompletions || []}
+      recentPayments={recentPayments || []}
     />
   );
 }

@@ -10,27 +10,71 @@ export default async function StudentDetailPage({
   const { studentId } = await params;
   const supabase = await createClient();
 
-  // Fetch student profile
-  const { data: student } = await supabase
-    .from('profiles')
-    .select('*')
-    .eq('id', studentId)
-    .eq('role', 'student')
-    .single();
+  let student = null;
+  const isMock = studentId.startsWith('std-');
+
+  if (isMock) {
+    const { SAMPLE_STUDENTS } = await import('@/lib/mockData');
+    student = SAMPLE_STUDENTS.find(s => s.id === studentId);
+  } else {
+    // Fetch student profile
+    const { data } = await supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', studentId)
+      .eq('role', 'student')
+      .single();
+    student = data;
+  }
 
   if (!student) {
     notFound();
   }
 
-  // Fetch student's skill access
-  const { data: skillAccess } = await supabase
-    .from('student_skill_access')
-    .select(`
-      *,
-      skill:skills(*, course:courses(name, branch:branches(name)))
-    `)
-    .eq('student_id', studentId)
-    .order('activated_at', { ascending: false });
+  let skillAccess: any[] = [];
+  let payments: any[] = [];
+  let certificates: any[] = [];
+  let lessonProgress: any[] = [];
+
+  if (isMock) {
+    const { SAMPLE_PAYMENTS, SAMPLE_CERTIFICATES } = await import('@/lib/mockData');
+    payments = SAMPLE_PAYMENTS.filter(p => p.student_id === studentId);
+    certificates = SAMPLE_CERTIFICATES.filter(c => c.student_id === studentId);
+    // skillAccess and lessonProgress left empty for mock to simplify
+  } else {
+    // Fetch student's skill access
+    const { data: sa } = await supabase
+      .from('student_skill_access')
+      .select(`
+        *,
+        skill:skills(*, course:courses(name, branch:branches(name)))
+      `)
+      .eq('student_id', studentId)
+      .order('activated_at', { ascending: false });
+    skillAccess = sa || [];
+
+    // Fetch student's payments
+    const { data: p } = await supabase
+      .from('payments')
+      .select('*')
+      .eq('student_id', studentId)
+      .order('created_at', { ascending: false });
+    payments = p || [];
+
+    // Fetch certificates
+    const { data: c } = await supabase
+      .from('certificates')
+      .select('*, skill:skills(name)')
+      .eq('student_id', studentId);
+    certificates = c || [];
+
+    // Fetch lesson progress for skill progress calculation
+    const { data: lp } = await supabase
+      .from('lesson_progress')
+      .select('*')
+      .eq('student_id', studentId);
+    lessonProgress = lp || [];
+  }
 
   // Fetch all available skills (for activation UI)
   const { data: allSkills } = await supabase
@@ -41,25 +85,6 @@ export default async function StudentDetailPage({
     `)
     .eq('is_active', true)
     .order('sort_order');
-
-  // Fetch student's payments
-  const { data: payments } = await supabase
-    .from('payments')
-    .select('*')
-    .eq('student_id', studentId)
-    .order('created_at', { ascending: false });
-
-  // Fetch certificates
-  const { data: certificates } = await supabase
-    .from('certificates')
-    .select('*, skill:skills(name)')
-    .eq('student_id', studentId);
-
-  // Fetch lesson progress for skill progress calculation
-  const { data: lessonProgress } = await supabase
-    .from('lesson_progress')
-    .select('*')
-    .eq('student_id', studentId);
 
   // Fetch lesson counts per skill
   const skillIds = (skillAccess || []).map(sa => sa.skill_id);

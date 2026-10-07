@@ -8,7 +8,7 @@ const DEMO_LESSONS: Record<string, any> = {
     id: 'lesson-dsa-1',
     title: '1. Arrays, Memory Layout & Dynamic Sizing',
     duration_minutes: 25,
-    video_path: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+    video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
     notes_content: `### Arrays & Memory Layout\n\nIn this lecture, we delve deep into:\n1. **Contiguous Memory Allocation** — cache line efficiency, O(1) random access indexing.\n2. **Dynamic Array Resizing** — amortized O(1) append analysis.\n3. **Pointer Arithmetic** — how compilers map index lookups to physical memory addresses.`,
     sort_order: 1,
     skill: {
@@ -24,7 +24,7 @@ const DEMO_LESSONS: Record<string, any> = {
     id: 'lesson-dsa-2',
     title: '2. Two-Pointer & Sliding Window Techniques',
     duration_minutes: 32,
-    video_path: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+    video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
     notes_content: `### Two-Pointer & Sliding Window\n\n- How to reduce O(N^2) brute force problems down to optimal O(N) linear time.\n- Fixed-size vs dynamic-size sliding windows.\n- Left and right convergence criteria.`,
     sort_order: 2,
     skill: {
@@ -40,7 +40,7 @@ const DEMO_LESSONS: Record<string, any> = {
     id: 'lesson-dsa-3',
     title: '3. Singly & Doubly Linked List Inversion & Cycle Detection',
     duration_minutes: 28,
-    video_path: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
+    video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
     notes_content: `### Linked Lists & Floyd's Cycle Finding\n\n- In-place reversal of pointers without extra space.\n- Fast & Slow pointer (Tortoise and Hare algorithm) for cycle detection.`,
     sort_order: 3,
     skill: {
@@ -85,7 +85,7 @@ export default async function LessonPage({
       id: lessonId,
       title: 'Interactive Video Lecture',
       duration_minutes: 30,
-      video_path: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+      video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
       notes_content: 'Comprehensive lesson notes and lecture slides for this session.',
       sort_order: 1,
       skill: {
