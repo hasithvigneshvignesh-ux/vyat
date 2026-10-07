@@ -173,12 +173,13 @@ export async function POST(request: NextRequest) {
 
     // Log admin action
     if (adminId) {
-      await supabaseAdmin.from('admin_actions').insert({
+      const { error: logError } = await supabaseAdmin.from('admin_actions').insert({
         admin_id: adminId,
         action_type: 'student_created',
         description: `Created student account for ${full_name} (${email})${award_certificate ? ' with certificate awarded' : ''}`,
         metadata: { student_id: authData.user.id },
-      }).catch(() => {}); // ignore errors for logging
+      });
+      if (logError) console.error('Error logging action:', logError);
     }
 
     return NextResponse.json({
