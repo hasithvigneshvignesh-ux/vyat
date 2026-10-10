@@ -182,7 +182,10 @@ export default function SkillDetailClient({
 
       {/* Lessons list */}
       {hasAccess && (
-        <div className="bg-white dark:bg-[#14141e] border border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-sm">
+        <div 
+          className="border rounded-2xl p-6 shadow-sm"
+          style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}
+        >
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold" style={{ color: 'var(--text-primary)' }}>
               Lessons
@@ -205,29 +208,34 @@ export default function SkillDetailClient({
                 <Link key={lesson.id} href={`/skills/${skill.id}/lessons/${lesson.id}`}>
                   <div
                     className={`
-                      flex items-center gap-4 p-4 rounded-lg border border-gray-200 dark:border-gray-800 bg-white dark:bg-[#1a1a24] shadow-sm hover:shadow-md transition-all
-                      ${completed ? 'border-emerald-200 dark:border-emerald-800/30' : started ? 'border-blue-200 dark:border-blue-800/30' : 'hover:border-indigo-300 dark:hover:border-indigo-700'}
+                      flex items-center gap-4 p-4 rounded-lg border shadow-sm transition-all group hover:-translate-y-0.5
+                      ${completed ? 'border-emerald-500/30' : started ? 'border-blue-500/30' : 'hover:border-indigo-500/50'}
                     `}
+                    style={{ 
+                      backgroundColor: 'var(--bg-tertiary)',
+                      borderColor: (!completed && !started) ? 'var(--border-secondary)' : undefined
+                    }}
                   >
                     {/* Lesson number */}
                     <div className={`
                       w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 text-sm font-bold
                       ${completed
-                        ? 'bg-emerald-100 text-emerald-600 dark:bg-emerald-900/40 dark:text-emerald-400'
+                        ? 'bg-emerald-500/10 text-emerald-500'
                         : started
-                        ? 'bg-blue-100 text-blue-600 dark:bg-blue-900/40 dark:text-blue-400'
-                        : 'bg-slate-100 text-slate-500 dark:bg-slate-800 dark:text-slate-400'
+                        ? 'bg-blue-500/10 text-blue-500'
+                        : ''
                       }
                     `}
+                    style={(!completed && !started) ? { backgroundColor: 'var(--bg-elevated)', color: 'var(--text-muted)' } : undefined}
                     >
                       {completed ? <CheckCircle2 size={18} /> : idx + 1}
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <p className="text-base font-bold truncate text-gray-900 dark:text-gray-100">
+                      <p className="text-base font-bold truncate" style={{ color: 'var(--text-primary)' }}>
                         {lesson.title}
                       </p>
-                      <div className="flex items-center gap-3 mt-1.5 text-xs text-gray-500 dark:text-gray-400 font-medium">
+                      <div className="flex items-center gap-3 mt-1.5 text-xs font-medium" style={{ color: 'var(--text-tertiary)' }}>
                         {lesson.duration_minutes && (
                           <span className="flex items-center gap-1.5">
                             <Clock size={12} className="text-pink-500" /> {lesson.duration_minutes} min
@@ -247,7 +255,7 @@ export default function SkillDetailClient({
                     </div>
 
                     <div className="flex-shrink-0 pl-2">
-                       <ArrowRight size={18} className="text-gray-400 group-hover:text-indigo-600 transition-colors" />
+                       <ArrowRight size={18} className="transition-colors opacity-50 group-hover:opacity-100 group-hover:text-indigo-500" />
                     </div>
                   </div>
                 </Link>

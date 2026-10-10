@@ -150,7 +150,7 @@ export default function AdminSidebar() {
         style={{
           display: 'flex',
           flexDirection: 'column',
-          height: '100vh',
+          height: '100dvh',
           backgroundColor: 'var(--bg-secondary)',
           borderRight: '1px solid var(--border-primary)',
           overflow: 'hidden',

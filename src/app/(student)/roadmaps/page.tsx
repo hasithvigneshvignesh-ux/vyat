@@ -92,8 +92,8 @@ export default async function RoadmapsPage() {
   return (
     <div className="page-container flex flex-col gap-8 animate-fade-in">
       <div>
-        <h1 className="text-3xl font-extrabold text-slate-900">Learning Roadmaps</h1>
-        <p className="text-base mt-2 text-slate-500 font-medium">
+        <h1 className="text-3xl font-extrabold" style={{ color: 'var(--text-primary)' }}>Learning Roadmaps</h1>
+        <p className="text-base mt-2 font-medium" style={{ color: 'var(--text-secondary)' }}>
           Follow structured paths to master a domain
         </p>
       </div>
@@ -114,25 +114,32 @@ export default async function RoadmapsPage() {
             return (
               <div 
                 key={roadmap.id} 
-                className="bg-white rounded-[24px] p-8 shadow-[0_4px_20px_rgba(0,0,0,0.04)] border border-slate-100"
+                className="rounded-[24px] p-8 shadow-sm border"
+                style={{ backgroundColor: 'var(--bg-card)', borderColor: 'var(--border-primary)' }}
               >
                 <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-6 mb-6">
                   <div>
-                    <span className="inline-block px-3 py-1 bg-slate-100 text-slate-600 text-xs font-bold uppercase tracking-wider rounded-full mb-3">
+                    <span 
+                      className="inline-block px-3 py-1 text-xs font-bold uppercase tracking-wider rounded-full mb-3"
+                      style={{ backgroundColor: 'var(--bg-tertiary)', color: 'var(--text-secondary)' }}
+                    >
                       {roadmap.branch?.name}
                     </span>
-                    <h2 className="text-2xl font-bold text-slate-900">
+                    <h2 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>
                       {roadmap.name}
                     </h2>
                     {roadmap.description && (
-                      <p className="text-base mt-2 text-slate-500 leading-relaxed max-w-3xl">
+                      <p className="text-base mt-2 leading-relaxed max-w-3xl" style={{ color: 'var(--text-secondary)' }}>
                         {roadmap.description}
                       </p>
                     )}
                   </div>
-                  <div className="text-right shrink-0 bg-slate-50 px-5 py-3 rounded-2xl border border-slate-100">
-                    <p className="text-3xl font-black text-slate-900">{progress}%</p>
-                    <p className="text-sm font-semibold text-slate-500 mt-1 uppercase tracking-widest">{completed}/{skills.length} skills</p>
+                  <div 
+                    className="text-right shrink-0 px-5 py-3 rounded-2xl border"
+                    style={{ backgroundColor: 'var(--bg-tertiary)', borderColor: 'var(--border-secondary)' }}
+                  >
+                    <p className="text-3xl font-black" style={{ color: 'var(--text-primary)' }}>{progress}%</p>
+                    <p className="text-sm font-semibold mt-1 uppercase tracking-widest" style={{ color: 'var(--text-tertiary)' }}>{completed}/{skills.length} skills</p>
                   </div>
                 </div>
                 <ProgressBar value={progress} size="lg" className="mb-8" color="brand" />
@@ -143,7 +150,8 @@ export default async function RoadmapsPage() {
                     return (
                       <div
                         key={rs.skill?.id || idx}
-                        className="flex items-center gap-4 py-3 px-4 rounded-lg bg-[#F8FAFC] border border-slate-100/50 hover:bg-slate-50 transition-colors"
+                        className="flex items-center gap-4 py-3 px-4 rounded-lg border transition-colors hover:bg-[var(--bg-tertiary)]"
+                        style={{ backgroundColor: 'var(--bg-elevated)', borderColor: 'var(--border-secondary)' }}
                       >
                         <div className={`w-10 h-10 rounded-lg flex items-center justify-center text-sm font-bold flex-shrink-0 ${
                           status === 'completed' ? 'bg-emerald-100 text-emerald-600' :
@@ -154,11 +162,14 @@ export default async function RoadmapsPage() {
                         </div>
                         
                         <div className="flex-1 min-w-0 flex flex-col justify-center">
-                          <p className={`text-base font-bold truncate ${status ? 'text-slate-900' : 'text-slate-600'}`}>
+                          <p 
+                            className="text-base font-bold truncate"
+                            style={{ color: status ? 'var(--text-primary)' : 'var(--text-muted)' }}
+                          >
                             {rs.skill?.name}
                           </p>
                           {rs.skill?.short_description && (
-                            <p className="text-xs sm:text-sm text-slate-500 truncate mt-0.5 font-medium">
+                            <p className="text-xs sm:text-sm truncate mt-0.5 font-medium" style={{ color: 'var(--text-tertiary)' }}>
                               {rs.skill.short_description}
                             </p>
                           )}
@@ -177,7 +188,7 @@ export default async function RoadmapsPage() {
                               </span>
                             </Link>
                           )}
-                          {!status && <Lock size={16} className="text-slate-400 mx-2" />}
+                          {!status && <Lock size={16} style={{ color: 'var(--text-muted)', margin: '0 8px' }} />}
                         </div>
                       </div>
                     );

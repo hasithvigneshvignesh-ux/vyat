@@ -77,7 +77,7 @@ export default function ClassesClient({ courses }: Props) {
   const totalCompleted = courses.reduce((s, c) => s + c._completedCount, 0);
 
   return (
-    <div className="min-h-screen bg-[#F7F9FC] dark:bg-slate-950 text-[#172033] dark:text-slate-100 p-6 sm:p-10 lg:p-12 transition-colors">
+    <div className="min-h-[100dvh] p-6 sm:p-10 lg:p-12 transition-colors">
       <div className="w-full flex-1 md:px-4 lg:px-6 xl:px-10 mx-auto max-w-[1800px] animate-fade-in">
         {/* ── Header ── */}
         <div className="mb-6">
@@ -91,8 +91,8 @@ export default function ClassesClient({ courses }: Props) {
               <GraduationCap size={22} color="#fff" />
             </div>
             <div>
-              <h1 className="text-2xl font-bold text-[#172033] dark:text-white">My Classes</h1>
-              <p className="text-sm text-[#667085] dark:text-slate-400">
+              <h1 className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>My Classes</h1>
+              <p className="text-sm" style={{ color: 'var(--text-tertiary)' }}>
                 {courses.length} active course{courses.length !== 1 ? 's' : ''} · {totalSkills} module{totalSkills !== 1 ? 's' : ''} enrolled
               </p>
             </div>

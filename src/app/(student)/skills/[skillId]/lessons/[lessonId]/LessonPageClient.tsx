@@ -157,7 +157,7 @@ export default function LessonPageClient({
   ).length;
 
   return (
-    <div className="min-h-screen animate-fade-in">
+    <div className="min-h-[100dvh] animate-fade-in">
       {/* Top nav bar */}
       <div
         className="sticky top-0 z-30 border-b px-4 py-3 flex items-center justify-between"
@@ -206,7 +206,7 @@ export default function LessonPageClient({
           style={{
             backgroundColor: 'var(--bg-secondary)',
             borderColor: 'var(--border-primary)',
-            height: 'calc(100vh - 57px)',
+            height: 'calc(100dvh - 57px)',
           }}
         >
           <div className="p-4">
