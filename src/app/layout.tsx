@@ -38,83 +38,25 @@ const jetbrains = JetBrains_Mono({
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vyat-v3.vercel.app';
 
 export const metadata: Metadata = {
-  metadataBase: new URL(BASE_URL),
+  metadataBase: new URL("https://vyatai.com"),
   title: {
-    default: "Courses for CSE Students in India — Placements, Core Subjects, DSA, Web Dev & AI | Vyat",
-    template: "%s | Vyat",
+    default: "Vyat AI — CSE Courses, Placements & Skills for Tech Students",
+    template: "%s | Vyat AI",
   },
-  description: "India's premier learning platform for CSE & engineering students. Master campus placements, core CS subjects (OS, DBMS, Computer Networks), Data Structures & Algorithms (DSA), Full-Stack Web Development, and AI learning with structured daily lessons and verified certificates.",
-  keywords: [
-    "Courses for CSE",
-    "CSE students India",
-    "Engineering students India",
-    "Campus placements preparation",
-    "Core subjects CSE",
-    "Operating Systems DBMS Computer Networks",
-    "Data Structures and Algorithms",
-    "DSA for placements",
-    "Web Dev courses for CSE",
-    "Full stack web development",
-    "AI learning for engineering students",
-    "Artificial Intelligence Machine Learning CSE",
-    "B.Tech CSE courses",
-    "Engineering placements India",
-    "Technical interview preparation",
-    "Computer Science Engineering syllabus",
-    "Vyat learning platform",
-  ],
-  authors: [{ name: "Vyat Learning" }],
-  creator: "Vyat",
-  publisher: "Vyat",
-  formatDetection: {
-    email: false,
-    address: false,
-    telephone: false,
-  },
-  alternates: {
-    canonical: BASE_URL,
-  },
-  icons: {
-    icon: [
-      { url: '/favicon.ico', sizes: '32x32' },
-      { url: '/icon.png', sizes: '512x512', type: 'image/png' },
-    ],
-    apple: [
-      { url: '/apple-icon.png', sizes: '512x512', type: 'image/png' },
-    ],
-  },
+  description: "Master CSE core subjects, DSA, Web Development, and AI. Curated skill roadmaps, courses, and interview preparation for engineering students in India.",
+  keywords: ["Vyat AI", "VyatAI", "Vyat", "CSE courses", "DSA roadmap", "AI engineering skills"],
   openGraph: {
-    title: "Courses for CSE Students in India — Placements, Core Subjects, DSA, Web Dev & AI | Vyat",
-    description: "India's dedicated learning hub for CSE & engineering students. Master campus placements, core CS subjects (OS, DBMS, Networks), DSA, Web Dev, and AI learning with daily drip lessons.",
-    url: BASE_URL,
-    siteName: "Vyat",
+    title: "Vyat AI — CSE Courses & Skill Roadmaps",
+    description: "Placement preparation, DSA, Full-Stack Web Development, and AI courses for CSE students.",
+    url: "https://vyatai.com",
+    siteName: "Vyat AI",
     locale: "en_IN",
     type: "website",
-    images: [
-      {
-        url: `${BASE_URL}/brand/vyat-og.png`,
-        width: 1200,
-        height: 630,
-        alt: "Vyat — Courses for CSE Students in India",
-      },
-    ],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Courses for CSE Students in India — Placements, Core Subjects, DSA, Web Dev & AI | Vyat",
-    description: "Master campus placements, core CS subjects (OS, DBMS, Networks), DSA, Full-Stack Web Dev, and AI learning with verified certificates.",
-    images: [`${BASE_URL}/brand/vyat-og.png`],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: {
-      index: true,
-      follow: true,
-      'max-video-preview': -1,
-      'max-image-preview': 'large',
-      'max-snippet': -1,
-    },
+    title: "Vyat AI — CSE Courses & Skill Roadmaps",
+    description: "Placement preparation, DSA, Full-Stack Web Development, and AI courses for CSE students.",
   },
 };
 
