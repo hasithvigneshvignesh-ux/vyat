@@ -370,20 +370,20 @@ export default function PublicLanding({ branches, skillsCount, coursesCount }: P
 
             {/* Bento Cards (All Styled in Cohesive Sky-Blue Aesthetic) */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
-              {/* Card 1: Deep Royal Sky-Blue Hero Bento Card */}
-              <div className="p-8 sm:p-10 rounded-2xl bg-gradient-to-br from-sky-600 to-sky-700 text-white border-2 border-sky-400 shadow-xl shadow-sky-600/25 flex flex-col justify-between group hover:-translate-y-1 transition-all">
+              {/* Card 1: Light Sky-Blue Bento Card */}
+              <div className="p-8 sm:p-10 rounded-2xl bg-gradient-to-b from-sky-50 via-sky-100/50 to-sky-50 text-slate-900 border-2 border-sky-300/80 shadow-md shadow-sky-500/5 hover:border-sky-400 hover:shadow-xl hover:shadow-sky-500/10 transition-all hover:-translate-y-1 flex flex-col justify-between">
                 <div>
-                  <span className="inline-block px-3.5 py-1.5 text-xs font-bold rounded-lg bg-white/20 text-white border border-white/30 mb-6 backdrop-blur-xs">
+                  <span className="inline-block px-3.5 py-1.5 text-xs font-bold rounded-lg bg-sky-200/80 text-sky-900 border border-sky-300 mb-6">
                     01 · College Timetable Friendly
                   </span>
-                  <h3 className="text-xl sm:text-2xl font-bold text-white mb-3.5 leading-snug">
+                  <h3 className="text-xl sm:text-2xl font-bold text-[#0F172A] mb-3.5 leading-snug">
                     1 Daily Lesson Fits Your Schedule
                   </h3>
-                  <p className="text-sm sm:text-base text-sky-100 leading-relaxed font-normal">
-                    Indian engineering colleges enforce 75% mandatory attendance, long lab sessions, and internal assignments. Vyat’s <strong className="text-white font-semibold">1 lesson/day rhythm (15–25 mins)</strong> fits seamlessly into your evening routine without late-night burnout.
+                  <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
+                    Indian engineering colleges enforce 75% mandatory attendance, long lab sessions, and internal assignments. Vyat’s <strong className="text-sky-700 font-semibold">1 lesson/day rhythm (15–25 mins)</strong> fits seamlessly into your evening routine without late-night burnout.
                   </p>
                 </div>
-                <div className="pt-6 border-t border-sky-500/40 mt-8 text-xs text-sky-200 font-semibold flex items-center gap-1.5">
+                <div className="pt-6 border-t border-sky-200 mt-8 text-xs text-sky-800 font-semibold flex items-center gap-1.5">
                   <span>✓</span> Zero binge burnout · Consistent daily progress
                 </div>
               </div>
@@ -497,35 +497,35 @@ export default function PublicLanding({ branches, skillsCount, coursesCount }: P
           </div>
         </section>
 
-        {/* ── 6. VERIFIED CERTIFICATE SPOTLIGHT ── */}
+        {/* ── 6. VERIFIED CERTIFICATE SPOTLIGHT (LIGHT SKY-BLUE SPOTLIGHT) ── */}
         <section id="credentials" className="w-full pt-28 pb-32 sm:pt-36 sm:pb-40 lg:pt-44 lg:pb-48 bg-[#F8FAFC] border-b border-sky-100 relative">
           <div className="w-full max-w-[1780px] mx-auto px-6 sm:px-10 lg:px-14 xl:px-20">
-            <div className="rounded-3xl p-8 sm:p-12 lg:p-16 xl:p-20 bg-[#0F172A] text-white border-2 border-slate-800 shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16">
+            <div className="rounded-3xl p-8 sm:p-12 lg:p-16 xl:p-20 bg-gradient-to-br from-sky-100/90 via-sky-50 to-white text-slate-900 border-2 border-sky-300 shadow-xl flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16">
               <div className="max-w-2xl">
-                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30 mb-5 shadow-2xs">
-                  <Award size={14} className="text-sky-300" /> Verified Anti-Cheat Credential
+                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-sky-200 text-sky-900 border border-sky-300 mb-5 shadow-2xs">
+                  <Award size={14} className="text-sky-700" /> Verified Anti-Cheat Credential
                 </span>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-5 leading-tight text-balance">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0F172A] tracking-tight mb-5 leading-tight text-balance">
                   Earn Credentials That Prove Practical Competency
                 </h2>
-                <p className="text-slate-300 text-base sm:text-lg leading-relaxed mb-8 font-normal">
+                <p className="text-slate-600 text-base sm:text-lg leading-relaxed mb-8 font-normal">
                   Unlike platforms where users skip videos to get a badge, Vyat strictly unlocks credentials only after every lesson and checkpoint in the curriculum has been completed. Share your authentic verification link on LinkedIn and your resume with total confidence.
                 </p>
                 <div className="flex flex-wrap gap-3 text-xs sm:text-sm">
-                  <div className="flex items-center gap-2 bg-slate-800/90 border border-slate-700 px-4 py-2.5 rounded-xl text-slate-200 font-medium">
-                    <CheckCircle2 size={16} className="text-sky-400 shrink-0" /> Unique Credential ID
+                  <div className="flex items-center gap-2 bg-white border border-sky-200 px-4 py-2.5 rounded-xl text-slate-700 font-medium shadow-2xs">
+                    <CheckCircle2 size={16} className="text-sky-600 shrink-0" /> Unique Credential ID
                   </div>
-                  <div className="flex items-center gap-2 bg-slate-800/90 border border-slate-700 px-4 py-2.5 rounded-xl text-slate-200 font-medium">
-                    <CheckCircle2 size={16} className="text-sky-400 shrink-0" /> Public Verification URL
+                  <div className="flex items-center gap-2 bg-white border border-sky-200 px-4 py-2.5 rounded-xl text-slate-700 font-medium shadow-2xs">
+                    <CheckCircle2 size={16} className="text-sky-600 shrink-0" /> Public Verification URL
                   </div>
-                  <div className="flex items-center gap-2 bg-slate-800/90 border border-slate-700 px-4 py-2.5 rounded-xl text-slate-200 font-medium">
-                    <CheckCircle2 size={16} className="text-sky-400 shrink-0" /> Anti-Fraud Guaranteed
+                  <div className="flex items-center gap-2 bg-white border border-sky-200 px-4 py-2.5 rounded-xl text-slate-700 font-medium shadow-2xs">
+                    <CheckCircle2 size={16} className="text-sky-600 shrink-0" /> Anti-Fraud Guaranteed
                   </div>
                 </div>
               </div>
 
               {/* Realistic Certificate Mockup Visual with Sky-Blue Frame */}
-              <div className="w-full max-w-md bg-white text-slate-900 border-2 border-sky-200 shadow-2xl rounded-2xl p-7 sm:p-9 relative shrink-0">
+              <div className="w-full max-w-md bg-white text-slate-900 border-2 border-sky-300 shadow-xl rounded-2xl p-7 sm:p-9 relative shrink-0">
                 <div className="flex items-center justify-between pb-4 border-b border-sky-100">
                   <div className="flex items-center gap-2.5">
                     <div className="w-8 h-8 rounded-lg bg-sky-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
@@ -591,26 +591,26 @@ export default function PublicLanding({ branches, skillsCount, coursesCount }: P
           </div>
         </section>
 
-        {/* ── 8. PRE-FOOTER CTA BANNER ── */}
-        <section className="w-full pt-28 pb-32 sm:pt-36 sm:pb-40 lg:pt-44 lg:pb-48 bg-[#0F172A] text-center relative overflow-hidden border-b border-slate-800">
+        {/* ── 8. PRE-FOOTER CTA BANNER (LIGHT SKY-BLUE GRADIENT BANNER) ── */}
+        <section className="w-full pt-28 pb-32 sm:pt-36 sm:pb-40 lg:pt-44 lg:pb-48 bg-gradient-to-b from-white via-sky-50 to-sky-100/60 text-center relative overflow-hidden border-b border-sky-200">
           <div className="w-full max-w-5xl mx-auto px-6 sm:px-10 text-center">
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-sky-500/20 text-sky-300 border border-sky-500/30 mb-6 shadow-2xs">
-              <span>⚡</span> Accelerate Your Career
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-sky-200 text-sky-900 border border-sky-300 mb-6 shadow-2xs">
+              <span className="text-sky-600">⚡</span> Accelerate Your Career
             </div>
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-6 leading-tight text-balance">
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-[#0F172A] tracking-tight mb-6 leading-tight text-balance">
               Ready to Master Computer Science?
             </h2>
-            <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto mb-12 leading-relaxed font-normal">
+            <p className="text-slate-600 text-base sm:text-lg max-w-2xl mx-auto mb-12 leading-relaxed font-normal">
               Join thousands of engineering students across India mastering core computer science, DSA, Web Dev, and AI to secure top engineering placements.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
               <Link href="/explore">
-                <button className="w-full sm:w-auto px-9 py-4 bg-sky-500 hover:bg-sky-400 text-white font-semibold rounded-xl shadow-lg shadow-sky-500/25 transition-all hover:scale-105 flex items-center justify-center gap-2 text-base">
+                <button className="w-full sm:w-auto px-9 py-4 bg-sky-600 hover:bg-sky-500 text-white font-semibold rounded-xl shadow-lg shadow-sky-600/30 transition-all hover:scale-105 flex items-center justify-center gap-2 text-base">
                   Explore All CSE Courses <ArrowRight size={18} />
                 </button>
               </Link>
               <Link href="/login">
-                <button className="w-full sm:w-auto px-9 py-4 bg-white/10 hover:bg-white/15 text-white font-semibold rounded-xl border border-white/20 transition-all text-base">
+                <button className="w-full sm:w-auto px-9 py-4 bg-white hover:bg-sky-50 text-slate-700 font-semibold rounded-xl border-2 border-sky-200 shadow-sm transition-all text-base">
                   Sign In to Dashboard
                 </button>
               </Link>
@@ -619,22 +619,22 @@ export default function PublicLanding({ branches, skillsCount, coursesCount }: P
         </section>
       </main>
 
-      {/* ── 9. FOOTER ── */}
-      <footer className="w-full bg-[#0B0F17] border-t border-slate-800/80 py-14 text-sm text-slate-400">
+      {/* ── 9. FOOTER (LIGHT SKY-BLUE REFINED FOOTER) ── */}
+      <footer className="w-full bg-white border-t border-sky-200 py-14 text-sm text-slate-600">
         <div className="w-full max-w-[1780px] mx-auto px-6 sm:px-10 lg:px-14 xl:px-20 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3.5">
-            <div className="w-8 h-8 rounded-lg bg-sky-600 flex items-center justify-center text-white font-bold text-sm">
+            <div className="w-8 h-8 rounded-lg bg-sky-600 flex items-center justify-center text-white font-bold text-sm shadow-sm shadow-sky-600/30">
               V
             </div>
-            <span className="font-bold text-slate-100 text-base">Vyat</span>
+            <span className="font-bold text-[#0F172A] text-base">Vyat</span>
             <span className="text-xs text-slate-500">· Courses for CSE &amp; Engineering Students in India</span>
           </div>
-          <div className="flex flex-wrap items-center gap-8 text-xs sm:text-sm font-semibold text-slate-400">
-            <Link href="/explore" className="hover:text-white transition-colors">All Courses</Link>
-            <a href="#curriculum" className="hover:text-white transition-colors">Placements &amp; Core CS</a>
-            <a href="#engineering-context" className="hover:text-white transition-colors">Why Engineering</a>
-            <Link href="/login" className="hover:text-white transition-colors">Student Login</Link>
-            <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
+          <div className="flex flex-wrap items-center gap-8 text-xs sm:text-sm font-semibold text-slate-600">
+            <Link href="/explore" className="hover:text-sky-600 transition-colors">All Courses</Link>
+            <a href="#curriculum" className="hover:text-sky-600 transition-colors">Placements &amp; Core CS</a>
+            <a href="#engineering-context" className="hover:text-sky-600 transition-colors">Why Engineering</a>
+            <Link href="/login" className="hover:text-sky-600 transition-colors">Student Login</Link>
+            <a href="#faq" className="hover:text-sky-600 transition-colors">FAQ</a>
           </div>
           <p className="text-xs text-slate-500">
             © {new Date().getFullYear()} Vyat. All rights reserved.
