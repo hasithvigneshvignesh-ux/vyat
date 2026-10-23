@@ -619,22 +619,22 @@ export default function PublicLanding({ branches, skillsCount, coursesCount }: P
         </section>
       </main>
 
-      {/* ── 9. FOOTER (LIGHT SKY-BLUE REFINED FOOTER) ── */}
-      <footer className="w-full bg-white border-t border-sky-200 py-14 text-sm text-slate-600">
+      {/* ── 9. FOOTER (DARK THEME) ── */}
+      <footer className="w-full bg-[#0B0F17] border-t border-slate-800 py-14 text-sm text-slate-400">
         <div className="w-full max-w-[1780px] mx-auto px-6 sm:px-10 lg:px-14 xl:px-20 flex flex-col sm:flex-row items-center justify-between gap-6">
           <div className="flex items-center gap-3.5">
             <div className="w-8 h-8 rounded-lg bg-sky-600 flex items-center justify-center text-white font-bold text-sm shadow-sm shadow-sky-600/30">
               V
             </div>
-            <span className="font-bold text-[#0F172A] text-base">Vyat</span>
+            <span className="font-bold text-white text-base">Vyat</span>
             <span className="text-xs text-slate-500">· Courses for CSE &amp; Engineering Students in India</span>
           </div>
-          <div className="flex flex-wrap items-center gap-8 text-xs sm:text-sm font-semibold text-slate-600">
-            <Link href="/explore" className="hover:text-sky-600 transition-colors">All Courses</Link>
-            <a href="#curriculum" className="hover:text-sky-600 transition-colors">Placements &amp; Core CS</a>
-            <a href="#engineering-context" className="hover:text-sky-600 transition-colors">Why Engineering</a>
-            <Link href="/login" className="hover:text-sky-600 transition-colors">Student Login</Link>
-            <a href="#faq" className="hover:text-sky-600 transition-colors">FAQ</a>
+          <div className="flex flex-wrap items-center gap-8 text-xs sm:text-sm font-semibold text-slate-400">
+            <Link href="/explore" className="hover:text-white transition-colors">All Courses</Link>
+            <a href="#curriculum" className="hover:text-white transition-colors">Placements &amp; Core CS</a>
+            <a href="#engineering-context" className="hover:text-white transition-colors">Why Engineering</a>
+            <Link href="/login" className="hover:text-white transition-colors">Student Login</Link>
+            <a href="#faq" className="hover:text-white transition-colors">FAQ</a>
           </div>
           <p className="text-xs text-slate-500">
             © {new Date().getFullYear()} Vyat. All rights reserved.
