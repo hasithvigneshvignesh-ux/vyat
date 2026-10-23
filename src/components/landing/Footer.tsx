@@ -20,19 +20,19 @@ export function Footer() {
     <footer
       className="w-full relative border-t border-slate-200/80 dark:border-white/10 bg-slate-50 dark:bg-[#07090e] text-sm text-slate-500 dark:text-slate-400"
       style={{
-        paddingTop: '56px',
-        paddingBottom: 'max(32px, calc(32px + env(safe-area-inset-bottom, 0px)))',
+        paddingTop: '48px',
+        paddingBottom: 'max(28px, calc(28px + env(safe-area-inset-bottom, 0px)))',
       }}
     >
       {/* Gradient Hairline on Top */}
       <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-sky-500/40 dark:via-sky-400/40 to-transparent" />
 
       <Container>
-        {/* 4-Column Grid with Wider Brand Column & 2-Col Mobile Links */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 pb-10 sm:pb-12 border-b border-slate-200/60 dark:border-white/10">
-          {/* Col 1: Brand Info (Wider: 5 of 12 cols on desktop, top on mobile) */}
-          <div className="lg:col-span-5 space-y-3.5">
-            <Link href="/" className="inline-flex items-center gap-2.5 group">
+        {/* Main Grid: Brand Block on top, Link columns in 2-col grid on mobile */}
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 pb-8">
+          {/* Brand Block on top (16px gap between logo, tagline, theme toggle) */}
+          <div className="lg:col-span-5 flex flex-col gap-4">
+            <Link href="/" className="inline-flex items-center gap-2.5 group w-fit min-h-[36px]">
               <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center text-white shadow-sm shadow-sky-500/25 group-hover:scale-105 transition-transform">
                 <BookOpen size={16} />
               </div>
@@ -45,52 +45,52 @@ export function Footer() {
               Structured daily drip courses built specifically for Indian B.Tech / BE Computer Science students.
             </p>
 
-            <div className="pt-1">
+            <div className="pt-0.5">
               <button
                 onClick={toggleTheme}
-                className="inline-flex items-center gap-2 text-xs font-semibold px-3 py-1.5 rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
+                className="inline-flex items-center gap-2 text-xs font-semibold px-3 py-2 min-h-[36px] rounded-xl border border-slate-200 dark:border-white/10 bg-white dark:bg-white/5 hover:bg-slate-100 dark:hover:bg-white/10 text-slate-700 dark:text-slate-300 transition-colors cursor-pointer"
                 aria-label="Toggle visual theme"
               >
                 {isDark ? (
-                  <Sun size={13} className="text-amber-400" />
+                  <Sun size={14} className="text-amber-400" />
                 ) : (
-                  <Moon size={13} className="text-sky-500" />
+                  <Moon size={14} className="text-sky-500" />
                 )}
                 <span>Switch to {isDark ? 'Light' : 'Dark'} Mode</span>
               </button>
             </div>
           </div>
 
-          {/* Links Cluster: 2-column on mobile, 3 individual columns on lg */}
-          <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-8">
+          {/* Link Columns: 2-column grid on mobile with 28px row gap, 3 columns on sm/lg */}
+          <div className="lg:col-span-7 grid grid-cols-2 sm:grid-cols-3 gap-x-6 gap-y-7">
             {/* Curriculums */}
             <div>
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-3.5">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-3">
                 Curriculums
               </h4>
-              <ul className="space-y-[10px] text-xs sm:text-sm">
+              <ul className="space-y-1 text-xs sm:text-sm">
                 <li>
-                  <a href="#curriculum" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+                  <a href="#curriculum" className="min-h-[36px] flex items-center hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
                     Campus Placements
                   </a>
                 </li>
                 <li>
-                  <a href="#curriculum" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+                  <a href="#curriculum" className="min-h-[36px] flex items-center hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
                     Data Structures &amp; Algorithms
                   </a>
                 </li>
                 <li>
-                  <a href="#curriculum" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+                  <a href="#curriculum" className="min-h-[36px] flex items-center hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
                     Core CS (OS, DBMS, Networks)
                   </a>
                 </li>
                 <li>
-                  <a href="#curriculum" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+                  <a href="#curriculum" className="min-h-[36px] flex items-center hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
                     Full-Stack Web Dev
                   </a>
                 </li>
                 <li>
-                  <a href="#curriculum" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+                  <a href="#curriculum" className="min-h-[36px] flex items-center hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
                     Applied AI &amp; ML
                   </a>
                 </li>
@@ -99,51 +99,51 @@ export function Footer() {
 
             {/* Why Vyat */}
             <div>
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-3.5">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-3">
                 Why Vyat
               </h4>
-              <ul className="space-y-[10px] text-xs sm:text-sm">
+              <ul className="space-y-1 text-xs sm:text-sm">
                 <li>
-                  <a href="#engineering-context" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+                  <a href="#engineering-context" className="min-h-[36px] flex items-center hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
                     Timetable Friendly
                   </a>
                 </li>
                 <li>
-                  <a href="#advantages" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+                  <a href="#advantages" className="min-h-[36px] flex items-center hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
                     1 Video / Day Engine
                   </a>
                 </li>
                 <li>
-                  <a href="#credentials" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+                  <a href="#credentials" className="min-h-[36px] flex items-center hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
                     Verified Credentials
                   </a>
                 </li>
                 <li>
-                  <a href="#faq" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+                  <a href="#faq" className="min-h-[36px] flex items-center hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
                     FAQ
                   </a>
                 </li>
               </ul>
             </div>
 
-            {/* Platform */}
+            {/* Platform (col-span-2 on mobile, col-span-1 on sm+) */}
             <div className="col-span-2 sm:col-span-1">
-              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-3.5">
+              <h4 className="text-xs font-bold uppercase tracking-wider text-slate-900 dark:text-white mb-3">
                 Platform
               </h4>
-              <ul className="space-y-[10px] text-xs sm:text-sm">
+              <ul className="space-y-1 text-xs sm:text-sm">
                 <li>
-                  <Link href="/explore" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+                  <Link href="/explore" className="min-h-[36px] flex items-center hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
                     All Courses Catalog
                   </Link>
                 </li>
                 <li>
-                  <Link href="/login" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+                  <Link href="/login" className="min-h-[36px] flex items-center hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
                     Student Sign In
                   </Link>
                 </li>
                 <li>
-                  <Link href="/explore" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+                  <Link href="/explore" className="min-h-[36px] flex items-center hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
                     Start Placement Prep
                   </Link>
                 </li>
@@ -152,10 +152,12 @@ export function Footer() {
           </div>
         </div>
 
-        {/* Bottom Bar: Copyright & Attribution separated by border */}
-        <div className="pt-6 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 dark:text-slate-400 text-center sm:text-left">
+        {/* Bottom Bar: Normal flow, separated by border-top with 24px above, 8px apart */}
+        <div className="pt-6 border-t border-slate-200/60 dark:border-white/10 flex flex-col items-center justify-center gap-2 text-xs text-slate-500 dark:text-slate-400 text-center">
           <p>© {new Date().getFullYear()} Vyat. All rights reserved.</p>
-          <p className="font-medium text-slate-600 dark:text-slate-400">Built for Indian CSE &amp; B.Tech undergraduates.</p>
+          <p className="font-medium text-slate-600 dark:text-slate-400">
+            Built for Indian CSE &amp; B.Tech undergraduates.
+          </p>
         </div>
       </Container>
     </footer>

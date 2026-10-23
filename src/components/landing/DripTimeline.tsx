@@ -78,7 +78,7 @@ export function DripTimeline() {
         />
 
         <div ref={containerRef} className="relative mt-8 sm:mt-12">
-          {/* ── Desktop Connecting Line (lg+) - Runs strictly at vertical center of badges (top-6 = 24px) ── */}
+          {/* ── Desktop Connecting Line (lg+ only) ── */}
           <div className="hidden lg:block absolute top-6 left-[10%] right-[10%] h-[2px] bg-slate-200 dark:bg-slate-800 z-0 pointer-events-none">
             <div
               className="h-full bg-gradient-to-r from-sky-500 via-indigo-500 to-emerald-500 transition-all duration-300"
@@ -86,45 +86,84 @@ export function DripTimeline() {
             />
           </div>
 
-          {/* ── Mobile Connecting Line (Vertical on Left, <md) - Passes strictly behind badges (left-[34px]) ── */}
-          <div className="block md:hidden absolute top-8 bottom-8 left-[34px] w-[2px] bg-slate-200 dark:bg-slate-800 z-0 pointer-events-none">
-            <div
-              className="w-full bg-gradient-to-b from-sky-500 via-indigo-500 to-emerald-500 transition-all duration-300"
-              style={{ height: `${lineProgress * 100}%` }}
-            />
+          {/* ── Mobile & Tablet: Strict Vertical Timeline (<lg) ── */}
+          <div className="flex flex-col gap-4 sm:gap-5 lg:hidden">
+            {STEPS.map((item, idx) => {
+              const isLast = idx === STEPS.length - 1;
+              return (
+                <Reveal key={idx} delayMs={idx * 80} className="w-full">
+                  <div className="flex items-start gap-3 w-full">
+                    {/* Left Column (44px wide with 36px circular badge and vertical line) */}
+                    <div className="w-[44px] shrink-0 flex flex-col items-center relative self-stretch">
+                      {/* 36px Circular Badge */}
+                      <div
+                        className={`w-9 h-9 rounded-full font-bold text-sm flex items-center justify-center text-white bg-gradient-to-tr ${item.accentGradient} shadow-sm z-10 ring-4 ring-slate-50 dark:ring-[#05070f] shrink-0`}
+                      >
+                        {item.step}
+                      </div>
+
+                      {/* Connecting Line connecting badge to badge */}
+                      {!isLast && (
+                        <div className="w-[2px] bg-slate-200 dark:bg-slate-800 absolute top-9 bottom-[-16px] left-1/2 -translate-x-1/2 z-0" />
+                      )}
+                    </div>
+
+                    {/* Right Column: Card (Padded 18-20px, flex: 1, min-w-0, never covered by badge) */}
+                    <div
+                      className="flex-1 min-w-0 rounded-2xl border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#0b1020] shadow-[0_2px_12px_rgba(15,23,42,0.04)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.5)] p-5 flex flex-col justify-between min-h-[150px]"
+                    >
+                      <div>
+                        <div className="inline-block px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider rounded-md bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 mb-2 border border-slate-200/60 dark:border-white/5">
+                          {item.badge}
+                        </div>
+                        {/* Title: 18px */}
+                        <h3 className="font-bold text-lg text-slate-900 dark:text-white mb-2 leading-snug">
+                          {item.title}
+                        </h3>
+                        {/* Description: 14-15px */}
+                        <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                          {item.description}
+                        </p>
+                      </div>
+
+                      <div className="pt-3 mt-4 border-t border-slate-200/70 dark:border-white/5 flex items-center gap-1.5 text-xs text-sky-600 dark:text-sky-400 font-semibold">
+                        <span>Phase 0{item.step} of 04</span>
+                      </div>
+                    </div>
+                  </div>
+                </Reveal>
+              );
+            })}
           </div>
 
-          {/* ── Timeline Grid: Vertical list on base -> 2x2 on md -> Horizontal 4-col on lg (gap >= 24px) ── */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-6 lg:gap-7 relative z-10">
+          {/* ── Desktop Horizontal 4-Column Grid (lg+) ── */}
+          <div className="hidden lg:grid grid-cols-4 gap-7 relative z-10">
             {STEPS.map((item, idx) => (
               <Reveal key={idx} delayMs={idx * 80} className="h-full">
                 <div
-                  className="group relative h-full min-h-[260px] sm:min-h-[290px] flex flex-col justify-between rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white/80 dark:bg-[#0b1020]/80 backdrop-blur-xl shadow-[0_2px_12px_rgba(15,23,42,0.04)] hover:shadow-[0_16px_36px_rgba(15,23,42,0.08)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.5)] dark:hover:shadow-[0_16px_40px_rgba(0,0,0,0.8)] transition-all duration-300 hover:-translate-y-1.5 active:scale-[0.99] pl-16 sm:pl-6"
-                  style={{
-                    padding: 'clamp(20px, 2.5vw, 32px)',
-                    paddingLeft: 'clamp(20px, 2.5vw, 32px)',
-                  }}
+                  className="group relative h-full min-h-[280px] flex flex-col justify-between rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#0b1020] shadow-[0_2px_12px_rgba(15,23,42,0.04)] hover:shadow-[0_16px_36px_rgba(15,23,42,0.08)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.5)] dark:hover:shadow-[0_16px_40px_rgba(0,0,0,0.8)] transition-all duration-300 hover:-translate-y-1.5 p-7"
                 >
                   <div>
-                    {/* Step Number Badge - Sits on top of the card above connecting line */}
-                    <div className="absolute left-3.5 top-6 sm:static sm:left-auto sm:top-auto mb-4 sm:mb-5 z-10">
+                    {/* Step Number Badge */}
+                    <div className="mb-5 z-10">
                       <div
-                        className={`w-11 h-11 sm:w-12 sm:h-12 rounded-xl font-bold text-base sm:text-lg flex items-center justify-center text-white bg-gradient-to-tr ${item.accentGradient} shadow-md group-hover:scale-110 transition-transform duration-200 ring-4 ring-white dark:ring-[#0b1020]`}
+                        className={`w-12 h-12 rounded-xl font-bold text-lg flex items-center justify-center text-white bg-gradient-to-tr ${item.accentGradient} shadow-md group-hover:scale-110 transition-transform duration-200 ring-4 ring-white dark:ring-[#0b1020]`}
                       >
                         {item.step}
                       </div>
                     </div>
 
-                    <div className="inline-block px-2.5 py-1 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider rounded-md bg-slate-100/90 dark:bg-white/5 text-slate-700 dark:text-slate-300 mb-2 border border-slate-200/60 dark:border-white/5">
+                    <div className="inline-block px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider rounded-md bg-slate-100/90 dark:bg-white/5 text-slate-700 dark:text-slate-300 mb-2 border border-slate-200/60 dark:border-white/5">
                       {item.badge}
                     </div>
 
-                    {/* Title: 18-20px as required */}
+                    {/* Title: 18-20px */}
                     <h3 className="font-bold text-lg lg:text-xl text-slate-900 dark:text-white mb-2.5 leading-snug">
                       {item.title}
                     </h3>
 
-                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
+                    {/* Description: 14-15px */}
+                    <p className="text-sm text-slate-600 dark:text-slate-300 leading-relaxed font-normal">
                       {item.description}
                     </p>
                   </div>

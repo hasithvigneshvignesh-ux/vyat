@@ -85,16 +85,16 @@ export function Navbar() {
             : 'py-3 sm:py-4'
         }`}
       >
-        <div className="landing-container w-full mx-auto">
+        <div className="w-full mx-auto px-3 sm:px-6 flex justify-center">
           <div
-            className={`w-full max-w-[1100px] mx-auto px-4 sm:px-6 h-[56px] sm:h-[64px] rounded-2xl sm:rounded-full flex items-center justify-between transition-all duration-300 ${
+            className={`w-[calc(100%-24px)] max-w-[1100px] mx-auto px-3.5 sm:px-6 h-[56px] sm:h-[64px] rounded-full flex items-center justify-between transition-all duration-300 ${
               isScrolled
-                ? 'bg-white/85 dark:bg-[#080d1a]/85 backdrop-blur-xl border border-slate-200/80 dark:border-white/10 shadow-[0_4px_24px_-4px_rgba(15,23,42,0.06),0_1px_3px_rgba(15,23,42,0.03)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)]'
-                : 'bg-white/60 dark:bg-[#07090e]/50 backdrop-blur-md border border-slate-200/60 dark:border-white/10'
+                ? 'bg-white/90 dark:bg-[#080d1a]/90 backdrop-blur-xl border border-slate-200/80 dark:border-white/10 shadow-[0_4px_24px_-4px_rgba(15,23,42,0.06),0_1px_3px_rgba(15,23,42,0.03)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)]'
+                : 'bg-white/75 dark:bg-[#07090e]/70 backdrop-blur-md border border-slate-200/60 dark:border-white/10'
             }`}
           >
             {/* Brand Logo */}
-            <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group shrink-0" id="nav-brand-logo">
+            <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group shrink-0 min-h-[40px]" id="nav-brand-logo">
               <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center text-white shadow-sm shadow-sky-500/25 group-hover:scale-105 transition-transform duration-200">
                 <BookOpen size={17} />
               </div>
@@ -132,46 +132,46 @@ export function Navbar() {
               })}
             </nav>
 
-            {/* Right Action Cluster */}
+            {/* Right Action Cluster (8-12px gaps, min 40x40 tap targets) */}
             <div className="flex items-center gap-2 sm:gap-3">
-              {/* Theme Toggle Button with morphing animation */}
+              {/* Theme Toggle Button with 40x40 tap target */}
               <button
                 onClick={toggleTheme}
                 aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
                 title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
                 id="theme-toggle-btn"
-                className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-slate-800/80 flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-all text-slate-700 dark:text-amber-400"
+                className="w-10 h-10 min-w-[40px] min-h-[40px] rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-slate-800/80 flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-all text-slate-700 dark:text-amber-400"
               >
                 {isDark ? (
-                  <Sun size={15} className="rotate-0 hover:rotate-90 transition-transform duration-300" />
+                  <Sun size={17} className="rotate-0 hover:rotate-90 transition-transform duration-300" />
                 ) : (
-                  <Moon size={15} className="rotate-0 hover:-rotate-12 transition-transform duration-300" />
+                  <Moon size={17} className="rotate-0 hover:-rotate-12 transition-transform duration-300" />
                 )}
               </button>
 
-              {/* Sign In link */}
+              {/* Sign In link with 40x40 tap target */}
               <Link href="/login" id="nav-login-btn">
-                <button className="px-3 py-1.5 sm:px-3.5 sm:py-2 text-xs sm:text-sm font-semibold rounded-lg text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/60 transition-colors cursor-pointer">
+                <button className="min-h-[40px] px-3 py-2 text-xs sm:text-sm font-semibold rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/60 transition-colors cursor-pointer flex items-center justify-center">
                   Sign In
                 </button>
               </Link>
 
               {/* Desktop Primary CTA */}
               <Link href="/explore" id="nav-explore-btn" className="hidden sm:inline-flex">
-                <button className="relative group overflow-hidden px-4 py-2 text-xs sm:text-sm font-semibold bg-sky-600 hover:bg-sky-500 text-white rounded-xl shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 cursor-pointer flex items-center gap-1.5">
+                <button className="relative group overflow-hidden px-4 py-2 min-h-[40px] text-xs sm:text-sm font-semibold bg-sky-600 hover:bg-sky-500 text-white rounded-xl shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 cursor-pointer flex items-center gap-1.5">
                   <span>Explore Catalog</span>
                   <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
                 </button>
               </Link>
 
-              {/* Mobile Hamburger Button */}
+              {/* Mobile Hamburger Button with 40x40 tap target */}
               <button
                 onClick={() => setMobileMenuOpen(true)}
                 aria-label="Open mobile menu"
                 aria-expanded={mobileMenuOpen}
-                className="lg:hidden w-8 h-8 sm:w-9 sm:h-9 rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-slate-800/80 flex items-center justify-center text-slate-700 dark:text-slate-200 cursor-pointer active:scale-95 transition-transform"
+                className="lg:hidden w-10 h-10 min-w-[40px] min-h-[40px] rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-slate-800/80 flex items-center justify-center text-slate-700 dark:text-slate-200 cursor-pointer active:scale-95 transition-transform"
               >
-                <Menu size={17} />
+                <Menu size={18} />
               </button>
             </div>
           </div>

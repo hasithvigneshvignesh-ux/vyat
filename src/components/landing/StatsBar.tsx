@@ -52,20 +52,27 @@ const STATS: StatItem[] = [
 
 export function StatsBar() {
   return (
-    <div className="relative w-full pt-2 pb-10 sm:pb-14 z-20">
+    <div className="relative w-full pt-8 sm:pt-12 pb-8 sm:pb-12 z-20">
       <Container>
         <Reveal delayMs={100}>
-          <div className="w-full max-w-5xl mx-auto rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white/85 dark:bg-[#0b1020]/85 backdrop-blur-xl shadow-[0_8px_30px_rgba(15,23,42,0.06)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.6)] overflow-hidden">
-            {/* Responsive 2x2 grid on mobile, 4-in-a-row on md+ with equal cells */}
-            <div className="grid grid-cols-2 md:grid-cols-4 divide-y divide-slate-200/70 dark:divide-white/10 md:divide-y-0 md:divide-x">
-              {STATS.map((stat, idx) => (
-                <div
-                  key={idx}
-                  className="group flex flex-col justify-center transition-all duration-200 hover:bg-slate-50/60 dark:hover:bg-white/[0.02]"
-                  style={{
-                    padding: 'clamp(20px, 3vw, 32px)',
-                  }}
-                >
+          <div className="w-full max-w-5xl mx-auto rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white/95 dark:bg-[#0b1020]/95 shadow-[0_8px_30px_rgba(15,23,42,0.06)] dark:shadow-[0_12px_40px_rgba(0,0,0,0.6)] overflow-hidden">
+            {/* Responsive 2x2 grid on mobile with 1px inner dividers, 4-in-a-row on md+ with equal cells */}
+            <div className="grid grid-cols-2 md:grid-cols-4">
+              {STATS.map((stat, idx) => {
+                // Precise 1px dividers:
+                // Mobile (2x2): odd cells get right border; row 1 gets bottom border
+                // Desktop (4 cols): cells 1,2,3 get left border, no bottom borders
+                const borderClasses = `
+                  ${idx % 2 === 0 ? 'border-r border-slate-200/70 dark:border-white/10 md:border-r-0' : ''}
+                  ${idx < 2 ? 'border-b border-slate-200/70 dark:border-white/10 md:border-b-0' : ''}
+                  ${idx > 0 ? 'md:border-l md:border-slate-200/70 dark:md:border-white/10' : ''}
+                `;
+
+                return (
+                  <div
+                    key={idx}
+                    className={`group flex flex-col justify-center min-h-[100px] sm:min-h-[116px] p-5 sm:p-7 transition-colors duration-200 hover:bg-slate-50/60 dark:hover:bg-white/[0.02] ${borderClasses}`}
+                  >
                   <p
                     className={`text-xl sm:text-2xl lg:text-3xl font-extrabold tracking-tight leading-tight ${
                       stat.highlight
@@ -88,8 +95,9 @@ export function StatsBar() {
                     {stat.subtext}
                   </p>
                 </div>
-              ))}
-            </div>
+              );
+            })}
+          </div>
           </div>
         </Reveal>
       </Container>

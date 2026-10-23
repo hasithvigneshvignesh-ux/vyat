@@ -179,7 +179,9 @@
     scroll-behavior: smooth;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    scroll-padding-top: 80px;
     overflow-x: clip;
+    max-width: 100%;
   }
 
   h1, h2, h3, h4, h5, h6, .font-heading {
@@ -193,6 +195,7 @@
     font-family: var(--font-sans);
     min-height: 100dvh;
     overflow-x: clip;
+    max-width: 100%;
   }
 }
 
@@ -342,7 +345,7 @@ body:has(.sidebar-layout) {
   max-width: 68ch;
 }
 
-/* Fluid Page Container with Safe Area Insets (Step 2: max-w 1200px, 1360px at >=1536px) */
+/* Fluid Page Container with Safe Area Insets (max-w 1200px, 1360px at >=1536px) */
 .landing-container {
   width: 100%;
   max-width: 1200px;
@@ -359,10 +362,10 @@ body:has(.sidebar-layout) {
   }
 }
 
-/* Section Rhythm Tokens (Step 2: padding-block clamp(64px, 8vw, 112px)) */
+/* Section Rhythm Tokens: Single strict rhythm clamp(48px, 8vw, 112px), zero extra outer gaps */
 .landing-section {
-  padding-top: clamp(64px, 8vw, 112px);
-  padding-bottom: clamp(64px, 8vw, 112px);
+  padding-top: clamp(48px, 8vw, 112px);
+  padding-bottom: clamp(48px, 8vw, 112px);
   position: relative;
   width: 100%;
   box-sizing: border-box;
@@ -370,7 +373,7 @@ body:has(.sidebar-layout) {
 }
 
 .landing-section-header {
-  margin-bottom: clamp(32px, 5vw, 64px);
+  margin-bottom: clamp(28px, 4vw, 48px);
   text-align: center;
   width: 100%;
 }
@@ -391,37 +394,55 @@ body:has(.sidebar-layout) {
     linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
 }
 
-/* Glass Card with Container Query & Explicit Inner Padding */
-.glass-panel {
-  background: var(--glass-bg);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid var(--card-border);
-  box-shadow: var(--card-shadow);
-  border-radius: var(--card-radius, 16px);
-  padding: clamp(18px, 2.2vw, 32px);
+/* Glass Card & Spotlight Card Shared Layout Tokens (Strict mobile-first) */
+.glass-panel,
+.spotlight-card,
+.landing-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  border-radius: 20px;
+  min-width: 0;
   box-sizing: border-box;
-  container-type: inline-size;
+  padding: clamp(18px, 2.2vw, 32px);
+  background: var(--card-bg, #ffffff);
+  border: 1px solid var(--card-border, rgba(226, 232, 240, 0.8));
+  box-shadow: var(--card-shadow, 0 2px 12px rgba(15, 23, 42, 0.04));
+  position: relative;
 }
 
-@supports not (backdrop-filter: blur(16px)) {
-  .glass-panel {
-    background: var(--bg-card);
+.dark .glass-panel,
+.dark .spotlight-card,
+.dark .landing-card {
+  background: var(--card-bg, #0b1020);
+  border: 1px solid var(--card-border, rgba(255, 255, 255, 0.08));
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* Desktop backdrop blur enhancement (>=768px fine pointer) */
+@media (min-width: 768px) {
+  .glass-panel,
+  .spotlight-card,
+  .landing-card {
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 }
 
-/* Spotlight Card with mouse follow coordinates & Explicit Inner Padding */
-.spotlight-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: var(--card-radius, 16px);
-  background: var(--card-bg);
-  border: 1px solid var(--card-border);
-  box-shadow: var(--card-shadow);
-  padding: clamp(18px, 2.2vw, 32px);
-  box-sizing: border-box;
-  transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
-  container-type: inline-size;
+/* Mobile Anti-Jank: No backdrop-filter blur on cards, modest shadows to eliminate Android Chrome ghosting */
+@media (max-width: 767px) {
+  .glass-panel,
+  .spotlight-card,
+  .landing-card {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+    box-shadow: 0 2px 8px rgba(15, 23, 42, 0.05) !important;
+  }
+  .dark .glass-panel,
+  .dark .spotlight-card,
+  .dark .landing-card {
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.4) !important;
+  }
 }
 
 @media (hover: hover) and (pointer: fine) {

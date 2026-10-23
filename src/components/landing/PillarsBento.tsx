@@ -148,26 +148,21 @@ export function PillarsBento() {
               : 'col-span-1 md:col-span-1 lg:col-span-2';
 
             return (
-              <Reveal key={pillar.id} delayMs={idx * 60} className={`h-full ${spanClass}`}>
+              <Reveal key={pillar.id} delayMs={idx * 60} className={`h-full min-w-0 ${spanClass}`}>
                 <SpotlightCard
                   accentColor={pillar.accent}
-                  className="group relative h-full flex flex-col justify-between rounded-2xl sm:rounded-3xl transition-all duration-300 hover:-translate-y-1.5 active:scale-[0.99] border border-slate-200/80 dark:border-white/10 bg-white/75 dark:bg-[#0b1020]/75 backdrop-blur-xl shadow-[0_2px_12px_rgba(15,23,42,0.04)] hover:shadow-[0_16px_36px_rgba(15,23,42,0.08)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.5)] dark:hover:shadow-[0_16px_40px_rgba(0,0,0,0.8)] overflow-hidden"
+                  style={{ padding: 'clamp(20px, 2.5vw, 32px)' }}
+                  className="group relative h-full flex flex-col justify-between rounded-2xl sm:rounded-3xl transition-all duration-200 border border-slate-200/80 dark:border-white/10 bg-white dark:bg-[#0b1020] min-w-0"
                 >
-                  {/* Subtle Accent Glow Ring in Card Corner */}
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute -top-16 -right-16 w-40 h-40 rounded-full blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-300"
-                    style={{ backgroundColor: pillar.accent }}
-                  />
-
                   {isRoadmap ? (
-                    /* ── Wide Horizontal Layout for 4-Year Roadmap (Row 3, 6 cols) ── */
-                    <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6 lg:gap-10 w-full h-full">
+                    /* ── Wide Horizontal Layout for 4-Year Roadmap (Row 3 on lg, normal card on mobile) ── */
+                    <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6 lg:gap-10 w-full h-full min-w-0">
                       {/* Left: Info & Meta */}
-                      <div className="flex-1 max-w-xl">
-                        <div className="flex items-center gap-3 mb-4">
+                      <div className="flex-1 max-w-xl min-w-0">
+                        {/* Header Row: Icon + Category Tag */}
+                        <div className="flex flex-wrap items-center justify-between gap-3 mb-3.5">
                           <div
-                            className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 shadow-sm shrink-0"
+                            className="w-11 h-11 rounded-xl flex items-center justify-center shadow-sm shrink-0"
                             style={{
                               backgroundColor: `${pillar.accent}15`,
                               borderColor: `${pillar.accent}35`,
@@ -177,26 +172,28 @@ export function PillarsBento() {
                           >
                             <IconComponent size={22} />
                           </div>
-                          <span className="px-2.5 py-1 text-[11px] sm:text-xs font-semibold rounded-lg bg-slate-100/80 dark:bg-white/5 text-slate-700 dark:text-slate-300 border border-slate-200/60 dark:border-white/5">
+                          <span className="px-3 py-1 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 border border-slate-200/60 dark:border-white/5 shrink-0">
                             {pillar.category}
                           </span>
                         </div>
 
-                        <h3 className="text-lg sm:text-xl lg:text-2xl font-bold tracking-tight text-slate-900 dark:text-white mb-2 leading-snug">
+                        {/* Title (18-20px with 12px under it) */}
+                        <h3 className="text-lg sm:text-xl lg:text-2xl font-bold tracking-tight text-slate-900 dark:text-white mb-3 leading-snug">
                           {pillar.title}
                         </h3>
 
-                        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-normal mb-4">
+                        {/* Description (14-15px) */}
+                        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-normal mb-5">
                           {pillar.hook}
                         </p>
 
-                        <div className="flex items-center gap-3">
-                          <span className="text-[10px] sm:text-xs font-mono font-medium px-2.5 py-1 rounded-md border border-slate-200/80 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-600 dark:text-slate-400">
+                        <div className="flex flex-wrap items-center gap-3">
+                          <span className="text-xs font-mono font-medium px-2.5 py-1 rounded-md border border-slate-200/80 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-600 dark:text-slate-400">
                             {pillar.tag}
                           </span>
                           <Link
                             href="/explore"
-                            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold transition-colors duration-200 shrink-0 group/link"
+                            className="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors duration-200 shrink-0 group/link"
                             style={{ color: pillar.accent }}
                           >
                             <span>Explore Full Track</span>
@@ -205,17 +202,17 @@ export function PillarsBento() {
                         </div>
                       </div>
 
-                      {/* Right: 3 Checklist items in a row on lg */}
-                      <div className="w-full lg:w-auto lg:min-w-[460px] pt-4 lg:pt-0 border-t lg:border-t-0 lg:border-l border-slate-200/70 dark:border-white/5 lg:pl-8">
-                        <ul className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3 text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-medium">
+                      {/* Right: 3 Checklist items (flex row with 18px icon and flex:1 min-w-0 text) */}
+                      <div className="w-full lg:w-auto lg:min-w-[440px] pt-4 lg:pt-0 border-t lg:border-t-0 lg:border-l border-slate-200/70 dark:border-white/5 lg:pl-8 min-w-0">
+                        <ul className="flex flex-col gap-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-medium min-w-0">
                           {pillar.highlights.map((item, hIdx) => (
-                            <li key={hIdx} className="flex items-start gap-2.5 bg-slate-50/70 dark:bg-white/[0.02] p-2.5 rounded-xl border border-slate-200/60 dark:border-white/5">
+                            <li key={hIdx} className="flex items-start gap-2.5 bg-slate-50/80 dark:bg-white/[0.02] p-3 rounded-xl border border-slate-200/60 dark:border-white/5 min-w-0">
                               <CheckCircle2
-                                size={16}
-                                className="shrink-0 mt-0.5 transition-transform duration-200 group-hover:scale-110"
+                                size={18}
+                                className="shrink-0 mt-0.5"
                                 style={{ color: pillar.accent }}
                               />
-                              <span className="leading-snug">{item}</span>
+                              <span className="flex-1 min-w-0 leading-snug break-words">{item}</span>
                             </li>
                           ))}
                         </ul>
@@ -223,12 +220,12 @@ export function PillarsBento() {
                     </div>
                   ) : (
                     /* ── Standard Card Layout (Rows 1 & 2) ── */
-                    <div className="flex flex-col justify-between h-full">
-                      <div>
-                        {/* Top Row: Icon with Gradient Glow + Category Pill */}
-                        <div className="flex items-center justify-between mb-4 sm:mb-5">
+                    <div className="flex flex-col justify-between h-full min-w-0">
+                      <div className="min-w-0">
+                        {/* Top Row: Icon + Category Pill with wrapping */}
+                        <div className="flex flex-wrap items-center justify-between gap-3 mb-3.5">
                           <div
-                            className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 shadow-sm shrink-0"
+                            className="w-11 h-11 rounded-xl flex items-center justify-center shadow-sm shrink-0"
                             style={{
                               backgroundColor: `${pillar.accent}15`,
                               borderColor: `${pillar.accent}35`,
@@ -239,38 +236,39 @@ export function PillarsBento() {
                             <IconComponent size={22} />
                           </div>
 
-                          <span className="px-2.5 py-1 text-[11px] sm:text-xs font-semibold rounded-lg bg-slate-100/80 dark:bg-white/5 text-slate-700 dark:text-slate-300 border border-slate-200/60 dark:border-white/5">
+                          <span className="px-3 py-1 text-xs font-semibold rounded-lg bg-slate-100 dark:bg-white/5 text-slate-700 dark:text-slate-300 border border-slate-200/60 dark:border-white/5 shrink-0">
                             {pillar.category}
                           </span>
                         </div>
 
-                        {/* Title & Hook */}
-                        <h3 className="text-base sm:text-lg lg:text-xl font-bold tracking-tight text-slate-900 dark:text-white mb-2 leading-snug">
+                        {/* Title (18-20px with 12px under it) */}
+                        <h3 className="text-lg font-bold tracking-tight text-slate-900 dark:text-white mb-3 leading-snug">
                           {pillar.title}
                         </h3>
 
-                        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-5 font-normal line-clamp-3 sm:line-clamp-none">
+                        {/* Description (14-15px) */}
+                        <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-5 font-normal">
                           {pillar.hook}
                         </p>
 
-                        {/* Checklist with animated/glowing icons */}
-                        <ul className="space-y-2 sm:space-y-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-medium mb-6">
+                        {/* Checklist with fixed 18px icon and flex:1 text */}
+                        <ul className="space-y-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-medium mb-6 min-w-0">
                           {pillar.highlights.map((item, hIdx) => (
-                            <li key={hIdx} className="flex items-start gap-2.5">
+                            <li key={hIdx} className="flex items-start gap-2.5 min-w-0">
                               <CheckCircle2
-                                size={16}
-                                className="shrink-0 mt-0.5 transition-transform duration-200 group-hover:scale-110"
+                                size={18}
+                                className="shrink-0 mt-0.5"
                                 style={{ color: pillar.accent }}
                               />
-                              <span className="leading-snug">{item}</span>
+                              <span className="flex-1 min-w-0 leading-snug break-words">{item}</span>
                             </li>
                           ))}
                         </ul>
                       </div>
 
                       {/* Card Bottom Meta & Explore CTA */}
-                      <div className="pt-4 border-t border-slate-200/70 dark:border-white/5 flex items-center justify-between gap-3 mt-auto">
-                        <span className="text-[10px] sm:text-xs font-mono font-medium px-2.5 py-1 rounded-md border border-slate-200/80 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-600 dark:text-slate-400 truncate max-w-[150px] sm:max-w-none">
+                      <div className="pt-3.5 border-t border-slate-200/70 dark:border-white/5 flex items-center justify-between gap-3 mt-auto">
+                        <span className="text-xs font-mono font-medium px-2.5 py-1 rounded-md border border-slate-200/80 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-600 dark:text-slate-400 truncate max-w-[150px] sm:max-w-none">
                           {pillar.tag}
                         </span>
 

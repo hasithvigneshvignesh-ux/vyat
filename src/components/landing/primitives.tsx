@@ -105,9 +105,10 @@ export function GlassPanel({ children, className = '', style, id }: GlassPanelPr
   return (
     <div
       id={id}
-      className={`glass-panel w-full rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white/75 dark:bg-[#0b1020]/75 backdrop-blur-xl shadow-[0_2px_12px_rgba(15,23,42,0.04)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.5)] ${className}`}
+      className={`glass-panel w-full rounded-[20px] ${className}`}
       style={{
         padding: 'clamp(18px, 2.2vw, 32px)',
+        minWidth: 0,
         ...style,
       }}
     >
@@ -130,9 +131,10 @@ export function Card({ children, className = '', style, onClick }: CardProps) {
   return (
     <div
       onClick={onClick}
-      className={`w-full h-full flex flex-col justify-between rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white/75 dark:bg-[#0b1020]/75 backdrop-blur-xl shadow-[0_2px_12px_rgba(15,23,42,0.04)] hover:shadow-[0_16px_36px_rgba(15,23,42,0.08)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.5)] dark:hover:shadow-[0_16px_40px_rgba(0,0,0,0.8)] transition-all duration-300 ${className}`}
+      className={`landing-card w-full h-full flex flex-col justify-between rounded-[20px] transition-all duration-300 ${className}`}
       style={{
         padding: 'clamp(18px, 2.2vw, 32px)',
+        minWidth: 0,
         ...style,
       }}
     >
@@ -208,7 +210,7 @@ export function GradientText({
 }
 
 /* ──────────────────────────────────────────────────────────
-   5. Reveal on Scroll Component (IntersectionObserver)
+   5. Reveal on Scroll Component (Anti-Ghosting, No Filter Blur)
    ────────────────────────────────────────────────────────── */
 interface RevealProps {
   children: ReactNode;
@@ -240,14 +242,14 @@ export function Reveal({
           if (ref.current) observer.unobserve(ref.current);
         }
       },
-      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' }
+      { threshold: 0.05, rootMargin: '0px 0px -20px 0px' }
     );
 
     if (ref.current) observer.observe(ref.current);
     return () => observer.disconnect();
   }, [reducedMotion]);
 
-  const translateY = direction === 'up' ? '20px' : direction === 'down' ? '-20px' : '0px';
+  const translateY = direction === 'up' ? '16px' : direction === 'down' ? '-16px' : '0px';
 
   return (
     <div
@@ -255,10 +257,11 @@ export function Reveal({
       className={className}
       style={{
         opacity: isVisible ? 1 : 0,
-        transform: isVisible ? 'translateY(0)' : `translateY(${translateY})`,
-        filter: isVisible ? 'blur(0px)' : 'blur(4px)',
-        transition: `opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1) ${delayMs}ms, transform 0.65s cubic-bezier(0.22, 1, 0.36, 1) ${delayMs}ms, filter 0.65s cubic-bezier(0.22, 1, 0.36, 1) ${delayMs}ms`,
-        willChange: isVisible ? 'auto' : 'transform, opacity, filter',
+        transform: isVisible ? 'none' : `translateY(${translateY})`,
+        transition: isVisible
+          ? `opacity 0.45s ease-out ${delayMs}ms, transform 0.45s ease-out ${delayMs}ms`
+          : undefined,
+        minWidth: 0,
       }}
     >
       {children}

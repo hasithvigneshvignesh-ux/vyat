@@ -51,7 +51,7 @@ export function FaqAccordion() {
           subtitle="Everything you need to know about Vyat courses, placements, and learning format."
         />
 
-        {/* ── Centered max-w-[780px] FAQ container with 12px gap ── */}
+        {/* ── Single column, width 100%, 10-12px gap between items ── */}
         <div className="w-full max-w-[780px] mx-auto space-y-3">
           {FAQS_DATA.map((faq, idx) => {
             const isOpen = openIndex === idx;
@@ -59,29 +59,26 @@ export function FaqAccordion() {
             const panelId = `faq-panel-${idx}`;
 
             return (
-              <Reveal key={idx} delayMs={idx * 50}>
+              <Reveal key={idx} delayMs={idx * 40} className="w-full">
                 <div
-                  className={`rounded-2xl transition-all duration-300 border overflow-hidden ${
+                  className={`w-full rounded-[14px] transition-all duration-200 border overflow-hidden ${
                     isOpen
-                      ? 'border-sky-500/50 dark:border-sky-400/50 bg-white dark:bg-[#0d1424] shadow-[0_8px_28px_rgba(14,165,233,0.08)] dark:shadow-[0_12px_32px_rgba(0,0,0,0.6)]'
-                      : 'border-slate-200/80 dark:border-white/10 bg-white/75 dark:bg-[#0b1020]/75 hover:border-slate-300 dark:hover:border-white/20'
+                      ? 'border-sky-500/60 dark:border-sky-400/50 bg-sky-50/40 dark:bg-sky-950/20 shadow-sm'
+                      : 'border-slate-200 dark:border-white/10 bg-white dark:bg-[#0c1220] hover:border-slate-300 dark:hover:border-white/20'
                   }`}
-                  style={{
-                    borderLeftWidth: isOpen ? '4px' : undefined,
-                    borderLeftColor: isOpen ? '#0ea5e9' : undefined,
-                  }}
                 >
+                  {/* Question Row: flex, text flex:1, chevron 20px fixed on right, vertically centered */}
                   <button
                     type="button"
                     id={headingId}
                     aria-expanded={isOpen}
                     aria-controls={panelId}
                     onClick={() => toggle(idx)}
-                    className="w-full min-h-[56px] flex items-center justify-between gap-4 text-left cursor-pointer transition-colors"
-                    style={{ padding: '18px 22px' }}
+                    className="w-full flex items-center justify-between text-left cursor-pointer transition-colors"
+                    style={{ padding: '16px 18px' }}
                   >
                     <span
-                      className={`font-semibold text-sm sm:text-base leading-snug transition-colors ${
+                      className={`flex-1 font-semibold text-sm sm:text-base leading-snug pr-3 transition-colors ${
                         isOpen
                           ? 'text-sky-600 dark:text-sky-400 font-bold'
                           : 'text-slate-900 dark:text-white'
@@ -91,31 +88,32 @@ export function FaqAccordion() {
                     </span>
 
                     <span
-                      className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 transition-transform duration-300 ${
+                      className={`w-5 h-5 flex items-center justify-center shrink-0 transition-transform duration-200 ${
                         isOpen
-                          ? 'rotate-180 bg-sky-500/10 text-sky-600 dark:text-sky-400'
-                          : 'bg-slate-100 dark:bg-white/5 text-slate-500 dark:text-slate-400'
+                          ? 'rotate-180 text-sky-600 dark:text-sky-400'
+                          : 'text-slate-400 dark:text-slate-500'
                       }`}
                     >
-                      <ChevronDown size={17} />
+                      <ChevronDown size={20} />
                     </span>
                   </button>
 
-                  {/* Smooth animated accordion panel with grid-template-rows */}
+                  {/* Smooth animated accordion panel */}
                   <div
                     id={panelId}
                     role="region"
                     aria-labelledby={headingId}
-                    className="grid transition-all duration-300 ease-in-out"
+                    className="grid transition-all duration-200 ease-in-out"
                     style={{
                       gridTemplateRows: isOpen ? '1fr' : '0fr',
                     }}
                   >
                     <div className="overflow-hidden">
+                      {/* Answer sits inside the item with padding 0 18px 16px and 14-15px / 1.65 line-height */}
                       <div
-                        className="text-xs sm:text-sm leading-relaxed text-slate-600 dark:text-slate-300 border-t border-slate-100 dark:border-white/5 font-normal"
+                        className="text-sm sm:text-[15px] leading-[1.65] text-slate-600 dark:text-slate-300 font-normal border-t border-slate-100 dark:border-white/5 pt-3"
                         style={{
-                          padding: '12px 22px 18px 22px',
+                          padding: '0 18px 16px',
                         }}
                       >
                         {faq.a}
