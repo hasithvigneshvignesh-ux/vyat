@@ -141,8 +141,8 @@ export function Footer() {
                   </Link>
                 </li>
                 <li>
-                  <Link href="/explore" className="min-h-[36px] flex items-center hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
-                    Start Placement Prep
+                  <Link href="/terms" className="min-h-[36px] flex items-center hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+                    Terms &amp; Conditions
                   </Link>
                 </li>
               </ul>
@@ -151,11 +151,30 @@ export function Footer() {
         </div>
 
         {/* Bottom Bar: Normal flow, separated by border-top with 24px above, 8px apart */}
-        <div className="pt-6 border-t border-slate-200/60 dark:border-white/10 flex flex-col items-center justify-center gap-2 text-xs text-slate-500 dark:text-slate-400 text-center">
-          <p>© {new Date().getFullYear()} Vyat. All rights reserved.</p>
-          <p className="font-medium text-slate-600 dark:text-slate-400">
-            Built for Indian CSE &amp; B.Tech undergraduates.
-          </p>
+        <div className="pt-6 border-t border-slate-200/60 dark:border-white/10 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-500 dark:text-slate-400 text-center sm:text-left">
+          <div>
+            <p>© {new Date().getFullYear()} Vyat. All rights reserved.</p>
+            <p className="font-medium text-slate-600 dark:text-slate-400">
+              Built for Indian CSE &amp; B.Tech undergraduates.
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1.5 text-xs">
+            <Link href="/terms" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors underline-offset-4 hover:underline">
+              Terms &amp; Conditions
+            </Link>
+            <span className="text-slate-300 dark:text-slate-700">•</span>
+            <Link href="/terms#refund-policy" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors underline-offset-4 hover:underline">
+              Refund Policy
+            </Link>
+            <span className="text-slate-300 dark:text-slate-700">•</span>
+            <Link href="/terms#privacy-policy" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors underline-offset-4 hover:underline">
+              Privacy &amp; Data
+            </Link>
+            <span className="text-slate-300 dark:text-slate-700">•</span>
+            <Link href="/terms#contact" className="hover:text-sky-600 dark:hover:text-sky-400 transition-colors underline-offset-4 hover:underline">
+              Grievance &amp; Contact
+            </Link>
+          </div>
         </div>
       </Container>
     </footer>

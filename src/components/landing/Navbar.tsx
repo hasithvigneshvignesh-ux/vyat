@@ -7,11 +7,11 @@ import { Sun, Moon, Menu, X, ArrowRight } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
 
 const NAV_LINKS = [
-  { href: '#curriculum', label: 'Courses' },
-  { href: '#engineering-context', label: 'Why Vyat' },
-  { href: '#advantages', label: '1 Video/Day' },
-  { href: '#credentials', label: 'Credentials' },
-  { href: '#faq', label: 'FAQ' },
+  { href: '/#curriculum', label: 'Courses' },
+  { href: '/#engineering-context', label: 'Why Vyat' },
+  { href: '/#advantages', label: '1 Video/Day' },
+  { href: '/#credentials', label: 'Credentials' },
+  { href: '/#faq', label: 'FAQ' },
 ];
 
 export function Navbar() {
@@ -45,7 +45,7 @@ export function Navbar() {
       const observer = new IntersectionObserver(
         ([entry]) => {
           if (entry.isIntersecting) {
-            setActiveSection(`#${id}`);
+            setActiveSection(`/#${id}`);
           }
         },
         { rootMargin: '-20% 0px -65% 0px' }
