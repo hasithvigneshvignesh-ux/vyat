@@ -29,7 +29,7 @@ export async function generateMetadata({ params }: BranchPageProps): Promise<Met
   }
 
   return {
-    title: `${branch.name} Courses & Skills Roadmap | Vyat`,
+    title: `${branch.name} Courses & Skills Roadmap`,
     description: branch.description,
     keywords: [
       `${branch.name} roadmap`,

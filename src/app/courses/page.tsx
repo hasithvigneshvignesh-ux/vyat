@@ -8,7 +8,7 @@ import { branches, skills } from '@/data/branches';
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vyat-v3.vercel.app';
 
 export const metadata: Metadata = {
-  title: 'Browse All CSE Courses & Skills by Branch | Vyat',
+  title: 'Browse All CSE Courses & Skills by Branch',
   description:
     'Explore 45 comprehensive computer science roadmaps and skills across CSE Core & AI, Machine Learning, Data Science, and Cyber Security. Daily guided lessons engineered for Indian engineering undergraduates.',
   keywords: [

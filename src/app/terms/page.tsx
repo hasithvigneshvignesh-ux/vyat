@@ -4,7 +4,7 @@ import TermsClient from './TermsClient';
 const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vyat-v3.vercel.app';
 
 export const metadata: Metadata = {
-  title: 'Terms and Conditions of Service | Vyat',
+  title: 'Terms and Conditions of Service',
   description:
     'Read the official Terms and Conditions of Vyat. Learn about student eligibility, single-user licenses, the 1 Video/Day drip learning engine, verified credentials, intellectual property, and our 7-day refund guarantee.',
   alternates: {
