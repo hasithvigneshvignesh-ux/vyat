@@ -7,8 +7,9 @@ import { createClient } from '@/lib/supabase/client';
 import { STUDENT_NAV_ITEMS } from '@/lib/constants';
 import {
   LayoutDashboard, BookOpen, Compass, Map, Code, Award, User,
-  LogOut, Menu, X, ChevronLeft, ChevronRight, Moon, Sun, BookOpenCheck,
+  LogOut, Menu, X, ChevronLeft, ChevronRight, Moon, Sun,
 } from 'lucide-react';
+import Logo from '@/components/ui/Logo';
 import { useTheme } from '@/providers/ThemeProvider';
 import React from 'react';
 
@@ -115,14 +116,7 @@ export default function StudentSidebar({
             <Menu size={20} />
           </button>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, pointerEvents: 'auto' }}>
-            <div style={{
-              width: 32, height: 32, borderRadius: 10,
-              background: 'linear-gradient(135deg, #2563eb, #7c3aed)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 2px 8px rgba(37,99,235,0.3)',
-            }}>
-              <BookOpenCheck size={16} color="#fff" />
-            </div>
+            <Logo size={32} withWordmark={false} href={null} />
             <span style={{ fontWeight: 700, fontSize: 15, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
               Vyat
             </span>
@@ -189,14 +183,7 @@ export default function StudentSidebar({
                 textDecoration: 'none', minWidth: 0, flex: 1,
               }}
             >
-              <div style={{
-                width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-                background: 'linear-gradient(135deg, #2563eb, #7c3aed)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 2px 8px rgba(37,99,235,0.25)',
-              }}>
-                <BookOpenCheck size={18} color="#fff" />
-              </div>
+              <Logo size={34} withWordmark={false} href={null} />
               <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0, lineHeight: 1 }}>
                 <span className="gradient-text" style={{ fontWeight: 800, fontSize: 15, letterSpacing: '-0.02em', lineHeight: '1.2' }}>
                   Vyat

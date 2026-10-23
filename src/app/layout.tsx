@@ -74,6 +74,15 @@ export const metadata: Metadata = {
   alternates: {
     canonical: BASE_URL,
   },
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '32x32' },
+      { url: '/icon.png', sizes: '512x512', type: 'image/png' },
+    ],
+    apple: [
+      { url: '/apple-icon.png', sizes: '512x512', type: 'image/png' },
+    ],
+  },
   openGraph: {
     title: "Courses for CSE Students in India — Placements, Core Subjects, DSA, Web Dev & AI | Vyat",
     description: "India's dedicated learning hub for CSE & engineering students. Master campus placements, core CS subjects (OS, DBMS, Networks), DSA, Web Dev, and AI learning with daily drip lessons.",
@@ -81,11 +90,20 @@ export const metadata: Metadata = {
     siteName: "Vyat",
     locale: "en_IN",
     type: "website",
+    images: [
+      {
+        url: `${BASE_URL}/brand/vyat-og.png`,
+        width: 1200,
+        height: 630,
+        alt: "Vyat — Courses for CSE Students in India",
+      },
+    ],
   },
   twitter: {
     card: "summary_large_image",
     title: "Courses for CSE Students in India — Placements, Core Subjects, DSA, Web Dev & AI | Vyat",
     description: "Master campus placements, core CS subjects (OS, DBMS, Networks), DSA, Full-Stack Web Dev, and AI learning with verified certificates.",
+    images: [`${BASE_URL}/brand/vyat-og.png`],
   },
   robots: {
     index: true,
@@ -108,7 +126,7 @@ const jsonLd = {
       "@id": `${BASE_URL}/#organization`,
       "name": "Vyat — Courses for CSE & Engineering Students",
       "url": BASE_URL,
-      "logo": `${BASE_URL}/favicon.ico`,
+      "logo": `${BASE_URL}/icon.png`,
       "description": "Comprehensive online learning platform for Computer Science & Engineering students in India. Specialized in Campus Placements, Core Subjects (Operating Systems, DBMS, Computer Networks), DSA, Full-Stack Web Development, and AI Learning.",
       "areaServed": {
         "@type": "Country",

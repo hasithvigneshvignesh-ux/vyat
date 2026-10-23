@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
-import { BookOpen, Mail, Lock, Eye, EyeOff, ShieldCheck, GraduationCap, Sparkles, ArrowRight, Check, Laptop, Smartphone, Tablet } from 'lucide-react';
+import { Mail, Lock, Eye, EyeOff, ShieldCheck, GraduationCap, Sparkles, ArrowRight, Check, Laptop, Smartphone, Tablet } from 'lucide-react';
+import Logo from '@/components/ui/Logo';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -137,24 +138,10 @@ export default function LoginPage() {
         }}
       >
         {/* Brand Header */}
-        <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '10px' }}>
-          <div
-            style={{
-              width: '60px',
-              height: '60px',
-              borderRadius: '18px',
-              background: 'linear-gradient(135deg, #2563eb, #7c3aed)',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              boxShadow: '0 10px 25px -5px rgba(59, 130, 246, 0.4)',
-              border: '1px solid rgba(255, 255, 255, 0.2)',
-            }}
-          >
-            <BookOpen size={30} color="#ffffff" />
-          </div>
+        <div style={{ textAlign: 'center', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '14px' }}>
+          <Logo size={60} withWordmark={false} href="/" />
 
-          <div style={{ marginTop: '4px' }}>
+          <div>
             <h1
               style={{
                 fontSize: 'clamp(26px, 4vw, 34px)',

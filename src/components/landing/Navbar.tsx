@@ -3,13 +3,14 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Link from 'next/link';
 import { useTheme } from '@/providers/ThemeProvider';
-import { BookOpen, Sun, Moon, Menu, X, ArrowRight } from 'lucide-react';
+import { Sun, Moon, Menu, X, ArrowRight } from 'lucide-react';
+import Logo from '@/components/ui/Logo';
 
 const NAV_LINKS = [
-  { href: '#curriculum', label: 'Courses & Pillars' },
-  { href: '#engineering-context', label: 'Why Engineering' },
-  { href: '#advantages', label: '1 Video / Day' },
-  { href: '#credentials', label: 'Verified Credentials' },
+  { href: '#curriculum', label: 'Courses' },
+  { href: '#engineering-context', label: 'Why Vyat' },
+  { href: '#advantages', label: '1 Video/Day' },
+  { href: '#credentials', label: 'Credentials' },
   { href: '#faq', label: 'FAQ' },
 ];
 
@@ -80,38 +81,43 @@ export function Navbar() {
     <>
       <header
         className={`sticky top-0 z-50 transition-all duration-300 w-full ${
-          isScrolled
-            ? 'py-2 sm:py-3'
-            : 'py-3 sm:py-4'
+          isScrolled ? 'py-2 sm:py-3' : 'py-3 sm:py-4'
         }`}
       >
         <div className="w-full mx-auto px-3 sm:px-6 flex justify-center">
           <div
-            className={`w-[calc(100%-24px)] max-w-[1100px] mx-auto px-3.5 sm:px-6 h-[56px] sm:h-[64px] rounded-full flex items-center justify-between transition-all duration-300 ${
+            className={`w-[calc(100%-24px)] max-w-[1200px] mx-auto px-3.5 sm:px-5 h-[56px] sm:h-[64px] rounded-full flex items-center justify-between gap-2 sm:gap-6 transition-all duration-300 ${
               isScrolled
                 ? 'bg-white/90 dark:bg-[#080d1a]/90 backdrop-blur-xl border border-slate-200/80 dark:border-white/10 shadow-[0_4px_24px_-4px_rgba(15,23,42,0.06),0_1px_3px_rgba(15,23,42,0.03)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)]'
                 : 'bg-white/75 dark:bg-[#07090e]/70 backdrop-blur-md border border-slate-200/60 dark:border-white/10'
             }`}
           >
-            {/* Brand Logo */}
-            <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group shrink-0 min-h-[40px]" id="nav-brand-logo">
-              <div className="w-8 h-8 sm:w-9 sm:h-9 rounded-xl bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center text-white shadow-sm shadow-sky-500/25 group-hover:scale-105 transition-transform duration-200">
-                <BookOpen size={17} />
+            {/* 1. Left Brand Logo (40px desktop, 34px mobile, wordmark + sublabel with 12px+ free space to right) */}
+            <div className="shrink-0 flex items-center mr-2 lg:mr-4">
+              <div className="hidden sm:block">
+                <Logo
+                  size="navbar"
+                  withWordmark={true}
+                  sublabel="COURSES FOR CSE"
+                  href="/"
+                  id="nav-brand-logo"
+                />
               </div>
-              <div className="flex flex-col">
-                <span className={`font-extrabold text-base sm:text-lg tracking-tight leading-none ${isDark ? 'text-white' : 'text-slate-900'}`}>
-                  Vyat
-                </span>
-                <span className="text-[9px] uppercase font-semibold tracking-wider text-sky-600 dark:text-sky-400 mt-0.5">
-                  Courses for CSE
-                </span>
+              <div className="sm:hidden">
+                <Logo
+                  size="mobile"
+                  withWordmark={true}
+                  sublabel="COURSES FOR CSE"
+                  href="/"
+                  id="nav-brand-logo-mobile"
+                />
               </div>
-            </Link>
+            </div>
 
-            {/* Desktop Floating Pill Nav Links (gap clamp(16px, 2vw, 32px), padding 8px 14px) */}
+            {/* 2. Middle Desktop Floating Pill Nav Links (hidden <1024px; gap clamp(8px,1.2vw,20px), padding 8px 14px, nowrap) */}
             <nav
-              className="hidden lg:flex items-center rounded-full bg-slate-100/70 dark:bg-slate-900/60 border border-slate-200/60 dark:border-white/5 text-xs font-semibold backdrop-blur-md p-1"
-              style={{ gap: 'clamp(12px, 1.5vw, 24px)' }}
+              className="hidden lg:flex items-center rounded-full bg-slate-100/70 dark:bg-slate-900/60 border border-slate-200/60 dark:border-white/5 text-xs font-semibold backdrop-blur-md p-1 shrink-0"
+              style={{ gap: 'clamp(8px, 1.2vw, 20px)' }}
             >
               {NAV_LINKS.map((link) => {
                 const isActive = activeSection === link.href;
@@ -119,12 +125,12 @@ export function Navbar() {
                   <a
                     key={link.href}
                     href={link.href}
-                    className={`relative rounded-full transition-all duration-200 ${
+                    className={`relative rounded-full transition-all duration-200 whitespace-nowrap select-none ${
                       isActive
-                        ? 'text-sky-600 dark:text-sky-400 font-bold bg-white dark:bg-slate-800 shadow-2xs'
+                        ? 'text-sky-600 dark:text-sky-400 font-bold bg-white dark:bg-slate-800 shadow-xs'
                         : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
-                    style={{ padding: '8px 14px' }}
+                    style={{ padding: '8px 14px', whiteSpace: 'nowrap' }}
                   >
                     {link.label}
                   </a>
@@ -132,15 +138,15 @@ export function Navbar() {
               })}
             </nav>
 
-            {/* Right Action Cluster (8-12px gaps, min 40x40 tap targets) */}
-            <div className="flex items-center gap-2 sm:gap-3">
-              {/* Theme Toggle Button with 40x40 tap target */}
+            {/* 3. Right Action Cluster (Theme toggle, Sign In, Explore Catalog button, Hamburger) */}
+            <div className="flex items-center gap-1.5 sm:gap-3 shrink-0">
+              {/* Theme Toggle Button (40x40 tap target) */}
               <button
                 onClick={toggleTheme}
                 aria-label={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
                 title={isDark ? 'Switch to light mode' : 'Switch to dark mode'}
                 id="theme-toggle-btn"
-                className="w-10 h-10 min-w-[40px] min-h-[40px] rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-slate-800/80 flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-all text-slate-700 dark:text-amber-400"
+                className="w-10 h-10 min-w-[40px] min-h-[40px] rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-slate-800/80 flex items-center justify-center cursor-pointer hover:scale-105 active:scale-95 transition-all text-slate-700 dark:text-amber-400 shrink-0"
               >
                 {isDark ? (
                   <Sun size={17} className="rotate-0 hover:rotate-90 transition-transform duration-300" />
@@ -149,27 +155,27 @@ export function Navbar() {
                 )}
               </button>
 
-              {/* Sign In link with 40x40 tap target */}
-              <Link href="/login" id="nav-login-btn">
-                <button className="min-h-[40px] px-3 py-2 text-xs sm:text-sm font-semibold rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/60 transition-colors cursor-pointer flex items-center justify-center">
+              {/* Sign In link (text button, nowrap, min-h-[40px]) */}
+              <Link href="/login" id="nav-login-btn" className="shrink-0">
+                <button className="min-h-[40px] px-2.5 sm:px-3 py-2 text-xs sm:text-sm font-semibold rounded-xl text-slate-700 dark:text-slate-300 hover:text-slate-900 dark:hover:text-white hover:bg-slate-100/70 dark:hover:bg-slate-800/60 transition-colors cursor-pointer flex items-center justify-center whitespace-nowrap">
                   Sign In
                 </button>
               </Link>
 
-              {/* Desktop Primary CTA */}
-              <Link href="/explore" id="nav-explore-btn" className="hidden sm:inline-flex">
-                <button className="relative group overflow-hidden px-4 py-2 min-h-[40px] text-xs sm:text-sm font-semibold bg-sky-600 hover:bg-sky-500 text-white rounded-xl shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 cursor-pointer flex items-center gap-1.5">
+              {/* Explore Catalog -> primary button (nowrap, padding 10px 18px, height 44px, hidden on <768px mobile) */}
+              <Link href="/explore" id="nav-explore-btn" className="hidden md:inline-flex shrink-0">
+                <button className="relative group overflow-hidden px-[18px] h-[44px] text-xs sm:text-sm font-semibold bg-sky-600 hover:bg-sky-500 text-white rounded-xl shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 cursor-pointer flex items-center gap-1.5 whitespace-nowrap">
                   <span>Explore Catalog</span>
-                  <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform" />
+                  <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform shrink-0" />
                 </button>
               </Link>
 
-              {/* Mobile Hamburger Button with 40x40 tap target */}
+              {/* Hamburger Button: visible on <1024px (both tablets and phones) */}
               <button
                 onClick={() => setMobileMenuOpen(true)}
-                aria-label="Open mobile menu"
+                aria-label="Open navigation menu"
                 aria-expanded={mobileMenuOpen}
-                className="lg:hidden w-10 h-10 min-w-[40px] min-h-[40px] rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-slate-800/80 flex items-center justify-center text-slate-700 dark:text-slate-200 cursor-pointer active:scale-95 transition-transform"
+                className="lg:hidden w-10 h-10 min-w-[40px] min-h-[40px] rounded-xl border border-slate-200/80 dark:border-white/10 bg-slate-50/80 dark:bg-slate-800/80 flex items-center justify-center text-slate-700 dark:text-slate-200 cursor-pointer active:scale-95 transition-transform shrink-0"
               >
                 <Menu size={18} />
               </button>
@@ -178,7 +184,7 @@ export function Navbar() {
         </div>
       </header>
 
-      {/* ── Mobile Full-Screen Glass Sheet Overlay ── */}
+      {/* ── Mobile & Tablet Glass Sheet Menu Overlay (lg:hidden) ── */}
       {mobileMenuOpen && (
         <div
           ref={menuRef}
@@ -193,12 +199,7 @@ export function Navbar() {
         >
           {/* Top Sheet Header */}
           <div className="flex items-center justify-between pb-4 border-b border-slate-200/60 dark:border-slate-800">
-            <div className="flex items-center gap-2.5">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center text-white font-bold text-xs">
-                <BookOpen size={16} />
-              </div>
-              <span className="font-extrabold text-lg text-slate-900 dark:text-white">Vyat</span>
-            </div>
+            <Logo size="mobile" withWordmark={true} sublabel="COURSES FOR CSE" href="/" />
 
             <button
               onClick={() => setMobileMenuOpen(false)}

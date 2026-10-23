@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
-import { BookOpen, Sun, Moon } from 'lucide-react';
+import { Sun, Moon } from 'lucide-react';
+import Logo from '@/components/ui/Logo';
 import { useTheme } from '@/providers/ThemeProvider';
 import { Container } from './primitives';
 
@@ -32,14 +33,7 @@ export function Footer() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 pb-8">
           {/* Brand Block on top (16px gap between logo, tagline, theme toggle) */}
           <div className="lg:col-span-5 flex flex-col gap-4">
-            <Link href="/" className="inline-flex items-center gap-2.5 group w-fit min-h-[36px]">
-              <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-sky-600 to-indigo-600 flex items-center justify-center text-white shadow-sm shadow-sky-500/25 group-hover:scale-105 transition-transform">
-                <BookOpen size={16} />
-              </div>
-              <span className="font-extrabold text-lg tracking-tight text-slate-900 dark:text-white">
-                Vyat
-              </span>
-            </Link>
+            <Logo size="footer" withWordmark={true} sublabel="COURSES FOR CSE" href="/" />
 
             <p className="text-xs sm:text-sm text-slate-500 dark:text-slate-400 leading-relaxed font-normal max-w-sm">
               Structured daily drip courses built specifically for Indian B.Tech / BE Computer Science students.

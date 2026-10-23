@@ -2,6 +2,7 @@
 
 import React, { useRef } from 'react';
 import { Award, CheckCircle2, ShieldCheck, QrCode } from 'lucide-react';
+import Logo from '@/components/ui/Logo';
 import { Container, SectionHeader, TiltCard, Reveal, useMediaQuery } from './primitives';
 
 export function Credentials() {
@@ -106,12 +107,10 @@ export function Credentials() {
 
                   {/* Top Certificate Header: Brand Logo + Anti-Cheat Verified Badge */}
                   <div className="relative z-10 flex flex-wrap items-center justify-between gap-2 pb-3.5 border-b border-slate-100 dark:border-white/10">
-                    <div className="flex items-center gap-2">
-                      <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-sky-600 to-indigo-600 text-white flex items-center justify-center font-bold text-xs shadow-sm">
-                        V
-                      </div>
+                    <div className="flex items-center gap-2.5">
+                      <Logo size="certificate" withWordmark={false} href={null} />
                       <div className="flex flex-col">
-                        <span className="font-extrabold text-xs sm:text-sm tracking-tight leading-none">
+                        <span className="font-extrabold text-xs sm:text-sm tracking-tight leading-none text-slate-900 dark:text-white">
                           Vyat Engineering
                         </span>
                         <span className="text-[9px] text-slate-400 uppercase font-mono tracking-wider mt-0.5">

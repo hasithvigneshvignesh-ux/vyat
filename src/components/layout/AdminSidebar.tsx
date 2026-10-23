@@ -10,6 +10,7 @@ import {
   HelpCircle, IndianRupee, Award, Map, BarChart3, Settings,
   LogOut, Menu, X, ChevronLeft, Moon, Sun, Shield,
 } from 'lucide-react';
+import Logo from '@/components/ui/Logo';
 import { useTheme } from '@/providers/ThemeProvider';
 
 const iconMap: Record<string, React.ReactNode> = {
@@ -104,14 +105,7 @@ export default function AdminSidebar() {
             <Menu size={20} />
           </button>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, pointerEvents: 'auto' }}>
-            <div style={{
-              width: 32, height: 32, borderRadius: 10,
-              background: 'linear-gradient(135deg, #7c3aed, #c026d3)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              boxShadow: '0 2px 8px rgba(124,58,237,0.3)',
-            }}>
-              <Shield size={16} color="#fff" />
-            </div>
+            <Logo size={32} withWordmark={false} href={null} />
             <span style={{ fontWeight: 700, fontSize: 15, letterSpacing: '-0.02em', color: 'var(--text-primary)' }}>
               Admin Panel
             </span>
@@ -177,14 +171,7 @@ export default function AdminSidebar() {
                 textDecoration: 'none', minWidth: 0, flex: 1,
               }}
             >
-              <div style={{
-                width: 36, height: 36, borderRadius: 10, flexShrink: 0,
-                background: 'linear-gradient(135deg, #7c3aed, #c026d3)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 2px 8px rgba(124,58,237,0.25)',
-              }}>
-                <Shield size={18} color="#fff" />
-              </div>
+              <Logo size={34} withWordmark={false} href={null} />
               <div style={{ display: 'flex', flexDirection: 'column', minWidth: 0, lineHeight: 1 }}>
                 <span className="gradient-text" style={{ fontWeight: 800, fontSize: 15, letterSpacing: '-0.02em', lineHeight: '1.2' }}>
                   Vyat
@@ -198,15 +185,8 @@ export default function AdminSidebar() {
               </div>
             </Link>
           ) : (
-            <div style={{ display: 'flex', justifyContent: 'center', flex: 1 }}>
-              <div style={{
-                width: 36, height: 36, borderRadius: 10,
-                background: 'linear-gradient(135deg, #7c3aed, #c026d3)',
-                display: 'flex', alignItems: 'center', justifyContent: 'center',
-                boxShadow: '0 2px 8px rgba(124,58,237,0.25)',
-              }} title="Vyat Admin">
-                <Shield size={18} color="#fff" />
-              </div>
+            <div style={{ display: 'flex', justifyContent: 'center', flex: 1 }} title="Vyat Admin">
+              <Logo size={30} withWordmark={false} href={null} />
             </div>
           )}
 

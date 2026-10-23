@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 190 150" width="190" height="150" fill="none">
+  <defs>
+    <linearGradient id="vyatRedBar" x1="0" y1="75.5" x2="0" y2="82" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#db6464" />
+      <stop offset="40%" stop-color="#c85252" />
+      <stop offset="100%" stop-color="#ad3636" />
+    </linearGradient>
+  </defs>
+
+  <!-- Purple Upward Chevron -->
+  <path
+    d="M 57 78 L 95 5.5 L 133 78"
+    stroke="#6947BF"
+    stroke-width="7.5"
+    stroke-linecap="round"
+    stroke-linejoin="miter"
+    stroke-miterlimit="4"
+  />
+
+  <!-- Gold Downward Chevron -->
+  <path
+    d="M 57 78.5 L 95 143.5 L 133 78.5"
+    stroke="#E2B838"
+    stroke-width="7.5"
+    stroke-linecap="round"
+    stroke-linejoin="miter"
+    stroke-miterlimit="4"
+  />
+
+  <!-- Red Horizontal Cylinder Bar -->
+  <rect
+    x="4"
+    y="75.5"
+    width="182"
+    height="6.5"
+    rx="3.25"
+    fill="url(#vyatRedBar)"
+  />
+</svg>
