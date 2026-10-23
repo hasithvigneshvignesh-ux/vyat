@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { ChevronDown } from 'lucide-react';
 import { Container, SectionHeader, Reveal } from './primitives';
+import { CodeSymbols } from './CodeSymbols';
 
 export const FAQS_DATA = [
   {
@@ -43,7 +44,10 @@ export function FaqAccordion() {
   };
 
   return (
-    <section id="faq" className="w-full landing-section relative border-b border-slate-200/70 dark:border-white/5">
+    <section id="faq" className="w-full landing-section relative [isolation:isolate] overflow-clip border-b border-slate-200/70 dark:border-white/5">
+      {/* ── Background Code Symbols ── */}
+      <CodeSymbols sectionId="faq" />
+
       <Container>
         <SectionHeader
           pillText="Got Questions?"

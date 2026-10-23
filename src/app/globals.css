@@ -304,6 +304,70 @@ body:has(.sidebar-layout) {
   to { transform: rotate(360deg); }
 }
 
+/* ============================================================
+   Floating Code Symbols (Site-Wide Background Decoration)
+   ============================================================ */
+@keyframes code-float-drift {
+  0% {
+    transform: translateY(0px) rotate(var(--symbol-rot, 0deg));
+  }
+  100% {
+    transform: translateY(-12px) rotate(calc(var(--symbol-rot, 0deg) + 3deg));
+  }
+}
+
+@keyframes code-float-alt {
+  0% {
+    transform: translateY(0px) rotate(var(--symbol-rot, 0deg));
+  }
+  100% {
+    transform: translateY(-10px) rotate(calc(var(--symbol-rot, 0deg) - 3deg));
+  }
+}
+
+.code-symbol-floating {
+  animation: code-float-drift var(--symbol-dur, 13s) ease-in-out infinite alternate;
+  animation-delay: var(--symbol-delay, 0s);
+  transform-origin: center center;
+}
+
+.code-symbol-floating.alt-drift {
+  animation-name: code-float-alt;
+}
+
+.code-symbols-layer.is-paused .code-symbol-floating {
+  animation-play-state: paused !important;
+}
+
+/* Centerline text protection mask (fades out symbols behind central content) */
+.code-symbols-layer {
+  mask-image: radial-gradient(ellipse 96% 75% at 50% 50%, transparent 42%, black 78%);
+  -webkit-mask-image: radial-gradient(ellipse 96% 75% at 50% 50%, transparent 42%, black 78%);
+}
+
+@media (min-width: 1024px) {
+  .code-symbols-layer {
+    mask-image: none;
+    -webkit-mask-image: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .code-symbol-floating {
+    animation: none !important;
+  }
+}
+
+@media print {
+  .code-symbols-layer {
+    display: none !important;
+  }
+}
+
+.dark .code-symbol-glow {
+  text-shadow: 0 0 24px currentColor;
+}
+
 @keyframes aurora-drift {
   0%, 100% { transform: translate(0, 0) scale(1); }
   33% { transform: translate(-3%, 3%) scale(1.06); }

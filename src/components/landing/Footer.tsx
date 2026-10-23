@@ -6,6 +6,7 @@ import { Sun, Moon } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
 import { useTheme } from '@/providers/ThemeProvider';
 import { Container } from './primitives';
+import { CodeSymbols } from './CodeSymbols';
 
 export function Footer() {
   const { theme, toggleTheme } = useTheme();
@@ -19,12 +20,15 @@ export function Footer() {
 
   return (
     <footer
-      className="w-full relative border-t border-slate-200/80 dark:border-white/10 bg-slate-50 dark:bg-[#07090e] text-sm text-slate-500 dark:text-slate-400"
+      className="w-full relative [isolation:isolate] overflow-clip border-t border-slate-200/80 dark:border-white/10 bg-slate-50 dark:bg-[#07090e] text-sm text-slate-500 dark:text-slate-400"
       style={{
         paddingTop: '48px',
         paddingBottom: 'max(28px, calc(28px + env(safe-area-inset-bottom, 0px)))',
       }}
     >
+      {/* ── Background Code Symbols ── */}
+      <CodeSymbols variant="footer" sectionId="footer" />
+
       {/* Gradient Hairline on Top */}
       <div className="absolute top-0 left-0 right-0 h-[1.5px] bg-gradient-to-r from-transparent via-sky-500/40 dark:via-sky-400/40 to-transparent" />
 

@@ -2,6 +2,7 @@
 
 import React, { useRef, useEffect, useState } from 'react';
 import { Container, SectionHeader, Reveal, useReducedMotion } from './primitives';
+import { CodeSymbols } from './CodeSymbols';
 
 interface StepData {
   step: number;
@@ -69,7 +70,10 @@ export function DripTimeline() {
   }, [reducedMotion]);
 
   return (
-    <section id="advantages" className="w-full landing-section relative border-b border-slate-200/70 dark:border-white/5">
+    <section id="advantages" className="w-full landing-section relative [isolation:isolate] overflow-clip border-b border-slate-200/70 dark:border-white/5">
+      {/* ── Background Code Symbols ── */}
+      <CodeSymbols sectionId="timeline" />
+
       <Container>
         <SectionHeader
           pillText="Engineered for Long-Term Retention"

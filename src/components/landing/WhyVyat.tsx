@@ -2,6 +2,7 @@
 
 import React, { useRef, useState } from 'react';
 import { Container, SectionHeader, Reveal } from './primitives';
+import { CodeSymbols } from './CodeSymbols';
 
 interface WhyCardData {
   number: string;
@@ -51,8 +52,11 @@ export function WhyVyat() {
   return (
     <section
       id="engineering-context"
-      className="w-full landing-section relative border-b border-slate-200/70 dark:border-white/5"
+      className="w-full landing-section relative [isolation:isolate] overflow-clip border-b border-slate-200/70 dark:border-white/5"
     >
+      {/* ── Background Code Symbols ── */}
+      <CodeSymbols sectionId="why" />
+
       <Container>
         <SectionHeader
           pillText="The Indian College Reality"

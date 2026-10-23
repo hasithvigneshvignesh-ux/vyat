@@ -4,10 +4,14 @@ import React from 'react';
 import Link from 'next/link';
 import { ArrowRight, Sparkles } from 'lucide-react';
 import { Container, Reveal } from './primitives';
+import { CodeSymbols } from './CodeSymbols';
 
 export function FinalCta() {
   return (
-    <section className="w-full landing-section relative overflow-hidden border-b border-slate-200/70 dark:border-white/5">
+    <section className="w-full landing-section relative overflow-hidden [isolation:isolate] border-b border-slate-200/70 dark:border-white/5">
+      {/* ── Background Code Symbols ── */}
+      <CodeSymbols sectionId="final-cta" />
+
       {/* Background Gradient Mesh Panel */}
       <div
         className="pointer-events-none absolute inset-0 opacity-40 dark:opacity-30"

@@ -4,6 +4,7 @@ import React, { useRef, useState } from 'react';
 import Link from 'next/link';
 import { ArrowRight, Terminal, Sparkles, CheckCircle2 } from 'lucide-react';
 import { Container, TiltCard, useMediaQuery, useReducedMotion } from './primitives';
+import { CodeSymbols } from './CodeSymbols';
 
 export function Hero() {
   const isFinePointer = useMediaQuery('(hover: hover) and (pointer: fine)');
@@ -25,7 +26,10 @@ export function Hero() {
   };
 
   return (
-    <section className="relative w-full overflow-hidden pt-6 sm:pt-10 lg:pt-14 pb-10 sm:pb-14 lg:pb-18">
+    <section className="relative w-full overflow-hidden [isolation:isolate] pt-6 sm:pt-10 lg:pt-14 pb-10 sm:pb-14 lg:pb-18">
+      {/* ── Background Code Symbols ── */}
+      <CodeSymbols variant="hero" sectionId="hero" />
+
       {/* ── Background Aurora Mesh Clipped strictly inside section bounds ── */}
       <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
         <div

@@ -8,6 +8,7 @@ import React, {
   CSSProperties,
   MouseEvent as ReactMouseEvent,
 } from 'react';
+import { CodeSymbols } from './CodeSymbols';
 
 /* ──────────────────────────────────────────────────────────
    1. Device & Environment Hooks
@@ -70,22 +71,42 @@ export function Container({ children, className = '', style, id }: ContainerProp
 }
 
 /* ──────────────────────────────────────────────────────────
-   2.1 Section Primitive with Consistent Rhythm
+   2.1 Section Primitive with Consistent Rhythm & Background Code Symbols
    ────────────────────────────────────────────────────────── */
-interface SectionProps {
+export interface SectionProps {
   children: ReactNode;
   className?: string;
   style?: CSSProperties;
   id?: string;
+  sectionId?: string;
+  variant?: 'hero' | 'section' | 'footer';
+  symbolDensity?: 'low' | 'medium';
+  withSymbols?: boolean;
 }
 
-export function Section({ children, className = '', style, id }: SectionProps) {
+export function Section({
+  children,
+  className = '',
+  style,
+  id,
+  sectionId,
+  variant = 'section',
+  symbolDensity = 'medium',
+  withSymbols = true,
+}: SectionProps) {
   return (
     <section
       id={id}
-      className={`w-full landing-section relative border-b border-slate-200/70 dark:border-white/5 flex flex-col items-center justify-center ${className}`}
-      style={style}
+      className={`w-full landing-section relative border-b border-slate-200/70 dark:border-white/5 flex flex-col items-center justify-center [isolation:isolate] overflow-clip ${className}`}
+      style={{ position: 'relative', isolation: 'isolate', ...style }}
     >
+      {withSymbols && (
+        <CodeSymbols
+          sectionId={sectionId || id || 'general'}
+          variant={variant}
+          density={symbolDensity}
+        />
+      )}
       {children}
     </section>
   );

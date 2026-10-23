@@ -13,6 +13,7 @@ import {
   ArrowRight,
 } from 'lucide-react';
 import { Container, SectionHeader, SpotlightCard, Reveal } from './primitives';
+import { CodeSymbols } from './CodeSymbols';
 
 export interface PillarData {
   id: string;
@@ -117,7 +118,10 @@ export const PILLARS_LIST: PillarData[] = [
 
 export function PillarsBento() {
   return (
-    <section id="curriculum" className="w-full landing-section relative border-b border-slate-200/70 dark:border-white/5">
+    <section id="curriculum" className="w-full landing-section relative [isolation:isolate] overflow-clip border-b border-slate-200/70 dark:border-white/5">
+      {/* ── Background Code Symbols ── */}
+      <CodeSymbols sectionId="pillars" />
+
       {/* Background ambient wash */}
       <div
         className="pointer-events-none absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] rounded-full blur-[140px] opacity-25 dark:opacity-15"

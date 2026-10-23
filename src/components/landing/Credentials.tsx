@@ -4,6 +4,7 @@ import React, { useRef } from 'react';
 import { Award, CheckCircle2, ShieldCheck, QrCode } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
 import { Container, SectionHeader, TiltCard, Reveal, useMediaQuery } from './primitives';
+import { CodeSymbols } from './CodeSymbols';
 
 export function Credentials() {
   const isFinePointer = useMediaQuery('(hover: hover) and (pointer: fine)');
@@ -19,7 +20,10 @@ export function Credentials() {
   };
 
   return (
-    <section id="credentials" className="w-full landing-section relative border-b border-slate-200/70 dark:border-white/5">
+    <section id="credentials" className="w-full landing-section relative [isolation:isolate] overflow-clip border-b border-slate-200/70 dark:border-white/5">
+      {/* ── Background Code Symbols ── */}
+      <CodeSymbols sectionId="credentials" />
+
       {/* Background ambient wash */}
       <div
         className="pointer-events-none absolute -bottom-20 right-10 w-[500px] h-[500px] rounded-full blur-[140px] opacity-20 dark:opacity-10"
