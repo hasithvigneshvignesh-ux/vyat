@@ -235,38 +235,38 @@ export default function PublicLanding({ branches, skillsCount, coursesCount }: P
             </p>
 
             {/* Dual CTAs (With dedicated bottom margin to prevent collision) */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-5 w-full sm:w-auto mb-16 sm:mb-20">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-5 w-full sm:w-auto mb-20 sm:mb-24">
               <Link href="/explore" className="w-full sm:w-auto" id="hero-cta-explore">
-                <button className="w-full sm:w-auto px-9 py-4 bg-sky-600 hover:bg-sky-500 text-white font-semibold rounded-xl shadow-md shadow-sky-600/25 transition-all hover:scale-[1.02] flex items-center justify-center gap-2 text-base">
+                <button className="w-full sm:w-auto px-9 py-4 bg-sky-600 hover:bg-sky-500 text-white font-semibold rounded-xl shadow-lg shadow-sky-600/30 transition-all hover:scale-[1.02] flex items-center justify-center gap-2 text-base">
                   Browse All CSE Courses
                   <ArrowRight size={18} />
                 </button>
               </Link>
               <Link href="/login" className="w-full sm:w-auto" id="hero-cta-login">
-                <button className="w-full sm:w-auto px-9 py-4 bg-white hover:bg-sky-50/50 text-slate-700 font-semibold rounded-xl border border-sky-200 shadow-sm transition-all flex items-center justify-center gap-2 text-base">
+                <button className="w-full sm:w-auto px-9 py-4 bg-white hover:bg-sky-50 text-slate-700 font-semibold rounded-xl border-2 border-sky-200 shadow-sm transition-all flex items-center justify-center gap-2 text-base">
                   Student Sign In
                 </button>
               </Link>
             </div>
 
-            {/* ── METRICS BAR (SKY-BLUE CARD STYLING & AIRY VERTICAL SPACING) ── */}
-            <div className="w-full max-w-[1600px] 2xl:max-w-[1720px] mx-auto p-8 sm:p-10 lg:p-12 bg-gradient-to-r from-sky-50/80 via-white to-sky-50/80 backdrop-blur-md rounded-3xl border border-sky-200 shadow-md">
+            {/* ── METRICS BAR (LUMINOUS SKY-BLUE CARD & AMPLE VERTICAL SPACING) ── */}
+            <div className="w-full max-w-[1600px] 2xl:max-w-[1720px] mx-auto p-8 sm:p-10 lg:p-12 bg-gradient-to-r from-sky-100/90 via-sky-50 to-sky-100/90 backdrop-blur-md rounded-3xl border-2 border-sky-300/80 shadow-lg shadow-sky-500/10">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-8 lg:gap-12 text-left">
-                <div className="md:border-r border-sky-200/80 last:border-r-0 pr-4">
+                <div className="md:border-r border-sky-300/80 last:border-r-0 pr-4">
                   <p className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0F172A] tracking-tight">5 Pillars</p>
-                  <p className="text-sm sm:text-base text-slate-600 font-medium mt-1.5">Placements, DSA, OS, Web &amp; AI</p>
+                  <p className="text-sm sm:text-base text-slate-600 font-semibold mt-1.5">Placements, DSA, OS, Web &amp; AI</p>
                 </div>
-                <div className="md:border-r border-sky-200/80 last:border-r-0 pr-4">
+                <div className="md:border-r border-sky-300/80 last:border-r-0 pr-4">
                   <p className="text-3xl sm:text-4xl lg:text-5xl font-black text-sky-600 tracking-tight">1 Video/Day</p>
-                  <p className="text-sm sm:text-base text-slate-600 font-medium mt-1.5">Drip habit without burnout</p>
+                  <p className="text-sm sm:text-base text-slate-600 font-semibold mt-1.5">Drip habit without burnout</p>
                 </div>
-                <div className="md:border-r border-sky-200/80 last:border-r-0 pr-4">
+                <div className="md:border-r border-sky-300/80 last:border-r-0 pr-4">
                   <p className="text-3xl sm:text-4xl lg:text-5xl font-black text-[#0F172A] tracking-tight">Dual Syllabus</p>
-                  <p className="text-sm sm:text-base text-slate-600 font-medium mt-1.5">Semester marks + Viva prep</p>
+                  <p className="text-sm sm:text-base text-slate-600 font-semibold mt-1.5">Semester marks + Viva prep</p>
                 </div>
                 <div>
                   <p className="text-3xl sm:text-4xl lg:text-5xl font-black text-sky-600 tracking-tight">100% Verified</p>
-                  <p className="text-sm sm:text-base text-slate-600 font-medium mt-1.5">Tamper-proof credentials</p>
+                  <p className="text-sm sm:text-base text-slate-600 font-semibold mt-1.5">Tamper-proof credentials</p>
                 </div>
               </div>
             </div>
@@ -275,54 +275,54 @@ export default function PublicLanding({ branches, skillsCount, coursesCount }: P
         </section>
 
         {/* ── 3. PILLAR CARDS SECTION ("5 ESSENTIAL PILLARS") ── */}
-        <section id="curriculum" className="w-full pt-28 pb-28 sm:pt-36 sm:pb-36 lg:pt-40 lg:pb-40 bg-white border-b border-sky-100 relative">
+        <section id="curriculum" className="w-full pt-28 pb-32 sm:pt-36 sm:pb-40 lg:pt-44 lg:pb-48 bg-white border-b border-sky-100 relative">
           <div className="w-full max-w-[1780px] mx-auto px-6 sm:px-10 lg:px-14 xl:px-20">
             
-            {/* Centered Heading Block with Generous Bottom Spacing */}
-            <div className="text-center max-w-4xl mx-auto mb-16 sm:mb-20">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-sky-100 text-sky-800 border border-sky-200 mb-4 shadow-xs">
-                <span>✦</span> Comprehensive CSE Curriculums
+            {/* Centered Heading Block with Generous Margin & Aligned Pill Badge */}
+            <div className="text-center max-w-4xl mx-auto mb-16 sm:mb-20 lg:mb-24">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-sky-100 text-sky-800 border border-sky-300 shadow-2xs mb-5">
+                <span className="text-sky-600">✦</span> Comprehensive CSE Curriculums
               </div>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0F172A] tracking-tight leading-tight mb-4">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0F172A] tracking-tight leading-[1.2] mb-5 text-balance">
                 5 Essential Pillars Every CSE Student Must Master
               </h2>
-              <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed font-normal">
                 Whether you are aiming for high-paying product company campus placements or scoring top SGPA in semester exams, Vyat covers the entire Computer Science Engineering roadmap.
               </p>
             </div>
 
-            {/* 6 Sky-Blue Pillar Cards */}
-            <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {/* 6 High-Impact Sky-Blue Pillar Cards */}
+            <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
               {CURRICULUM_PILLARS.map((pillar) => {
                 const IconComponent = pillar.icon;
 
                 return (
                   <article
                     key={pillar.id}
-                    className="bg-gradient-to-b from-sky-50/70 via-white to-white rounded-2xl border border-sky-200 p-7 sm:p-8 shadow-sm hover:shadow-xl hover:shadow-sky-500/10 hover:border-sky-400 transition-all duration-200 hover:-translate-y-1 h-full flex flex-col justify-between group"
+                    className="bg-gradient-to-b from-sky-50 via-sky-100/40 to-sky-50/80 rounded-2xl border-2 border-sky-200 hover:border-sky-400 hover:bg-sky-50/90 p-8 sm:p-9 shadow-md shadow-sky-500/5 hover:shadow-xl hover:shadow-sky-500/15 transition-all duration-200 hover:-translate-y-1.5 h-full flex flex-col justify-between group"
                   >
                     <div>
                       {/* Top Row: Icon + Badge */}
                       <div className="flex items-center justify-between mb-6">
-                        <div className="w-12 h-12 rounded-xl bg-sky-100 text-sky-600 border border-sky-200 flex items-center justify-center group-hover:scale-105 group-hover:bg-sky-600 group-hover:text-white transition-all shadow-xs">
+                        <div className="w-12 h-12 rounded-xl bg-sky-600 text-white border border-sky-500 flex items-center justify-center shadow-md shadow-sky-600/30 group-hover:scale-110 group-hover:bg-sky-500 transition-all">
                           <IconComponent size={24} />
                         </div>
-                        <span className="px-3 py-1 text-xs font-semibold rounded-md bg-sky-100/80 text-sky-800 border border-sky-200">
+                        <span className="px-3 py-1 text-xs font-bold rounded-lg bg-white/95 text-sky-900 border border-sky-300 shadow-2xs">
                           {pillar.category}
                         </span>
                       </div>
 
-                      {/* Title & Sub-hook */}
-                      <h3 className="text-xl sm:text-2xl font-bold text-[#0F172A] mb-3 leading-snug">
+                      {/* Title & Sub-hook (Aligned across grid with min-height) */}
+                      <h3 className="text-xl sm:text-2xl font-bold text-[#0F172A] mb-3 leading-snug min-h-[3.5rem] flex items-center">
                         {pillar.title}
                       </h3>
                       
-                      <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-6 font-normal">
+                      <p className="text-sm sm:text-base text-slate-600 leading-relaxed mb-6 font-normal min-h-[3rem]">
                         {pillar.hook}
                       </p>
 
                       {/* 3-Point Checklist */}
-                      <ul className="space-y-3 text-sm font-medium text-slate-700 mb-8">
+                      <ul className="space-y-3.5 text-sm font-medium text-slate-700 mb-8">
                         {pillar.highlights.map((item, idx) => (
                           <li key={idx} className="flex items-start gap-2.5">
                             <CheckCircle2 size={18} className="text-sky-600 shrink-0 mt-0.5" />
@@ -333,13 +333,13 @@ export default function PublicLanding({ branches, skillsCount, coursesCount }: P
                     </div>
 
                     {/* Bottom Action Area */}
-                    <div className="pt-5 border-t border-sky-100 flex items-center justify-between">
-                      <span className="text-xs font-mono font-medium text-sky-800 bg-sky-50 px-2.5 py-1 rounded border border-sky-200">
+                    <div className="pt-6 border-t border-sky-200/90 flex items-center justify-between mt-auto">
+                      <span className="text-xs font-mono font-semibold text-sky-900 bg-white px-3 py-1.5 rounded-md border border-sky-300 shadow-2xs">
                         {pillar.tag}
                       </span>
                       <Link
                         href="/explore"
-                        className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-sky-600 hover:text-sky-700 transition-colors"
+                        className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-bold text-sky-600 hover:text-sky-700 transition-colors group-hover:translate-x-1"
                       >
                         Explore Track <ArrowRight size={15} />
                       </Link>
@@ -352,69 +352,75 @@ export default function PublicLanding({ branches, skillsCount, coursesCount }: P
         </section>
 
         {/* ── 4. WHY ENGINEERING STUDENTS CHOOSE VYAT (BENTO SECTION) ── */}
-        <section id="engineering-context" className="w-full pt-28 pb-28 sm:pt-36 sm:pb-36 lg:pt-40 lg:pb-40 bg-[#F8FAFC] border-b border-sky-100 relative">
+        <section id="engineering-context" className="w-full pt-28 pb-32 sm:pt-36 sm:pb-40 lg:pt-44 lg:pb-48 bg-[#F8FAFC] border-b border-sky-100 relative">
           <div className="w-full max-w-[1780px] mx-auto px-6 sm:px-10 lg:px-14 xl:px-20">
             
-            {/* Centered Heading Block with Generous Bottom Spacing */}
-            <div className="text-center max-w-4xl mx-auto mb-16 sm:mb-20">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-sky-100 text-sky-800 border border-sky-200 mb-4 shadow-xs">
-                <span>✦</span> The Indian College Reality
+            {/* Centered Heading Block with Generous Margin & Aligned Pill Badge */}
+            <div className="text-center max-w-4xl mx-auto mb-16 sm:mb-20 lg:mb-24">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-sky-100 text-sky-800 border border-sky-300 shadow-2xs mb-5">
+                <span className="text-sky-600">✦</span> The Indian College Reality
               </div>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0F172A] tracking-tight leading-tight mb-4">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0F172A] tracking-tight leading-[1.2] mb-5 text-balance">
                 Why Engineering Students Across India Choose Vyat
               </h2>
-              <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed font-normal">
                 College lectures and traditional online courses fail Indian engineering students in predictable ways: outdated syllabi and unmanageable 60-hour video dumps.
               </p>
             </div>
 
-            {/* Bento Cards (With Sky-Blue Card Theming) */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {/* Card 1: Obsidian Contrast Card with Sky-Blue Highlights */}
-              <div className="p-8 sm:p-10 rounded-2xl bg-[#0F172A] text-white border border-slate-800 shadow-md flex flex-col justify-between">
+            {/* Bento Cards (All Styled in Cohesive Sky-Blue Aesthetic) */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
+              {/* Card 1: Deep Royal Sky-Blue Hero Bento Card */}
+              <div className="p-8 sm:p-10 rounded-2xl bg-gradient-to-br from-sky-600 to-sky-700 text-white border-2 border-sky-400 shadow-xl shadow-sky-600/25 flex flex-col justify-between group hover:-translate-y-1 transition-all">
                 <div>
-                  <span className="inline-block px-3 py-1 text-xs font-semibold rounded-md bg-sky-500/20 text-sky-300 border border-sky-500/30 mb-5">
+                  <span className="inline-block px-3.5 py-1.5 text-xs font-bold rounded-lg bg-white/20 text-white border border-white/30 mb-6 backdrop-blur-xs">
                     01 · College Timetable Friendly
                   </span>
-                  <h3 className="text-xl sm:text-2xl font-bold text-white mb-3">1 Daily Lesson Fits Your Schedule</h3>
-                  <p className="text-sm sm:text-base text-slate-300 leading-relaxed">
-                    Indian engineering colleges enforce 75% mandatory attendance, long lab sessions, and internal assignments. Vyat’s <strong className="text-sky-300">1 lesson/day rhythm (15–25 mins)</strong> fits seamlessly into your evening routine without late-night burnout.
+                  <h3 className="text-xl sm:text-2xl font-bold text-white mb-3.5 leading-snug">
+                    1 Daily Lesson Fits Your Schedule
+                  </h3>
+                  <p className="text-sm sm:text-base text-sky-100 leading-relaxed font-normal">
+                    Indian engineering colleges enforce 75% mandatory attendance, long lab sessions, and internal assignments. Vyat’s <strong className="text-white font-semibold">1 lesson/day rhythm (15–25 mins)</strong> fits seamlessly into your evening routine without late-night burnout.
                   </p>
                 </div>
-                <div className="pt-6 border-t border-slate-800 mt-8 text-xs text-sky-300 font-medium">
-                  ✓ Zero binge burnout · Consistent daily progress
+                <div className="pt-6 border-t border-sky-500/40 mt-8 text-xs text-sky-200 font-semibold flex items-center gap-1.5">
+                  <span>✓</span> Zero binge burnout · Consistent daily progress
                 </div>
               </div>
 
-              {/* Card 2: Sky-Blue Styled Light Card */}
-              <div className="p-8 sm:p-10 rounded-2xl bg-gradient-to-b from-sky-50/70 via-white to-white text-slate-900 border border-sky-200 shadow-sm hover:border-sky-400 transition-all flex flex-col justify-between">
+              {/* Card 2: Luminous Sky-Blue Card */}
+              <div className="p-8 sm:p-10 rounded-2xl bg-gradient-to-b from-sky-50 via-sky-100/50 to-sky-50 text-slate-900 border-2 border-sky-300/80 shadow-md shadow-sky-500/5 hover:border-sky-400 hover:shadow-xl hover:shadow-sky-500/10 transition-all hover:-translate-y-1 flex flex-col justify-between">
                 <div>
-                  <span className="inline-block px-3 py-1 text-xs font-semibold rounded-md bg-sky-100 text-sky-800 border border-sky-200 mb-5">
+                  <span className="inline-block px-3.5 py-1.5 text-xs font-bold rounded-lg bg-sky-200/80 text-sky-900 border border-sky-300 mb-6">
                     02 · Dual Syllabus Coverage
                   </span>
-                  <h3 className="text-xl sm:text-2xl font-bold text-[#0F172A] mb-3">Semester GPA + Placement Coding</h3>
-                  <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+                  <h3 className="text-xl sm:text-2xl font-bold text-[#0F172A] mb-3.5 leading-snug">
+                    Semester GPA + Placement Coding
+                  </h3>
+                  <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
                     You don’t have to sacrifice university marks to prepare for tech companies. Our courses cover both university semester theoretical deep-dives (OS, DBMS, Computer Networks) and rigorous LeetCode coding patterns.
                   </p>
                 </div>
-                <div className="pt-6 border-t border-sky-100 mt-8 text-xs text-slate-500 font-medium">
-                  ✓ Matches AKTU, VTU, Anna Univ &amp; JNTU syllabi
+                <div className="pt-6 border-t border-sky-200 mt-8 text-xs text-sky-800 font-semibold flex items-center gap-1.5">
+                  <span>✓</span> Matches AKTU, VTU, Anna Univ &amp; JNTU syllabi
                 </div>
               </div>
 
-              {/* Card 3: Sky-Blue Styled Light Card */}
-              <div className="p-8 sm:p-10 rounded-2xl bg-gradient-to-b from-sky-50/70 via-white to-white text-slate-900 border border-sky-200 shadow-sm hover:border-sky-400 transition-all flex flex-col justify-between">
+              {/* Card 3: Luminous Sky-Blue Card */}
+              <div className="p-8 sm:p-10 rounded-2xl bg-gradient-to-b from-sky-50 via-sky-100/50 to-sky-50 text-slate-900 border-2 border-sky-300/80 shadow-md shadow-sky-500/5 hover:border-sky-400 hover:shadow-xl hover:shadow-sky-500/10 transition-all hover:-translate-y-1 flex flex-col justify-between">
                 <div>
-                  <span className="inline-block px-3 py-1 text-xs font-semibold rounded-md bg-sky-100 text-sky-800 border border-sky-200 mb-5">
+                  <span className="inline-block px-3.5 py-1.5 text-xs font-bold rounded-lg bg-sky-200/80 text-sky-900 border border-sky-300 mb-6">
                     03 · Modern Industry Tech
                   </span>
-                  <h3 className="text-xl sm:text-2xl font-bold text-[#0F172A] mb-3">Full-Stack &amp; Generative AI</h3>
-                  <p className="text-sm sm:text-base text-slate-600 leading-relaxed">
+                  <h3 className="text-xl sm:text-2xl font-bold text-[#0F172A] mb-3.5 leading-snug">
+                    Full-Stack &amp; Generative AI
+                  </h3>
+                  <p className="text-sm sm:text-base text-slate-600 leading-relaxed font-normal">
                     College syllabi rarely teach modern Next.js, TypeScript, cloud deployments, or Generative AI. Vyat brings production engineering directly to your screen with hands-on projects recruiters love.
                   </p>
                 </div>
-                <div className="pt-6 border-t border-sky-100 mt-8 text-xs text-slate-500 font-medium">
-                  ✓ 3 Full-stack &amp; AI portfolio capstones
+                <div className="pt-6 border-t border-sky-200 mt-8 text-xs text-sky-800 font-semibold flex items-center gap-1.5">
+                  <span>✓</span> 3 Full-stack &amp; AI portfolio capstones
                 </div>
               </div>
             </div>
@@ -422,96 +428,104 @@ export default function PublicLanding({ branches, skillsCount, coursesCount }: P
         </section>
 
         {/* ── 5. 1 VIDEO / DAY HABIT ENGINE ── */}
-        <section id="advantages" className="w-full pt-28 pb-28 sm:pt-36 sm:pb-36 lg:pt-40 lg:pb-40 bg-white border-b border-sky-100 relative">
+        <section id="advantages" className="w-full pt-28 pb-32 sm:pt-36 sm:pb-40 lg:pt-44 lg:pb-48 bg-white border-b border-sky-100 relative">
           <div className="w-full max-w-[1780px] mx-auto px-6 sm:px-10 lg:px-14 xl:px-20">
             
-            {/* Centered Heading Block with Generous Bottom Spacing */}
-            <div className="text-center max-w-4xl mx-auto mb-16 sm:mb-20">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-sky-100 text-sky-800 border border-sky-200 mb-4 shadow-xs">
-                <span>✦</span> Engineered for Long-Term Retention
+            {/* Centered Heading Block with Generous Margin & Aligned Pill Badge */}
+            <div className="text-center max-w-4xl mx-auto mb-16 sm:mb-20 lg:mb-24">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-sky-100 text-sky-800 border border-sky-300 shadow-2xs mb-5">
+                <span className="text-sky-600">✦</span> Engineered for Long-Term Retention
               </div>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0F172A] tracking-tight leading-tight mb-4">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0F172A] tracking-tight leading-[1.2] mb-5 text-balance">
                 How Daily Drip Learning Guarantees Mastery
               </h2>
-              <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed font-normal">
                 Consistency beats 40-hour weekend marathons every single time.
               </p>
             </div>
 
             {/* 4 Sky-Blue Habit Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-              <div className="p-7 sm:p-8 rounded-2xl bg-gradient-to-b from-sky-50/70 via-white to-white border border-sky-200 shadow-sm hover:border-sky-400 transition-all">
-                <div className="w-10 h-10 rounded-xl bg-sky-600 text-white font-bold flex items-center justify-center mb-5 text-sm shadow-sm shadow-sky-600/30">
-                  1
+              <div className="p-8 sm:p-9 rounded-2xl bg-gradient-to-b from-sky-50 via-sky-100/40 to-sky-50/80 border-2 border-sky-200 hover:border-sky-400 hover:shadow-xl hover:shadow-sky-500/15 transition-all duration-200 hover:-translate-y-1 flex flex-col justify-between">
+                <div>
+                  <div className="w-12 h-12 rounded-xl bg-sky-600 text-white font-extrabold flex items-center justify-center mb-6 text-base shadow-md shadow-sky-600/30">
+                    1
+                  </div>
+                  <h3 className="font-bold text-lg text-[#0F172A] mb-2.5 min-h-[1.75rem]">1 Video Per Day</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed font-normal">
+                    New video lessons release daily. Prevents bingeing and forgetting, building rock-solid recall for viva and interviews.
+                  </p>
                 </div>
-                <h3 className="font-bold text-lg text-[#0F172A] mb-2">1 Video Per Day</h3>
-                <p className="text-sm text-slate-600 leading-relaxed">
-                  New video lessons release daily. Prevents bingeing and forgetting, building rock-solid recall for viva and interviews.
-                </p>
               </div>
 
-              <div className="p-7 sm:p-8 rounded-2xl bg-gradient-to-b from-sky-50/70 via-white to-white border border-sky-200 shadow-sm hover:border-sky-400 transition-all">
-                <div className="w-10 h-10 rounded-xl bg-sky-600 text-white font-bold flex items-center justify-center mb-5 text-sm shadow-sm shadow-sky-600/30">
-                  2
+              <div className="p-8 sm:p-9 rounded-2xl bg-gradient-to-b from-sky-50 via-sky-100/40 to-sky-50/80 border-2 border-sky-200 hover:border-sky-400 hover:shadow-xl hover:shadow-sky-500/15 transition-all duration-200 hover:-translate-y-1 flex flex-col justify-between">
+                <div>
+                  <div className="w-12 h-12 rounded-xl bg-sky-600 text-white font-extrabold flex items-center justify-center mb-6 text-base shadow-md shadow-sky-600/30">
+                    2
+                  </div>
+                  <h3 className="font-bold text-lg text-[#0F172A] mb-2.5 min-h-[1.75rem]">Placement Coding Rounds</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed font-normal">
+                    Step-by-step problem breakdowns that mimic the exact coding rounds used by leading tech recruiters.
+                  </p>
                 </div>
-                <h3 className="font-bold text-lg text-[#0F172A] mb-2">Placement Coding Rounds</h3>
-                <p className="text-sm text-slate-600 leading-relaxed">
-                  Step-by-step problem breakdowns that mimic the exact coding rounds used by leading tech recruiters.
-                </p>
               </div>
 
-              <div className="p-7 sm:p-8 rounded-2xl bg-gradient-to-b from-sky-50/70 via-white to-white border border-sky-200 shadow-sm hover:border-sky-400 transition-all">
-                <div className="w-10 h-10 rounded-xl bg-sky-600 text-white font-bold flex items-center justify-center mb-5 text-sm shadow-sm shadow-sky-600/30">
-                  3
+              <div className="p-8 sm:p-9 rounded-2xl bg-gradient-to-b from-sky-50 via-sky-100/40 to-sky-50/80 border-2 border-sky-200 hover:border-sky-400 hover:shadow-xl hover:shadow-sky-500/15 transition-all duration-200 hover:-translate-y-1 flex flex-col justify-between">
+                <div>
+                  <div className="w-12 h-12 rounded-xl bg-sky-600 text-white font-extrabold flex items-center justify-center mb-6 text-base shadow-md shadow-sky-600/30">
+                    3
+                  </div>
+                  <h3 className="font-bold text-lg text-[#0F172A] mb-2.5 min-h-[1.75rem]">Interactive MCQs</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed font-normal">
+                    Instant checkpoints and concept tests after every lesson to verify your understanding immediately.
+                  </p>
                 </div>
-                <h3 className="font-bold text-lg text-[#0F172A] mb-2">Interactive MCQs</h3>
-                <p className="text-sm text-slate-600 leading-relaxed">
-                  Instant checkpoints and concept tests after every lesson to verify your understanding immediately.
-                </p>
               </div>
 
-              <div className="p-7 sm:p-8 rounded-2xl bg-gradient-to-b from-sky-50/70 via-white to-white border border-sky-200 shadow-sm hover:border-sky-400 transition-all">
-                <div className="w-10 h-10 rounded-xl bg-sky-600 text-white font-bold flex items-center justify-center mb-5 text-sm shadow-sm shadow-sky-600/30">
-                  4
+              <div className="p-8 sm:p-9 rounded-2xl bg-gradient-to-b from-sky-50 via-sky-100/40 to-sky-50/80 border-2 border-sky-200 hover:border-sky-400 hover:shadow-xl hover:shadow-sky-500/15 transition-all duration-200 hover:-translate-y-1 flex flex-col justify-between">
+                <div>
+                  <div className="w-12 h-12 rounded-xl bg-sky-600 text-white font-extrabold flex items-center justify-center mb-6 text-base shadow-md shadow-sky-600/30">
+                    4
+                  </div>
+                  <h3 className="font-bold text-lg text-[#0F172A] mb-2.5 min-h-[1.75rem]">Verified Credentials</h3>
+                  <p className="text-sm text-slate-600 leading-relaxed font-normal">
+                    Tamper-proof verifiable certificates issued only when the full planned curriculum has been completed.
+                  </p>
                 </div>
-                <h3 className="font-bold text-lg text-[#0F172A] mb-2">Verified Credentials</h3>
-                <p className="text-sm text-slate-600 leading-relaxed">
-                  Tamper-proof verifiable certificates issued only when the full planned curriculum has been completed.
-                </p>
               </div>
             </div>
           </div>
         </section>
 
         {/* ── 6. VERIFIED CERTIFICATE SPOTLIGHT ── */}
-        <section id="credentials" className="w-full pt-28 pb-28 sm:pt-36 sm:pb-36 lg:pt-40 lg:pb-40 bg-[#F8FAFC] border-b border-sky-100 relative">
+        <section id="credentials" className="w-full pt-28 pb-32 sm:pt-36 sm:pb-40 lg:pt-44 lg:pb-48 bg-[#F8FAFC] border-b border-sky-100 relative">
           <div className="w-full max-w-[1780px] mx-auto px-6 sm:px-10 lg:px-14 xl:px-20">
-            <div className="rounded-3xl p-8 sm:p-12 lg:p-16 xl:p-20 bg-[#0F172A] text-white border border-slate-800 shadow-xl flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16">
+            <div className="rounded-3xl p-8 sm:p-12 lg:p-16 xl:p-20 bg-[#0F172A] text-white border-2 border-slate-800 shadow-2xl flex flex-col lg:flex-row items-center justify-between gap-12 lg:gap-16">
               <div className="max-w-2xl">
-                <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-sky-500/20 text-sky-300 border border-sky-500/30 mb-5">
+                <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-sky-500/20 text-sky-300 border border-sky-500/30 mb-5 shadow-2xs">
                   <Award size={14} className="text-sky-300" /> Verified Anti-Cheat Credential
                 </span>
-                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-5 leading-tight">
+                <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight mb-5 leading-tight text-balance">
                   Earn Credentials That Prove Practical Competency
                 </h2>
-                <p className="text-slate-300 text-base sm:text-lg leading-relaxed mb-8">
+                <p className="text-slate-300 text-base sm:text-lg leading-relaxed mb-8 font-normal">
                   Unlike platforms where users skip videos to get a badge, Vyat strictly unlocks credentials only after every lesson and checkpoint in the curriculum has been completed. Share your authentic verification link on LinkedIn and your resume with total confidence.
                 </p>
                 <div className="flex flex-wrap gap-3 text-xs sm:text-sm">
-                  <div className="flex items-center gap-2 bg-slate-800/80 border border-slate-700 px-4 py-2 rounded-xl text-slate-300">
-                    <CheckCircle2 size={16} className="text-sky-400" /> Unique Credential ID
+                  <div className="flex items-center gap-2 bg-slate-800/90 border border-slate-700 px-4 py-2.5 rounded-xl text-slate-200 font-medium">
+                    <CheckCircle2 size={16} className="text-sky-400 shrink-0" /> Unique Credential ID
                   </div>
-                  <div className="flex items-center gap-2 bg-slate-800/80 border border-slate-700 px-4 py-2 rounded-xl text-slate-300">
-                    <CheckCircle2 size={16} className="text-sky-400" /> Public Verification URL
+                  <div className="flex items-center gap-2 bg-slate-800/90 border border-slate-700 px-4 py-2.5 rounded-xl text-slate-200 font-medium">
+                    <CheckCircle2 size={16} className="text-sky-400 shrink-0" /> Public Verification URL
                   </div>
-                  <div className="flex items-center gap-2 bg-slate-800/80 border border-slate-700 px-4 py-2 rounded-xl text-slate-300">
-                    <CheckCircle2 size={16} className="text-sky-400" /> Anti-Fraud Guaranteed
+                  <div className="flex items-center gap-2 bg-slate-800/90 border border-slate-700 px-4 py-2.5 rounded-xl text-slate-200 font-medium">
+                    <CheckCircle2 size={16} className="text-sky-400 shrink-0" /> Anti-Fraud Guaranteed
                   </div>
                 </div>
               </div>
 
               {/* Realistic Certificate Mockup Visual with Sky-Blue Frame */}
-              <div className="w-full max-w-md bg-white text-slate-900 border border-sky-200 shadow-2xl rounded-2xl p-7 sm:p-9 relative shrink-0">
+              <div className="w-full max-w-md bg-white text-slate-900 border-2 border-sky-200 shadow-2xl rounded-2xl p-7 sm:p-9 relative shrink-0">
                 <div className="flex items-center justify-between pb-4 border-b border-sky-100">
                   <div className="flex items-center gap-2.5">
                     <div className="w-8 h-8 rounded-lg bg-sky-600 text-white flex items-center justify-center font-bold text-sm shadow-sm">
@@ -519,19 +533,19 @@ export default function PublicLanding({ branches, skillsCount, coursesCount }: P
                     </div>
                     <span className="font-bold text-sm tracking-tight text-[#0F172A]">Vyat Engineering</span>
                   </div>
-                  <span className="px-2.5 py-1 text-[11px] font-semibold bg-sky-100 text-sky-800 border border-sky-200 rounded-full">
+                  <span className="px-2.5 py-1 text-[11px] font-bold bg-sky-100 text-sky-800 border border-sky-200 rounded-full">
                     Anti-Cheat Verified
                   </span>
                 </div>
                 <div className="py-8 text-center">
-                  <p className="text-[11px] uppercase tracking-widest font-semibold text-slate-400">Certificate of Completion</p>
+                  <p className="text-[11px] uppercase tracking-widest font-bold text-slate-400">Certificate of Completion</p>
                   <p className="text-2xl font-extrabold text-[#0F172A] mt-2">Aarav Patel</p>
                   <p className="text-xs text-slate-500 mt-1">has demonstrated practical mastery in</p>
                   <p className="text-base font-bold text-sky-600 mt-1">Data Structures &amp; Algorithms</p>
                 </div>
                 <div className="pt-4 border-t border-sky-100 flex items-center justify-between text-xs text-slate-400 font-mono">
                   <span>ID: VYAT-2026-CSE-84920</span>
-                  <span className="text-emerald-600 font-semibold flex items-center gap-1">
+                  <span className="text-emerald-600 font-bold flex items-center gap-1">
                     <CheckCircle2 size={13} /> Authenticated
                   </span>
                 </div>
@@ -541,34 +555,34 @@ export default function PublicLanding({ branches, skillsCount, coursesCount }: P
         </section>
 
         {/* ── 7. FAQ SECTION ── */}
-        <section id="faq" className="w-full pt-28 pb-28 sm:pt-36 sm:pb-36 lg:pt-40 lg:pb-40 bg-white border-b border-sky-100 relative">
+        <section id="faq" className="w-full pt-28 pb-32 sm:pt-36 sm:pb-40 lg:pt-44 lg:pb-48 bg-white border-b border-sky-100 relative">
           <div className="w-full max-w-5xl mx-auto px-6 sm:px-10">
             
-            {/* Centered Heading Block with Generous Bottom Spacing */}
-            <div className="text-center max-w-4xl mx-auto mb-16 sm:mb-20">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-sky-100 text-sky-800 border border-sky-200 mb-4 shadow-xs">
-                <span>✦</span> Got Questions?
+            {/* Centered Heading Block with Generous Margin & Aligned Pill Badge */}
+            <div className="text-center max-w-4xl mx-auto mb-16 sm:mb-20 lg:mb-24">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-sky-100 text-sky-800 border border-sky-300 shadow-2xs mb-5">
+                <span className="text-sky-600">✦</span> Got Questions?
               </div>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0F172A] tracking-tight leading-tight mb-4">
+              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[#0F172A] tracking-tight leading-[1.2] mb-5 text-balance">
                 Frequently Asked Questions for CSE Students
               </h2>
-              <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
+              <p className="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed font-normal">
                 Everything you need to know about Vyat courses, placements, and learning format.
               </p>
             </div>
 
             {/* Accordion List with Sky-Blue Borders and Generous Card Padding */}
-            <div className="space-y-4">
+            <div className="space-y-5">
               {FAQS.map((faq, idx) => (
                 <details
                   key={idx}
-                  className="group p-6 sm:p-7 rounded-2xl bg-gradient-to-b from-sky-50/40 via-white to-white border border-sky-200 shadow-xs open:border-sky-400 hover:border-sky-300 transition-colors"
+                  className="group p-6 sm:p-8 rounded-2xl bg-gradient-to-b from-sky-50 via-white to-sky-50/60 border-2 border-sky-200 shadow-2xs open:border-sky-500 open:bg-sky-50/90 hover:border-sky-300 transition-colors"
                 >
-                  <summary className="flex items-center justify-between font-semibold text-base sm:text-lg text-[#0F172A] cursor-pointer list-none">
+                  <summary className="flex items-center justify-between font-bold text-base sm:text-lg text-[#0F172A] cursor-pointer list-none select-none">
                     <span>{faq.q}</span>
-                    <ChevronRight size={18} className="text-slate-400 group-open:rotate-90 group-open:text-sky-600 transition-transform shrink-0 ml-4" />
+                    <ChevronRight size={20} className="text-sky-600 group-open:rotate-90 transition-transform shrink-0 ml-4" />
                   </summary>
-                  <p className="mt-4 text-sm sm:text-base text-slate-600 leading-relaxed font-normal pt-3 border-t border-sky-100">
+                  <p className="mt-4 text-sm sm:text-base text-slate-600 leading-relaxed font-normal pt-4 border-t border-sky-200">
                     {faq.a}
                   </p>
                 </details>
@@ -578,15 +592,15 @@ export default function PublicLanding({ branches, skillsCount, coursesCount }: P
         </section>
 
         {/* ── 8. PRE-FOOTER CTA BANNER ── */}
-        <section className="w-full pt-28 pb-28 sm:pt-36 sm:pb-36 lg:pt-40 lg:pb-40 bg-[#0F172A] text-center relative overflow-hidden border-b border-slate-800">
-          <div className="w-full max-w-5xl mx-auto px-6 sm:px-10">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full text-xs font-semibold uppercase tracking-wider bg-sky-500/20 text-sky-300 border border-sky-500/30 mb-5">
+        <section className="w-full pt-28 pb-32 sm:pt-36 sm:pb-40 lg:pt-44 lg:pb-48 bg-[#0F172A] text-center relative overflow-hidden border-b border-slate-800">
+          <div className="w-full max-w-5xl mx-auto px-6 sm:px-10 text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider bg-sky-500/20 text-sky-300 border border-sky-500/30 mb-6 shadow-2xs">
               <span>⚡</span> Accelerate Your Career
             </div>
-            <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-5">
+            <h2 className="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-6 leading-tight text-balance">
               Ready to Master Computer Science?
             </h2>
-            <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto mb-10 leading-relaxed">
+            <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto mb-12 leading-relaxed font-normal">
               Join thousands of engineering students across India mastering core computer science, DSA, Web Dev, and AI to secure top engineering placements.
             </p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-5">
