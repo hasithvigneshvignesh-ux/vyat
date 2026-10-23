@@ -100,7 +100,7 @@ export function Hero() {
         {/* ── Dual CTA Action Row (Stacked 52px high on mobile, 12px gap, 40px space to preview) ── */}
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 w-full sm:w-auto mb-10">
           <Link
-            href="/explore"
+            href="/courses"
             ref={ctaRef}
             onMouseMove={handleCtaMouseMove}
             onMouseLeave={handleCtaMouseLeave}

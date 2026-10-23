@@ -7,7 +7,7 @@ import { Sun, Moon, Menu, X, ArrowRight } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
 
 const NAV_LINKS = [
-  { href: '/#curriculum', label: 'Courses' },
+  { href: '/courses', label: 'Courses' },
   { href: '/#engineering-context', label: 'Why Vyat' },
   { href: '/#advantages', label: '1 Video/Day' },
   { href: '/#credentials', label: 'Credentials' },
@@ -163,7 +163,7 @@ export function Navbar() {
               </Link>
 
               {/* Explore Catalog -> primary button (nowrap, padding 10px 18px, height 44px, hidden on <768px mobile) */}
-              <Link href="/explore" id="nav-explore-btn" className="hidden md:inline-flex shrink-0">
+              <Link href="/courses" id="nav-explore-btn" className="hidden md:inline-flex shrink-0">
                 <button className="relative group overflow-hidden px-[18px] h-[44px] text-xs sm:text-sm font-semibold bg-sky-600 hover:bg-sky-500 text-white rounded-xl shadow-sm hover:shadow-md transition-all hover:-translate-y-0.5 cursor-pointer flex items-center gap-1.5 whitespace-nowrap">
                   <span>Explore Catalog</span>
                   <ArrowRight size={14} className="group-hover:translate-x-0.5 transition-transform shrink-0" />
@@ -227,7 +227,7 @@ export function Navbar() {
 
           {/* Bottom Pinned CTAs */}
           <div className="space-y-3 pt-4 border-t border-slate-200/60 dark:border-slate-800">
-            <Link href="/explore" onClick={() => setMobileMenuOpen(false)} className="block w-full">
+            <Link href="/courses" onClick={() => setMobileMenuOpen(false)} className="block w-full">
               <button className="w-full h-12 rounded-xl bg-sky-600 text-white font-semibold flex items-center justify-center gap-2 shadow-sm text-base">
                 <span>Explore All CSE Courses</span>
                 <ArrowRight size={16} />

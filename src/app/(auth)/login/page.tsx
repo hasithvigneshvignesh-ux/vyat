@@ -1,13 +1,15 @@
 'use client';
 
-import { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import { useState, Suspense } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { Mail, Lock, Eye, EyeOff, ShieldCheck, GraduationCap, Sparkles, ArrowRight, Check, Laptop, Smartphone, Tablet } from 'lucide-react';
 import Logo from '@/components/ui/Logo';
 
-export default function LoginPage() {
+function LoginContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const nextParam = searchParams?.get('next') || searchParams?.get('redirectTo');
   const supabase = createClient();
 
   const [email, setEmail] = useState('');
@@ -67,7 +69,7 @@ export default function LoginPage() {
           return;
         }
 
-        const targetUrl = profile?.role === 'admin' ? '/admin/dashboard' : '/dashboard';
+        const targetUrl = profile?.role === 'admin' ? '/admin/dashboard' : (nextParam || '/dashboard');
         window.location.href = targetUrl;
       }
     } catch {
@@ -82,7 +84,8 @@ export default function LoginPage() {
     setDemoLoading(role);
     setError('');
     // Direct server-side redirect sets cookies & navigates with 100% reliability
-    window.location.href = `/api/auth/demo?role=${role}`;
+    const nextQuery = nextParam ? `&next=${encodeURIComponent(nextParam)}` : '';
+    window.location.href = `/api/auth/demo?role=${role}${nextQuery}`;
   };
 
   const autofillCredentials = (userEmail: string, userPass: string, role: 'admin' | 'student') => {
@@ -386,3 +389,29 @@ export default function LoginPage() {
     </div>
   );
 }
+
+export default function LoginPage() {
+  return (
+    <Suspense
+      fallback={
+        <div
+          style={{
+            minHeight: '100vh',
+            width: '100%',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            backgroundColor: '#090d16',
+            color: '#94a3b8',
+            fontSize: '14px',
+          }}
+        >
+          Loading Sign In...
+        </div>
+      }
+    >
+      <LoginContent />
+    </Suspense>
+  );
+}
+

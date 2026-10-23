@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 450" width="600" height="450" fill="none">
+  <defs>
+    <linearGradient id="bg_python-programming" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#080E1A" />
+      <stop offset="100%" stop-color="#0B1120" />
+    </linearGradient>
+    <radialGradient id="glow_python-programming" cx="50%" cy="45%" r="50%">
+      <stop offset="0%" stop-color="#3B82F6" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#3B82F6" stop-opacity="0" />
+    </radialGradient>
+    <pattern id="grid_python-programming" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(255,255,255,0.04)" stroke-width="1"/>
+    </pattern>
+    <filter id="dropShadow_python-programming" x="-10%" y="-10%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="rgba(0,0,0,0.6)"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="450" rx="20" fill="url(#bg_python-programming)" />
+  <rect width="600" height="450" fill="url(#grid_python-programming)" />
+  <circle cx="300" cy="225" r="180" fill="url(#glow_python-programming)" />
+
+  <!-- Outer frame border with subtle brand glow -->
+  <rect x="1.5" y="1.5" width="597" height="447" rx="18.5" stroke="#3B82F6" stroke-opacity="0.3" stroke-width="2" fill="none"/>
+
+  <!-- Graphic Subject -->
+  <g filter="url(#dropShadow_python-programming)">
+    
+      <path d="M250 180 C250 155, 275 145, 300 145 C325 145, 350 155, 350 180 L350 210 L280 210 C260 210, 245 225, 245 245 L245 270 L220 270 C195 270, 185 245, 185 220 L185 190 C185 165, 205 145, 230 145 L260 145" fill="none" stroke="#3B82F6" stroke-width="12" stroke-linecap="round"/>
+      <path d="M350 310 C350 335, 325 345, 300 345 C275 345, 250 335, 250 310 L250 280 L320 280 C340 280, 355 265, 355 245 L355 220 L380 220 C405 220, 415 245, 415 270 L415 300 C415 325, 395 345, 370 345 L340 345" fill="none" stroke="#93C5FD" stroke-width="12" stroke-linecap="round"/>
+      <circle cx="280" cy="175" r="7" fill="#3B82F6" />
+      <circle cx="320" cy="315" r="7" fill="#93C5FD" />
+    
+  </g>
+
+  <!-- Level & Lessons Badge -->
+  <rect x="30" y="30" width="130" height="32" rx="16" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+  <circle cx="46" cy="46" r="4" fill="#3B82F6" />
+  <text x="58" y="51" fill="#E2E8F0" font-family="sans-serif" font-size="12" font-weight="600" letter-spacing="0.5">BEGINNER</text>
+
+  <!-- Branch Pill -->
+  <rect x="420" y="30" width="150" height="32" rx="16" fill="rgba(255,255,255,0.06)" stroke="#3B82F6" stroke-opacity="0.4" stroke-width="1"/>
+  <text x="495" y="51" fill="#93C5FD" font-family="sans-serif" font-size="11" font-weight="600" text-anchor="middle">CSE CORE</text>
+
+  <!-- Bottom Brand Watermark -->
+  <text x="30" y="415" fill="rgba(255,255,255,0.4)" font-family="monospace" font-size="12">VYAT // python-programming</text>
+  <text x="570" y="415" fill="rgba(255,255,255,0.5)" font-family="sans-serif" font-size="12" font-weight="500" text-anchor="end">30 Lessons • 20m / lesson</text>
+</svg>

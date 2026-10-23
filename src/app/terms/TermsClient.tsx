@@ -583,7 +583,7 @@ export default function TermsClient() {
                   <span>Print Document</span>
                 </button>
                 <Link
-                  href="/explore"
+                  href="/courses"
                   className="flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-semibold bg-sky-600 hover:bg-sky-500 text-white transition-colors cursor-pointer shadow-xs"
                 >
                   <span>Explore Courses</span>
@@ -740,7 +740,7 @@ export default function TermsClient() {
                 </p>
                 <div className="pt-2 flex flex-wrap items-center justify-center gap-3">
                   <Link
-                    href="/explore"
+                    href="/courses"
                     className="px-5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold bg-sky-600 hover:bg-sky-500 text-white shadow-sm transition-all"
                   >
                     Browse All CSE Courses

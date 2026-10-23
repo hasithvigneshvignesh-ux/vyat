@@ -131,7 +131,7 @@ export function Footer() {
               </h4>
               <ul className="space-y-1 text-xs sm:text-sm">
                 <li>
-                  <Link href="/explore" className="min-h-[36px] flex items-center hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
+                  <Link href="/courses" className="min-h-[36px] flex items-center hover:text-sky-600 dark:hover:text-sky-400 transition-colors">
                     All Courses Catalog
                   </Link>
                 </li>

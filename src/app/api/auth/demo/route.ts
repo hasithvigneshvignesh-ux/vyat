@@ -59,7 +59,9 @@ export async function POST(request: Request) {
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const role = url.searchParams.get('role') === 'admin' ? 'admin' : 'student';
-  const targetUrl = new URL(role === 'admin' ? '/admin/dashboard' : '/dashboard', request.url);
+  const nextParam = url.searchParams.get('next') || url.searchParams.get('redirectTo');
+  const destination = role === 'admin' ? '/admin/dashboard' : (nextParam || '/dashboard');
+  const targetUrl = new URL(destination, request.url);
   const response = NextResponse.redirect(targetUrl);
 
   const demoUser = role === 'admin'

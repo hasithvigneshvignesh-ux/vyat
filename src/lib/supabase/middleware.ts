@@ -53,6 +53,8 @@ export async function updateSession(request: NextRequest) {
     (path === '/' ||
       path === '/login' ||
       path === '/explore' ||
+      path.startsWith('/courses') ||
+      path === '/terms' ||
       path === '/sitemap.xml' ||
       path === '/robots.txt' ||
       path.startsWith('/classes') ||

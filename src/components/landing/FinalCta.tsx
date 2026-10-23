@@ -85,7 +85,7 @@ export function FinalCta() {
 
             {/* Dual CTAs (Full width stacked on mobile, 12px gap, 20px+ from panel edge) */}
             <div className="relative z-10 flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3 w-full sm:w-auto">
-              <Link href="/explore" className="w-full sm:w-auto group">
+              <Link href="/courses" className="w-full sm:w-auto group">
                 <button className="w-full sm:w-auto h-[52px] min-h-[52px] px-8 bg-gradient-to-r from-sky-600 via-sky-500 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-semibold rounded-xl shadow-[0_4px_16px_rgba(14,165,233,0.35)] hover:shadow-[0_6px_24px_rgba(14,165,233,0.5)] transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2.5 text-sm sm:text-base cursor-pointer">
                   <span>Browse All CSE Courses</span>
                   <ArrowRight

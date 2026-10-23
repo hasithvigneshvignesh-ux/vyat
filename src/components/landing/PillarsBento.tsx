@@ -196,7 +196,7 @@ export function PillarsBento() {
                             {pillar.tag}
                           </span>
                           <Link
-                            href="/explore"
+                            href="/courses"
                             className="inline-flex items-center gap-1.5 text-sm font-semibold transition-colors duration-200 shrink-0 group/link"
                             style={{ color: pillar.accent }}
                           >
@@ -277,7 +277,7 @@ export function PillarsBento() {
                         </span>
 
                         <Link
-                          href="/explore"
+                          href="/courses"
                           className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold transition-colors duration-200 shrink-0 group/link"
                           style={{ color: pillar.accent }}
                         >
