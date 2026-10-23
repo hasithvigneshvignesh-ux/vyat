@@ -1,6 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, [data-theme="dark"], .dark *, [data-theme="dark"] *));
+
 /* ============================================================
    Vyat Design System
    Premium educational SaaS styling
@@ -63,22 +65,49 @@
   --bg-card-hover: #f8fafc;
   --bg-elevated: #ffffff;
 
+  /* Subtle, refined neutral / blue-gray borders */
   --border-primary: #e2e8f0;
   --border-secondary: #f1f5f9;
   --border-hover: #cbd5e1;
+  --border-accent: #93c5fd;
 
   --text-primary: #0f172a;
   --text-secondary: #334155;
   --text-tertiary: #64748b;
   --text-muted: #94a3b8;
 
+  /* Unified Card Design System Tokens */
+  --card-bg: #ffffff;
+  --card-bg-subtle: #f8fafc;
+  --card-bg-elevated: #ffffff;
+  --card-border: #e2e8f0;
+  --card-border-subtle: #f1f5f9;
+  --card-border-hover: #cbd5e1;
+  --card-border-active: #93c5fd;
+  --card-radius: 14px;
+  --card-radius-sm: 10px;
+  --card-radius-lg: 16px;
+  --card-radius-xl: 20px;
+  --card-shadow: 0 1px 3px 0 rgba(15, 23, 42, 0.04), 0 2px 6px -1px rgba(15, 23, 42, 0.02);
+  --card-shadow-hover: 0 4px 14px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.03);
+  --card-shadow-elevated: 0 10px 25px -4px rgba(15, 23, 42, 0.05), 0 4px 10px -2px rgba(15, 23, 42, 0.03);
+  --card-padding-sm: 16px;
+  --card-padding-md: 24px;
+  --card-padding-lg: 28px;
+
+  /* Section Spacing Tokens */
+  --section-padding-y: clamp(4.5rem, 7vw, 6.5rem);
+  --section-padding-hero: clamp(3.5rem, 5vw, 5.5rem);
+  --section-heading-gap: clamp(2.5rem, 4vw, 3.5rem);
+  --grid-gap: clamp(1.25rem, 2vw, 1.75rem);
+
   --glass-bg: rgba(255, 255, 255, 0.85);
   --glass-border: rgba(226, 232, 240, 0.8);
-  --glass-shadow: 0 8px 32px rgba(15, 23, 42, 0.06);
+  --glass-shadow: 0 8px 32px rgba(15, 23, 42, 0.04);
 
-  --glow-brand: 0 0 20px rgba(2, 132, 199, 0.15);
-  --glow-accent: 0 0 20px rgba(14, 165, 233, 0.15);
-  --glow-success: 0 0 20px rgba(16, 185, 129, 0.15);
+  --glow-brand: 0 0 20px rgba(2, 132, 199, 0.12);
+  --glow-accent: 0 0 20px rgba(14, 165, 233, 0.12);
+  --glow-success: 0 0 20px rgba(16, 185, 129, 0.12);
 
   color-scheme: light;
 }
@@ -97,11 +126,37 @@
   --border-primary: #1e293b;
   --border-secondary: #172033;
   --border-hover: #334155;
+  --border-accent: #38bdf8;
 
   --text-primary: #f8fafc;
   --text-secondary: #cbd5e1;
   --text-tertiary: #94a3b8;
   --text-muted: #64748b;
+
+  /* Unified Card Design System Tokens (Dark) */
+  --card-bg: #0d131f;
+  --card-bg-subtle: #121929;
+  --card-bg-elevated: #151e30;
+  --card-border: #1e293b;
+  --card-border-subtle: #172033;
+  --card-border-hover: #334155;
+  --card-border-active: #38bdf8;
+  --card-radius: 14px;
+  --card-radius-sm: 10px;
+  --card-radius-lg: 16px;
+  --card-radius-xl: 20px;
+  --card-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.3), 0 2px 8px -1px rgba(0, 0, 0, 0.2);
+  --card-shadow-hover: 0 8px 24px -4px rgba(0, 0, 0, 0.45), 0 2px 8px -2px rgba(0, 0, 0, 0.3);
+  --card-shadow-elevated: 0 16px 36px -6px rgba(0, 0, 0, 0.55);
+  --card-padding-sm: 16px;
+  --card-padding-md: 24px;
+  --card-padding-lg: 28px;
+
+  /* Section Spacing Tokens */
+  --section-padding-y: clamp(4.5rem, 7vw, 6.5rem);
+  --section-padding-hero: clamp(3.5rem, 5vw, 5.5rem);
+  --section-heading-gap: clamp(2.5rem, 4vw, 3.5rem);
+  --grid-gap: clamp(1.25rem, 2vw, 1.75rem);
 
   --glass-bg: rgba(13, 19, 31, 0.85);
   --glass-border: rgba(255, 255, 255, 0.06);
@@ -223,8 +278,8 @@ body:has(.sidebar-layout) {
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 0 0 rgba(59, 130, 246, 0.2); }
-  50% { box-shadow: 0 0 0 8px rgba(59, 130, 246, 0); }
+  0%, 100% { box-shadow: 0 0 0 0 rgba(14, 165, 233, 0.25); }
+  50% { box-shadow: 0 0 0 10px rgba(14, 165, 233, 0); }
 }
 
 @keyframes gradient-shift {
@@ -235,7 +290,215 @@ body:has(.sidebar-layout) {
 
 @keyframes float {
   0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-6px); }
+  50% { transform: translateY(-8px); }
+}
+
+@keyframes float-subtle {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-4px); }
+}
+
+@keyframes rotate-conic {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes aurora-drift {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(-3%, 3%) scale(1.06); }
+  66% { transform: translate(3%, -2%) scale(0.96); }
+}
+
+@keyframes foil-sheen {
+  0% { transform: translateX(-150%) rotate(25deg); }
+  100% { transform: translateX(250%) rotate(25deg); }
+}
+
+@keyframes beacon-pulse {
+  0% { transform: scale(0.95); opacity: 0.9; }
+  50% { transform: scale(1.8); opacity: 0; }
+  100% { transform: scale(0.95); opacity: 0; }
+}
+
+/* ============================================================
+   Fluid Typography & Layout Primitives
+   ============================================================ */
+.font-fluid-h1 {
+  font-size: clamp(2.1rem, 6.5vw, 4.75rem);
+  line-height: 1.1;
+  letter-spacing: -0.035em;
+  text-wrap: balance;
+}
+
+.font-fluid-h2 {
+  font-size: clamp(1.75rem, 4.2vw, 3rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  text-wrap: balance;
+}
+
+.font-fluid-body {
+  font-size: clamp(0.95rem, 1.1vw, 1.125rem);
+  line-height: 1.6;
+  text-wrap: pretty;
+  max-width: 68ch;
+}
+
+/* Fluid Page Container with Safe Area Insets */
+.landing-container {
+  width: 100%;
+  max-width: 1280px;
+  margin-inline: auto;
+  padding-inline: clamp(16px, 4vw, 48px);
+  padding-left: max(clamp(16px, 4vw, 48px), env(safe-area-inset-left));
+  padding-right: max(clamp(16px, 4vw, 48px), env(safe-area-inset-right));
+}
+
+@media (min-width: 1920px) {
+  .landing-container {
+    max-width: 1440px;
+  }
+}
+
+/* Section Rhythm Tokens */
+.landing-section {
+  padding-top: clamp(56px, 8vw, 120px);
+  padding-bottom: clamp(56px, 8vw, 120px);
+  position: relative;
+  width: 100%;
+}
+
+.landing-section-header {
+  margin-bottom: clamp(32px, 5vw, 64px);
+  text-align: center;
+}
+
+/* Background Grid Pattern with Radial Mask */
+.bg-grid-mask {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(148, 163, 184, 0.08) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(148, 163, 184, 0.08) 1px, transparent 1px);
+  mask-image: radial-gradient(ellipse 65% 55% at 50% 50%, #000 60%, transparent 100%);
+  -webkit-mask-image: radial-gradient(ellipse 65% 55% at 50% 50%, #000 60%, transparent 100%);
+}
+
+.dark .bg-grid-mask {
+  background-image: 
+    linear-gradient(to right, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
+}
+
+/* Glass Card with Container Query */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
+  border-radius: var(--card-radius, 16px);
+  container-type: inline-size;
+}
+
+@supports not (backdrop-filter: blur(16px)) {
+  .glass-panel {
+    background: var(--bg-card);
+  }
+}
+
+/* Spotlight Card with mouse follow coordinates */
+.spotlight-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--card-radius, 16px);
+  background: var(--card-bg);
+  border: 1px solid var(--card-border);
+  box-shadow: var(--card-shadow);
+  transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
+  container-type: inline-size;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .spotlight-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      600px circle at var(--mx, -500px) var(--my, -500px),
+      rgba(14, 165, 233, 0.12),
+      transparent 50%
+    );
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: inherit;
+    z-index: 1;
+  }
+
+  .spotlight-card:hover::before {
+    opacity: 1;
+  }
+
+  .spotlight-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--card-shadow-hover);
+    border-color: var(--card-border-hover);
+  }
+}
+
+/* Mobile Active Tap Press state */
+@media (hover: none) {
+  button:active, .interactive-tap:active {
+    transform: scale(0.98);
+  }
+}
+
+/* Shimmering Text Gradient */
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    #0ea5e9 0%,
+    #6366f1 35%,
+    #8b5cf6 70%,
+    #0ea5e9 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: shimmer 6s linear infinite;
+}
+
+/* Conic Rotating Badge Border */
+.conic-badge-border {
+  position: relative;
+  border-radius: 9999px;
+  padding: 1px;
+  overflow: hidden;
+}
+
+.conic-badge-border::before {
+  content: '';
+  position: absolute;
+  inset: -150%;
+  background: conic-gradient(from 0deg, transparent 0%, #f59e0b 25%, #0ea5e9 50%, #8b5cf6 75%, transparent 100%);
+  animation: rotate-conic 4s linear infinite;
+}
+
+.conic-badge-content {
+  position: relative;
+  border-radius: 9999px;
+  z-index: 1;
+}
+
+/* Reduced Motion Accessible Overrides */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ============================================================
@@ -274,14 +537,18 @@ body:has(.sidebar-layout) {
 }
 
 .animate-float {
-  animation: float 3s ease-in-out infinite;
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-float-subtle {
+  animation: float-subtle 3s ease-in-out infinite;
 }
 
 /* Glass morphism card */
 .glass-card {
   background: var(--glass-bg);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid var(--glass-border);
   box-shadow: var(--glass-shadow);
   border-radius: 16px;
@@ -327,12 +594,13 @@ body:has(.sidebar-layout) {
 
 /* Card hover lift effect */
 .card-hover {
-  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
 }
 
 .card-hover:hover {
   transform: translateY(-2px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+  border-color: var(--card-border-hover);
+  box-shadow: var(--card-shadow-hover);
 }
 
 /* Progress bar styles */
@@ -621,16 +889,16 @@ aside.sidebar button[title="Sign Out"]:hover {
   backface-visibility: hidden;
 }
 
-/* Stat card — uniform height, GPU-accelerated, contained layout */
+/* Stat card — uniform height, refined subtle borders & shadows */
 .stat-card {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
   padding: 24px;
-  border-radius: 14px;
-  border: 1px solid var(--border-primary);
-  background-color: var(--bg-card);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.06);
+  border-radius: var(--card-radius, 14px);
+  border: 1px solid var(--card-border, var(--border-primary));
+  background-color: var(--card-bg, var(--bg-card));
+  box-shadow: var(--card-shadow);
   transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
   min-height: 136px;
   transform: translateZ(0);
@@ -640,15 +908,16 @@ aside.sidebar button[title="Sign Out"]:hover {
 }
 
 .stat-card:hover {
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 8px 24px rgba(0, 0, 0, 0.10);
-  border-color: var(--hover-border, rgba(59,130,246,0.25));
+  transform: translateY(-1.5px);
+  box-shadow: var(--card-shadow-hover);
+  border-color: var(--hover-border, var(--card-border-hover));
 }
 
 /* Skill program cards — 3-col grid with equal-height flex cards */
 .skill-programs-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: var(--grid-gap, 24px);
   align-items: stretch;
 }
 
@@ -667,11 +936,11 @@ aside.sidebar button[title="Sign Out"]:hover {
 .skill-card {
   display: flex;
   flex-direction: column;
-  padding: 28px;
-  border-radius: 14px;
-  border: 1px solid var(--border-primary);
-  background-color: var(--bg-card);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 4px 12px rgba(0, 0, 0, 0.06);
+  padding: var(--card-padding-md, 24px);
+  border-radius: var(--card-radius, 14px);
+  border: 1px solid var(--card-border, var(--border-primary));
+  background-color: var(--card-bg, var(--bg-card));
+  box-shadow: var(--card-shadow);
   transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
   transform: translateZ(0);
   will-change: transform;
@@ -680,8 +949,9 @@ aside.sidebar button[title="Sign Out"]:hover {
 }
 
 .skill-card:hover {
-  border-color: rgba(59, 130, 246, 0.35);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.10), 0 12px 40px rgba(59, 130, 246, 0.08);
+  transform: translateY(-2px);
+  border-color: var(--card-border-hover);
+  box-shadow: var(--card-shadow-hover);
 }
 
 /* The top content area of skill cards grows to fill available space */

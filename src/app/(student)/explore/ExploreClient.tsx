@@ -97,7 +97,7 @@ export default function ExploreClient({ allSkills, skillAccess, branches }: Prop
             {branchName}
             <Badge>{skills.length} skills</Badge>
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {skills.map((skill, idx) => {
               const status = getAccessStatus(skill.id);
               const isActive = status === 'active';
@@ -108,11 +108,11 @@ export default function ExploreClient({ allSkills, skillAccess, branches }: Prop
                 <Card
                   key={skill.id}
                   hover={!isLocked}
-                  className={`!p-5 relative animate-fade-in stagger-${(idx % 8) + 1}`}
+                  className={`relative animate-fade-in stagger-${(idx % 8) + 1} flex flex-col justify-between`}
                   style={{ opacity: 0, animationFillMode: 'forwards' } as React.CSSProperties}
                 >
                   {/* Status indicator */}
-                  <div className="absolute top-4 right-4">
+                  <div className="absolute top-5 right-5">
                     {isCompleted && <CheckCircle2 size={18} className="text-emerald-400" />}
                     {isActive && <Zap size={18} className="text-blue-400" />}
                     {isLocked && <Lock size={18} style={{ color: 'var(--text-muted)' }} />}

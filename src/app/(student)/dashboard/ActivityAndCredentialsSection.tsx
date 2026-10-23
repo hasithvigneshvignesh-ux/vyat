@@ -33,10 +33,10 @@ export const ActivityAndCredentialsSection = memo(function ActivityAndCredential
           display: 'flex',
           flexDirection: 'column',
           padding: 28,
-          borderRadius: 12,
-          border: '1px solid var(--border-primary)',
-          backgroundColor: 'var(--bg-card)',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
+          borderRadius: 'var(--card-radius, 14px)',
+          border: '1px solid var(--card-border, var(--border-primary))',
+          backgroundColor: 'var(--card-bg, var(--bg-card))',
+          boxShadow: 'var(--card-shadow)',
         }}
       >
         {/* Header row */}
@@ -177,10 +177,10 @@ export const ActivityAndCredentialsSection = memo(function ActivityAndCredential
           display: 'flex',
           flexDirection: 'column',
           padding: 28,
-          borderRadius: 12,
-          border: '1px solid var(--border-primary)',
-          backgroundColor: 'var(--bg-card)',
-          boxShadow: '0 2px 8px rgba(0,0,0,0.10)',
+          borderRadius: 'var(--card-radius, 14px)',
+          border: '1px solid var(--card-border, var(--border-primary))',
+          backgroundColor: 'var(--card-bg, var(--bg-card))',
+          boxShadow: 'var(--card-shadow)',
         }}
       >
         {/* Header */}

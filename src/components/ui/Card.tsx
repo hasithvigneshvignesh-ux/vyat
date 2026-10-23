@@ -21,16 +21,16 @@ export default function Card({
 }: CardProps) {
   const paddings = {
     none: '',
-    sm: 'p-4',
-    md: 'p-6',
-    lg: 'p-8',
+    sm: 'p-4 sm:p-5',
+    md: 'p-6 sm:p-7',
+    lg: 'p-7 sm:p-8',
   };
 
   return (
     <div
       onClick={onClick}
       className={`
-        rounded-2xl border
+        rounded-[14px] border
         ${hover ? 'card-hover cursor-pointer' : ''}
         ${gradient ? 'gradient-border' : ''}
         ${paddings[padding]}
@@ -38,8 +38,9 @@ export default function Card({
         ${className}
       `}
       style={{
-        backgroundColor: 'var(--bg-card)',
-        borderColor: gradient ? 'transparent' : 'var(--border-primary)',
+        backgroundColor: 'var(--card-bg, var(--bg-card))',
+        borderColor: gradient ? 'transparent' : 'var(--card-border, var(--border-primary))',
+        boxShadow: 'var(--card-shadow)',
         ...style,
       }}
     >

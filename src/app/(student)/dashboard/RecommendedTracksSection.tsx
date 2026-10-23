@@ -45,8 +45,7 @@ export const RecommendedTracksSection = memo(function RecommendedTracksSection({
         {recommendedSkills.map((skill) => (
           <Card
             key={skill.id}
-            hover
-            className="!p-7 sm:!p-8 flex flex-col justify-between border hover:border-violet-500/40 shadow-sm hover:shadow-xl transition-all duration-200 gpu-layer"
+            className="p-6 sm:p-7 flex flex-col justify-between border hover:border-violet-500/30 transition-all duration-200 gpu-layer"
             style={{ contain: 'content' }}
           >
             <div className="space-y-4">
