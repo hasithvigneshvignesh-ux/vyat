@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap');
 @import "tailwindcss";
+@source "../**";
 
 @custom-variant dark (&:where(.dark, [data-theme="dark"], .dark *, [data-theme="dark"] *));
 
@@ -170,32 +171,29 @@
 }
 
 /* ============================================================
-   Base Styles
+   Base Styles (Layered to prevent overriding Tailwind utilities)
    ============================================================ */
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+@layer base {
+  html {
+    font-family: var(--font-sans);
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: clip;
+  }
 
-html {
-  font-family: var(--font-sans);
-  scroll-behavior: smooth;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
+  h1, h2, h3, h4, h5, h6, .font-heading {
+    font-family: var(--font-heading);
+    letter-spacing: -0.02em;
+  }
 
-h1, h2, h3, h4, h5, h6, .font-heading {
-  font-family: var(--font-heading);
-  letter-spacing: -0.02em;
-}
-
-body {
-  background-color: var(--bg-primary);
-  color: var(--text-primary);
-  font-family: var(--font-sans);
-  min-height: 100dvh;
-  overflow-x: hidden;
+  body {
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    min-height: 100dvh;
+    overflow-x: clip;
+  }
 }
 
 /* Prevent double scrollbar / nested scrolling on layout wrapper */
@@ -344,33 +342,37 @@ body:has(.sidebar-layout) {
   max-width: 68ch;
 }
 
-/* Fluid Page Container with Safe Area Insets */
+/* Fluid Page Container with Safe Area Insets (Step 2: max-w 1200px, 1360px at >=1536px) */
 .landing-container {
   width: 100%;
-  max-width: 1280px;
+  max-width: 1200px;
   margin-inline: auto;
-  padding-inline: clamp(16px, 4vw, 48px);
-  padding-left: max(clamp(16px, 4vw, 48px), env(safe-area-inset-left));
-  padding-right: max(clamp(16px, 4vw, 48px), env(safe-area-inset-right));
+  padding-inline: clamp(16px, 4vw, 40px);
+  padding-left: max(clamp(16px, 4vw, 40px), env(safe-area-inset-left));
+  padding-right: max(clamp(16px, 4vw, 40px), env(safe-area-inset-right));
+  box-sizing: border-box;
 }
 
-@media (min-width: 1920px) {
+@media (min-width: 1536px) {
   .landing-container {
-    max-width: 1440px;
+    max-width: 1360px;
   }
 }
 
-/* Section Rhythm Tokens */
+/* Section Rhythm Tokens (Step 2: padding-block clamp(64px, 8vw, 112px)) */
 .landing-section {
-  padding-top: clamp(56px, 8vw, 120px);
-  padding-bottom: clamp(56px, 8vw, 120px);
+  padding-top: clamp(64px, 8vw, 112px);
+  padding-bottom: clamp(64px, 8vw, 112px);
   position: relative;
   width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .landing-section-header {
   margin-bottom: clamp(32px, 5vw, 64px);
   text-align: center;
+  width: 100%;
 }
 
 /* Background Grid Pattern with Radial Mask */
@@ -389,7 +391,7 @@ body:has(.sidebar-layout) {
     linear-gradient(to bottom, rgba(255, 255, 255, 0.04) 1px, transparent 1px);
 }
 
-/* Glass Card with Container Query */
+/* Glass Card with Container Query & Explicit Inner Padding */
 .glass-panel {
   background: var(--glass-bg);
   backdrop-filter: blur(16px);
@@ -397,6 +399,8 @@ body:has(.sidebar-layout) {
   border: 1px solid var(--card-border);
   box-shadow: var(--card-shadow);
   border-radius: var(--card-radius, 16px);
+  padding: clamp(18px, 2.2vw, 32px);
+  box-sizing: border-box;
   container-type: inline-size;
 }
 
@@ -406,7 +410,7 @@ body:has(.sidebar-layout) {
   }
 }
 
-/* Spotlight Card with mouse follow coordinates */
+/* Spotlight Card with mouse follow coordinates & Explicit Inner Padding */
 .spotlight-card {
   position: relative;
   overflow: hidden;
@@ -414,6 +418,8 @@ body:has(.sidebar-layout) {
   background: var(--card-bg);
   border: 1px solid var(--card-border);
   box-shadow: var(--card-shadow);
+  padding: clamp(18px, 2.2vw, 32px);
+  box-sizing: border-box;
   transition: transform var(--transition-base), border-color var(--transition-base), box-shadow var(--transition-base);
   container-type: inline-size;
 }

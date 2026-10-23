@@ -133,17 +133,25 @@ export function PillarsBento() {
           subtitle="Whether you are aiming for high-paying product company campus placements or scoring top SGPA in semester exams, Vyat covers the entire Computer Science Engineering roadmap."
         />
 
-        {/* ── Responsive Bento Grid: 1-col (base) -> 2-col (sm/md) -> 3-col Bento with 2 cards spanning 2 cols (lg+) ── */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-7">
+        {/* ── Explicit 6-Column Grid on Desktop (lg+), 2-Col on Tablet (md), 1-Col on Mobile ── */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-4 sm:gap-6 lg:gap-7 [grid-auto-flow:dense]">
           {PILLARS_LIST.map((pillar, idx) => {
             const IconComponent = pillar.icon;
-            const isSpan2 = pillar.span2;
+            const isRoadmap = pillar.id === 'systems-scale';
+            const isTopRow = pillar.id === 'placements' || pillar.id === 'core-subjects';
+
+            // Desktop span: Row 1 = 3 cols each; Row 2 = 2 cols each; Row 3 (Roadmap) = all 6 cols
+            const spanClass = isRoadmap
+              ? 'col-span-1 md:col-span-2 lg:col-span-6'
+              : isTopRow
+              ? 'col-span-1 md:col-span-1 lg:col-span-3'
+              : 'col-span-1 md:col-span-1 lg:col-span-2';
 
             return (
-              <Reveal key={pillar.id} delayMs={idx * 70} className={isSpan2 ? 'sm:col-span-2 lg:col-span-2' : ''}>
+              <Reveal key={pillar.id} delayMs={idx * 60} className={`h-full ${spanClass}`}>
                 <SpotlightCard
                   accentColor={pillar.accent}
-                  className="group relative h-full flex flex-col justify-between rounded-2xl sm:rounded-3xl p-5 sm:p-7 transition-all duration-300 hover:-translate-y-1.5 active:scale-[0.99] border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-[#0b1020]/70 backdrop-blur-xl shadow-[0_2px_12px_rgba(15,23,42,0.04)] hover:shadow-[0_16px_36px_rgba(15,23,42,0.08)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.5)] dark:hover:shadow-[0_16px_40px_rgba(0,0,0,0.8)] overflow-hidden"
+                  className="group relative h-full flex flex-col justify-between rounded-2xl sm:rounded-3xl transition-all duration-300 hover:-translate-y-1.5 active:scale-[0.99] border border-slate-200/80 dark:border-white/10 bg-white/75 dark:bg-[#0b1020]/75 backdrop-blur-xl shadow-[0_2px_12px_rgba(15,23,42,0.04)] hover:shadow-[0_16px_36px_rgba(15,23,42,0.08)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.5)] dark:hover:shadow-[0_16px_40px_rgba(0,0,0,0.8)] overflow-hidden"
                 >
                   {/* Subtle Accent Glow Ring in Card Corner */}
                   <div
@@ -152,68 +160,134 @@ export function PillarsBento() {
                     style={{ backgroundColor: pillar.accent }}
                   />
 
-                  <div>
-                    {/* Top Row: Icon with Gradient Glow + Category Pill */}
-                    <div className="flex items-center justify-between mb-4 sm:mb-5">
-                      <div
-                        className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 shadow-sm shrink-0"
-                        style={{
-                          backgroundColor: `${pillar.accent}15`,
-                          borderColor: `${pillar.accent}35`,
-                          borderWidth: '1px',
-                          color: pillar.accent,
-                        }}
-                      >
-                        <IconComponent size={22} />
+                  {isRoadmap ? (
+                    /* ── Wide Horizontal Layout for 4-Year Roadmap (Row 3, 6 cols) ── */
+                    <div className="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-6 lg:gap-10 w-full h-full">
+                      {/* Left: Info & Meta */}
+                      <div className="flex-1 max-w-xl">
+                        <div className="flex items-center gap-3 mb-4">
+                          <div
+                            className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 shadow-sm shrink-0"
+                            style={{
+                              backgroundColor: `${pillar.accent}15`,
+                              borderColor: `${pillar.accent}35`,
+                              borderWidth: '1px',
+                              color: pillar.accent,
+                            }}
+                          >
+                            <IconComponent size={22} />
+                          </div>
+                          <span className="px-2.5 py-1 text-[11px] sm:text-xs font-semibold rounded-lg bg-slate-100/80 dark:bg-white/5 text-slate-700 dark:text-slate-300 border border-slate-200/60 dark:border-white/5">
+                            {pillar.category}
+                          </span>
+                        </div>
+
+                        <h3 className="text-lg sm:text-xl lg:text-2xl font-bold tracking-tight text-slate-900 dark:text-white mb-2 leading-snug">
+                          {pillar.title}
+                        </h3>
+
+                        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed font-normal mb-4">
+                          {pillar.hook}
+                        </p>
+
+                        <div className="flex items-center gap-3">
+                          <span className="text-[10px] sm:text-xs font-mono font-medium px-2.5 py-1 rounded-md border border-slate-200/80 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-600 dark:text-slate-400">
+                            {pillar.tag}
+                          </span>
+                          <Link
+                            href="/explore"
+                            className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold transition-colors duration-200 shrink-0 group/link"
+                            style={{ color: pillar.accent }}
+                          >
+                            <span>Explore Full Track</span>
+                            <ArrowRight size={14} className="transition-transform duration-200 group-hover/link:translate-x-1" />
+                          </Link>
+                        </div>
                       </div>
 
-                      <span className="px-2.5 py-1 text-[11px] sm:text-xs font-semibold rounded-lg bg-slate-100/80 dark:bg-white/5 text-slate-700 dark:text-slate-300 border border-slate-200/60 dark:border-white/5">
-                        {pillar.category}
-                      </span>
+                      {/* Right: 3 Checklist items in a row on lg */}
+                      <div className="w-full lg:w-auto lg:min-w-[460px] pt-4 lg:pt-0 border-t lg:border-t-0 lg:border-l border-slate-200/70 dark:border-white/5 lg:pl-8">
+                        <ul className="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-1 gap-3 text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-medium">
+                          {pillar.highlights.map((item, hIdx) => (
+                            <li key={hIdx} className="flex items-start gap-2.5 bg-slate-50/70 dark:bg-white/[0.02] p-2.5 rounded-xl border border-slate-200/60 dark:border-white/5">
+                              <CheckCircle2
+                                size={16}
+                                className="shrink-0 mt-0.5 transition-transform duration-200 group-hover:scale-110"
+                                style={{ color: pillar.accent }}
+                              />
+                              <span className="leading-snug">{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
                     </div>
+                  ) : (
+                    /* ── Standard Card Layout (Rows 1 & 2) ── */
+                    <div className="flex flex-col justify-between h-full">
+                      <div>
+                        {/* Top Row: Icon with Gradient Glow + Category Pill */}
+                        <div className="flex items-center justify-between mb-4 sm:mb-5">
+                          <div
+                            className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover:scale-110 shadow-sm shrink-0"
+                            style={{
+                              backgroundColor: `${pillar.accent}15`,
+                              borderColor: `${pillar.accent}35`,
+                              borderWidth: '1px',
+                              color: pillar.accent,
+                            }}
+                          >
+                            <IconComponent size={22} />
+                          </div>
 
-                    {/* Title & Hook */}
-                    <h3 className="text-base sm:text-lg lg:text-xl font-bold tracking-tight text-slate-900 dark:text-white mb-2 leading-snug">
-                      {pillar.title}
-                    </h3>
+                          <span className="px-2.5 py-1 text-[11px] sm:text-xs font-semibold rounded-lg bg-slate-100/80 dark:bg-white/5 text-slate-700 dark:text-slate-300 border border-slate-200/60 dark:border-white/5">
+                            {pillar.category}
+                          </span>
+                        </div>
 
-                    <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-5 font-normal line-clamp-3 sm:line-clamp-none">
-                      {pillar.hook}
-                    </p>
+                        {/* Title & Hook */}
+                        <h3 className="text-base sm:text-lg lg:text-xl font-bold tracking-tight text-slate-900 dark:text-white mb-2 leading-snug">
+                          {pillar.title}
+                        </h3>
 
-                    {/* Checklist with animated/glowing icons */}
-                    <ul className="space-y-2 sm:space-y-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-medium mb-6">
-                      {pillar.highlights.map((item, hIdx) => (
-                        <li key={hIdx} className="flex items-start gap-2.5">
-                          <CheckCircle2
-                            size={16}
-                            className="shrink-0 mt-0.5 transition-transform duration-200 group-hover:scale-110"
-                            style={{ color: pillar.accent }}
+                        <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400 leading-relaxed mb-5 font-normal line-clamp-3 sm:line-clamp-none">
+                          {pillar.hook}
+                        </p>
+
+                        {/* Checklist with animated/glowing icons */}
+                        <ul className="space-y-2 sm:space-y-2.5 text-xs sm:text-sm text-slate-700 dark:text-slate-300 font-medium mb-6">
+                          {pillar.highlights.map((item, hIdx) => (
+                            <li key={hIdx} className="flex items-start gap-2.5">
+                              <CheckCircle2
+                                size={16}
+                                className="shrink-0 mt-0.5 transition-transform duration-200 group-hover:scale-110"
+                                style={{ color: pillar.accent }}
+                              />
+                              <span className="leading-snug">{item}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+
+                      {/* Card Bottom Meta & Explore CTA */}
+                      <div className="pt-4 border-t border-slate-200/70 dark:border-white/5 flex items-center justify-between gap-3 mt-auto">
+                        <span className="text-[10px] sm:text-xs font-mono font-medium px-2.5 py-1 rounded-md border border-slate-200/80 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-600 dark:text-slate-400 truncate max-w-[150px] sm:max-w-none">
+                          {pillar.tag}
+                        </span>
+
+                        <Link
+                          href="/explore"
+                          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold transition-colors duration-200 shrink-0 group/link"
+                          style={{ color: pillar.accent }}
+                        >
+                          <span>Explore Track</span>
+                          <ArrowRight
+                            size={14}
+                            className="transition-transform duration-200 group-hover/link:translate-x-1"
                           />
-                          <span className="leading-snug">{item}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-
-                  {/* Card Bottom Meta & Explore CTA */}
-                  <div className="pt-4 border-t border-slate-200/70 dark:border-white/5 flex items-center justify-between gap-3 mt-auto">
-                    <span className="text-[10px] sm:text-xs font-mono font-medium px-2.5 py-1 rounded-md border border-slate-200/80 dark:border-white/10 bg-slate-50 dark:bg-white/5 text-slate-600 dark:text-slate-400 truncate max-w-[150px] sm:max-w-none">
-                      {pillar.tag}
-                    </span>
-
-                    <Link
-                      href="/explore"
-                      className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold transition-colors duration-200 shrink-0 group/link"
-                      style={{ color: pillar.accent }}
-                    >
-                      <span>Explore Track</span>
-                      <ArrowRight
-                        size={14}
-                        className="transition-transform duration-200 group-hover/link:translate-x-1"
-                      />
-                    </Link>
-                  </div>
+                        </Link>
+                      </div>
+                    </div>
+                  )}
                 </SpotlightCard>
               </Reveal>
             );

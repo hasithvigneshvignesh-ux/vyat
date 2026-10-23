@@ -78,42 +78,49 @@ export function DripTimeline() {
         />
 
         <div ref={containerRef} className="relative mt-8 sm:mt-12">
-          {/* ── Desktop Connecting Line (lg+) ── */}
-          <div className="hidden lg:block absolute top-[52px] left-[6%] right-[6%] h-[2px] bg-slate-200 dark:bg-slate-800 z-0">
+          {/* ── Desktop Connecting Line (lg+) - Runs strictly at vertical center of badges (top-6 = 24px) ── */}
+          <div className="hidden lg:block absolute top-6 left-[10%] right-[10%] h-[2px] bg-slate-200 dark:bg-slate-800 z-0 pointer-events-none">
             <div
               className="h-full bg-gradient-to-r from-sky-500 via-indigo-500 to-emerald-500 transition-all duration-300"
               style={{ width: `${lineProgress * 100}%` }}
             />
           </div>
 
-          {/* ── Mobile Connecting Line (Vertical on Left, <md) ── */}
-          <div className="block md:hidden absolute top-8 bottom-8 left-6 w-[2px] bg-slate-200 dark:bg-slate-800 z-0">
+          {/* ── Mobile Connecting Line (Vertical on Left, <md) - Passes strictly behind badges (left-[34px]) ── */}
+          <div className="block md:hidden absolute top-8 bottom-8 left-[34px] w-[2px] bg-slate-200 dark:bg-slate-800 z-0 pointer-events-none">
             <div
               className="w-full bg-gradient-to-b from-sky-500 via-indigo-500 to-emerald-500 transition-all duration-300"
               style={{ height: `${lineProgress * 100}%` }}
             />
           </div>
 
-          {/* ── Timeline Grid: Vertical list on base -> 2x2 on md -> Horizontal 4-col on lg ── */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-6 lg:gap-8 relative z-10">
+          {/* ── Timeline Grid: Vertical list on base -> 2x2 on md -> Horizontal 4-col on lg (gap >= 24px) ── */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-6 lg:gap-7 relative z-10">
             {STEPS.map((item, idx) => (
               <Reveal key={idx} delayMs={idx * 80} className="h-full">
-                <div className="group relative h-full flex flex-col justify-between rounded-2xl sm:rounded-3xl p-6 sm:p-7 border border-slate-200/80 dark:border-white/10 bg-white/70 dark:bg-[#0b1020]/70 backdrop-blur-xl shadow-[0_2px_12px_rgba(15,23,42,0.04)] hover:shadow-[0_16px_36px_rgba(15,23,42,0.08)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.5)] dark:hover:shadow-[0_16px_40px_rgba(0,0,0,0.8)] transition-all duration-300 hover:-translate-y-1.5 active:scale-[0.99] pl-16 sm:pl-7">
+                <div
+                  className="group relative h-full min-h-[260px] sm:min-h-[290px] flex flex-col justify-between rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white/80 dark:bg-[#0b1020]/80 backdrop-blur-xl shadow-[0_2px_12px_rgba(15,23,42,0.04)] hover:shadow-[0_16px_36px_rgba(15,23,42,0.08)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.5)] dark:hover:shadow-[0_16px_40px_rgba(0,0,0,0.8)] transition-all duration-300 hover:-translate-y-1.5 active:scale-[0.99] pl-16 sm:pl-6"
+                  style={{
+                    padding: 'clamp(20px, 2.5vw, 32px)',
+                    paddingLeft: 'clamp(20px, 2.5vw, 32px)',
+                  }}
+                >
                   <div>
-                    {/* Step Number Badge */}
-                    <div className="absolute left-3.5 top-6 sm:static sm:left-auto sm:top-auto mb-4 sm:mb-5">
+                    {/* Step Number Badge - Sits on top of the card above connecting line */}
+                    <div className="absolute left-3.5 top-6 sm:static sm:left-auto sm:top-auto mb-4 sm:mb-5 z-10">
                       <div
-                        className={`w-9 h-9 sm:w-11 sm:h-11 rounded-xl font-bold text-sm sm:text-base flex items-center justify-center text-white bg-gradient-to-tr ${item.accentGradient} shadow-sm group-hover:scale-110 transition-transform duration-200`}
+                        className={`w-11 h-11 sm:w-12 sm:h-12 rounded-xl font-bold text-base sm:text-lg flex items-center justify-center text-white bg-gradient-to-tr ${item.accentGradient} shadow-md group-hover:scale-110 transition-transform duration-200 ring-4 ring-white dark:ring-[#0b1020]`}
                       >
                         {item.step}
                       </div>
                     </div>
 
-                    <div className="inline-block px-2.5 py-0.5 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider rounded-md bg-slate-100 dark:bg-white/5 text-slate-600 dark:text-slate-400 mb-2">
+                    <div className="inline-block px-2.5 py-1 text-[10px] sm:text-[11px] font-semibold uppercase tracking-wider rounded-md bg-slate-100/90 dark:bg-white/5 text-slate-700 dark:text-slate-300 mb-2 border border-slate-200/60 dark:border-white/5">
                       {item.badge}
                     </div>
 
-                    <h3 className="font-bold text-base sm:text-lg text-slate-900 dark:text-white mb-2 leading-snug">
+                    {/* Title: 18-20px as required */}
+                    <h3 className="font-bold text-lg lg:text-xl text-slate-900 dark:text-white mb-2.5 leading-snug">
                       {item.title}
                     </h3>
 
@@ -122,7 +129,7 @@ export function DripTimeline() {
                     </p>
                   </div>
 
-                  <div className="pt-3 mt-4 border-t border-slate-200/70 dark:border-white/5 flex items-center gap-1.5 text-[11px] text-sky-600 dark:text-sky-400 font-semibold">
+                  <div className="pt-3.5 mt-5 border-t border-slate-200/70 dark:border-white/5 flex items-center gap-1.5 text-xs text-sky-600 dark:text-sky-400 font-semibold">
                     <span>Phase 0{item.step} of 04</span>
                   </div>
                 </div>

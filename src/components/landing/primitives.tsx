@@ -63,7 +63,79 @@ interface ContainerProps {
 
 export function Container({ children, className = '', style, id }: ContainerProps) {
   return (
-    <div id={id} className={`landing-container ${className}`} style={style}>
+    <div id={id} className={`landing-container w-full mx-auto ${className}`} style={style}>
+      {children}
+    </div>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────
+   2.1 Section Primitive with Consistent Rhythm
+   ────────────────────────────────────────────────────────── */
+interface SectionProps {
+  children: ReactNode;
+  className?: string;
+  style?: CSSProperties;
+  id?: string;
+}
+
+export function Section({ children, className = '', style, id }: SectionProps) {
+  return (
+    <section
+      id={id}
+      className={`w-full landing-section relative border-b border-slate-200/70 dark:border-white/5 flex flex-col items-center justify-center ${className}`}
+      style={style}
+    >
+      {children}
+    </section>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────
+   2.2 Glass Panel Primitive with Explicit Inner Padding
+   ────────────────────────────────────────────────────────── */
+interface GlassPanelProps {
+  children: ReactNode;
+  className?: string;
+  style?: CSSProperties;
+  id?: string;
+}
+
+export function GlassPanel({ children, className = '', style, id }: GlassPanelProps) {
+  return (
+    <div
+      id={id}
+      className={`glass-panel w-full rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white/75 dark:bg-[#0b1020]/75 backdrop-blur-xl shadow-[0_2px_12px_rgba(15,23,42,0.04)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.5)] ${className}`}
+      style={{
+        padding: 'clamp(18px, 2.2vw, 32px)',
+        ...style,
+      }}
+    >
+      {children}
+    </div>
+  );
+}
+
+/* ──────────────────────────────────────────────────────────
+   2.3 Card Primitive with Explicit Inner Padding & Equal Height
+   ────────────────────────────────────────────────────────── */
+interface CardProps {
+  children: ReactNode;
+  className?: string;
+  style?: CSSProperties;
+  onClick?: () => void;
+}
+
+export function Card({ children, className = '', style, onClick }: CardProps) {
+  return (
+    <div
+      onClick={onClick}
+      className={`w-full h-full flex flex-col justify-between rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white/75 dark:bg-[#0b1020]/75 backdrop-blur-xl shadow-[0_2px_12px_rgba(15,23,42,0.04)] hover:shadow-[0_16px_36px_rgba(15,23,42,0.08)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.5)] dark:hover:shadow-[0_16px_40px_rgba(0,0,0,0.8)] transition-all duration-300 ${className}`}
+      style={{
+        padding: 'clamp(18px, 2.2vw, 32px)',
+        ...style,
+      }}
+    >
       {children}
     </div>
   );
@@ -306,6 +378,7 @@ export function SpotlightCard({
       className={`spotlight-card ${className}`}
       style={
         {
+          padding: 'clamp(18px, 2.2vw, 32px)',
           ...style,
           '--spotlight-accent': accentColor,
         } as CSSProperties

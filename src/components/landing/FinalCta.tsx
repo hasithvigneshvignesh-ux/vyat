@@ -37,28 +37,37 @@ export function FinalCta() {
         }}
       />
 
-      <Container className="relative z-10">
+      <Container className="relative z-10 w-full mx-auto">
         <Reveal>
-          <div className="w-full max-w-4xl mx-auto rounded-3xl p-8 sm:p-12 lg:p-16 border border-slate-200/90 dark:border-white/10 bg-white/80 dark:bg-[#0b1020]/80 backdrop-blur-2xl shadow-[0_20px_60px_-15px_rgba(14,165,233,0.12)] dark:shadow-[0_20px_60px_rgba(0,0,0,0.8)] text-center relative overflow-hidden">
+          {/* ── Closing Hero Panel (Step 3: max-w-[1100px], padding clamp(40px, 6vw, 88px)) ── */}
+          <div
+            className="w-full max-w-[1100px] mx-auto rounded-3xl border border-slate-200/90 dark:border-white/10 bg-white/85 dark:bg-[#0b1020]/85 backdrop-blur-2xl shadow-[0_20px_60px_-15px_rgba(14,165,233,0.15)] dark:shadow-[0_25px_70px_rgba(0,0,0,0.8)] text-center relative overflow-hidden"
+            style={{
+              padding: 'clamp(40px, 6vw, 88px)',
+            }}
+          >
             {/* Pill Tag */}
             <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-semibold border border-sky-500/20 bg-sky-500/10 text-sky-700 dark:text-sky-300 mb-6 shadow-2xs">
               <span className="text-amber-500">⚡</span>
               <span>Accelerate Your Career</span>
             </div>
 
-            {/* H2 Title */}
-            <h2 className="font-fluid-h2 font-extrabold tracking-tight text-slate-900 dark:text-white mb-4 sm:mb-5 leading-tight text-balance">
+            {/* H2 Title (2-3 lines max on mobile) */}
+            <h2
+              className="font-extrabold tracking-tight text-slate-900 dark:text-white mb-4 sm:mb-5 leading-tight text-balance"
+              style={{ fontSize: 'clamp(1.85rem, 4.2vw, 3.25rem)' }}
+            >
               Ready to Master Computer Science?
             </h2>
 
-            {/* Subtitle */}
-            <p className="font-fluid-body text-slate-600 dark:text-slate-300 max-w-2xl mx-auto mb-8 sm:mb-10 leading-relaxed font-normal text-pretty">
+            {/* Subtitle (max-width 560px centered) */}
+            <p className="text-slate-600 dark:text-slate-300 max-w-[560px] mx-auto mb-8 sm:mb-10 leading-relaxed font-normal text-pretty text-sm sm:text-base">
               Join thousands of engineering students across India mastering core computer science,
               DSA, Web Dev, and AI to secure top engineering placements.
             </p>
 
-            {/* Dual CTAs (Stack on mobile, row on tablet/desktop) */}
-            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-3.5 w-full sm:w-auto">
+            {/* Dual CTAs (16px gap, stacked full-width on mobile, centered inline on desktop) */}
+            <div className="flex flex-col sm:flex-row items-stretch sm:items-center justify-center gap-4 w-full sm:w-auto">
               <Link href="/explore" className="w-full sm:w-auto group">
                 <button className="w-full sm:w-auto min-h-[48px] px-8 py-3.5 bg-gradient-to-r from-sky-600 via-sky-500 to-indigo-600 hover:from-sky-500 hover:to-indigo-500 text-white font-semibold rounded-xl shadow-[0_4px_16px_rgba(14,165,233,0.35)] hover:shadow-[0_6px_24px_rgba(14,165,233,0.5)] transition-all duration-200 active:scale-[0.98] flex items-center justify-center gap-2.5 text-sm sm:text-base cursor-pointer">
                   <span>Explore All CSE Courses</span>

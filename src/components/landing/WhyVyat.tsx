@@ -72,7 +72,7 @@ export function WhyVyat() {
   return (
     <section
       id="engineering-context"
-      className="w-full landing-section relative border-b border-slate-200/70 dark:border-white/5"
+      className="w-full landing-section relative border-b border-slate-200/70 dark:border-white/5 overflow-x-clip"
     >
       <Container>
         <SectionHeader
@@ -96,19 +96,24 @@ export function WhyVyat() {
             {WHY_CARDS.map((card, idx) => (
               <div
                 key={idx}
-                className="w-[85vw] max-w-[340px] md:w-auto md:max-w-none shrink-0 snap-center md:shrink flex flex-col"
+                className="w-[85vw] max-w-[340px] md:w-auto md:max-w-none shrink-0 snap-center md:shrink flex flex-col h-full"
               >
-                <Reveal delayMs={idx * 100} className="h-full">
-                  <div className="group relative h-full flex flex-col justify-between rounded-2xl sm:rounded-3xl p-6 sm:p-7 border border-slate-200/80 dark:border-white/10 bg-white/75 dark:bg-[#0b1020]/75 backdrop-blur-xl shadow-[0_2px_12px_rgba(15,23,42,0.04)] hover:shadow-[0_16px_36px_rgba(15,23,42,0.08)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.5)] dark:hover:shadow-[0_16px_40px_rgba(0,0,0,0.8)] transition-all duration-300 hover:-translate-y-1.5 active:scale-[0.99] overflow-hidden">
+                <Reveal delayMs={idx * 80} className="h-full">
+                  <div
+                    className="group relative h-full flex flex-col justify-between rounded-2xl sm:rounded-3xl border border-slate-200/80 dark:border-white/10 bg-white/75 dark:bg-[#0b1020]/75 backdrop-blur-xl shadow-[0_2px_12px_rgba(15,23,42,0.04)] hover:shadow-[0_16px_36px_rgba(15,23,42,0.08)] dark:shadow-[0_4px_20px_rgba(0,0,0,0.5)] dark:hover:shadow-[0_16px_40px_rgba(0,0,0,0.8)] transition-all duration-300 hover:-translate-y-1.5 active:scale-[0.99] overflow-hidden"
+                    style={{
+                      padding: 'clamp(18px, 2.2vw, 32px)',
+                    }}
+                  >
                     {/* Animated Gradient Top Line */}
                     <div
                       className={`absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r ${card.accentGradient} opacity-60 group-hover:opacity-100 group-hover:h-[3px] transition-all duration-300`}
                     />
 
-                    {/* Oversized Faded Number in Background */}
+                    {/* Oversized Faded Number in Background - Positioned Fully Inside Card */}
                     <span
                       aria-hidden="true"
-                      className="pointer-events-none absolute -bottom-4 -right-2 text-7xl sm:text-8xl font-black font-mono text-slate-900/[0.03] dark:text-white/[0.04] select-none group-hover:text-slate-900/[0.06] dark:group-hover:text-white/[0.08] transition-colors duration-300"
+                      className="pointer-events-none absolute bottom-3 right-4 text-5xl sm:text-6xl font-black font-mono text-slate-900/[0.05] dark:text-white/[0.06] select-none group-hover:text-slate-900/[0.08] dark:group-hover:text-white/[0.1] transition-colors duration-300"
                     >
                       {card.number}
                     </span>

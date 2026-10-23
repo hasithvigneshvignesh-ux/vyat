@@ -85,12 +85,12 @@ export function Navbar() {
             : 'py-3 sm:py-4'
         }`}
       >
-        <div className="landing-container">
+        <div className="landing-container w-full mx-auto">
           <div
-            className={`w-full mx-auto px-4 sm:px-6 h-14 sm:h-16 rounded-2xl flex items-center justify-between transition-all duration-300 ${
+            className={`w-full max-w-[1100px] mx-auto px-4 sm:px-6 h-[56px] sm:h-[64px] rounded-2xl sm:rounded-full flex items-center justify-between transition-all duration-300 ${
               isScrolled
-                ? 'bg-white/80 dark:bg-[#080d1a]/85 backdrop-blur-xl border border-slate-200/80 dark:border-white/10 shadow-[0_4px_24px_-4px_rgba(15,23,42,0.06),0_1px_3px_rgba(15,23,42,0.03)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)]'
-                : 'bg-white/50 dark:bg-[#07090e]/40 backdrop-blur-md border border-slate-200/50 dark:border-white/5'
+                ? 'bg-white/85 dark:bg-[#080d1a]/85 backdrop-blur-xl border border-slate-200/80 dark:border-white/10 shadow-[0_4px_24px_-4px_rgba(15,23,42,0.06),0_1px_3px_rgba(15,23,42,0.03)] dark:shadow-[0_8px_32px_rgba(0,0,0,0.5)]'
+                : 'bg-white/60 dark:bg-[#07090e]/50 backdrop-blur-md border border-slate-200/60 dark:border-white/10'
             }`}
           >
             {/* Brand Logo */}
@@ -108,19 +108,23 @@ export function Navbar() {
               </div>
             </Link>
 
-            {/* Desktop Floating Pill Nav Links */}
-            <nav className="hidden lg:flex items-center gap-1 p-1 rounded-full bg-slate-100/70 dark:bg-slate-900/60 border border-slate-200/60 dark:border-white/5 text-xs font-semibold backdrop-blur-md">
+            {/* Desktop Floating Pill Nav Links (gap clamp(16px, 2vw, 32px), padding 8px 14px) */}
+            <nav
+              className="hidden lg:flex items-center rounded-full bg-slate-100/70 dark:bg-slate-900/60 border border-slate-200/60 dark:border-white/5 text-xs font-semibold backdrop-blur-md p-1"
+              style={{ gap: 'clamp(12px, 1.5vw, 24px)' }}
+            >
               {NAV_LINKS.map((link) => {
                 const isActive = activeSection === link.href;
                 return (
                   <a
                     key={link.href}
                     href={link.href}
-                    className={`relative px-3.5 py-1.5 rounded-full transition-all duration-200 ${
+                    className={`relative rounded-full transition-all duration-200 ${
                       isActive
                         ? 'text-sky-600 dark:text-sky-400 font-bold bg-white dark:bg-slate-800 shadow-2xs'
                         : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
                     }`}
+                    style={{ padding: '8px 14px' }}
                   >
                     {link.label}
                   </a>

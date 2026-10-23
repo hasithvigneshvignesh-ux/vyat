@@ -63,7 +63,7 @@ export default function PublicLanding({ branches, skillsCount, coursesCount }: P
 
   return (
     <div
-      className="min-h-screen w-full flex flex-col antialiased transition-colors duration-200 bg-slate-50 dark:bg-[#05070f] text-slate-900 dark:text-slate-100 selection:bg-sky-500/20 selection:text-sky-900 dark:selection:bg-sky-500/30 dark:selection:text-sky-200"
+      className="min-h-screen w-full flex flex-col antialiased transition-colors duration-200 bg-slate-50 dark:bg-[#05070f] text-slate-900 dark:text-slate-100 selection:bg-sky-500/20 selection:text-sky-900 dark:selection:bg-sky-500/30 dark:selection:text-sky-200 overflow-x-clip"
     >
       {/* ── SEO Structured Data (JSON-LD) ── */}
       <script
@@ -93,7 +93,7 @@ export default function PublicLanding({ branches, skillsCount, coursesCount }: P
       <Navbar />
 
       {/* ── Main Landing Flow ── */}
-      <main id="main-content" className="w-full flex flex-col items-center flex-1">
+      <main id="main-content" className="w-full flex flex-col items-center flex-1 overflow-x-clip">
         {/* ── 2. HERO SECTION ── */}
         <Hero />
 
