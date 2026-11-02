@@ -51,30 +51,37 @@ export default function Modal({
   };
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+    <div
+      className="fixed inset-0 z-[100] overflow-y-auto p-4 sm:p-6 flex flex-col items-center"
+      onClick={onClose}
+    >
       {/* Backdrop */}
       <div
-        className="absolute inset-0 bg-black/60 backdrop-blur-sm animate-fade-in"
-        onClick={onClose}
+        className="fixed inset-0 bg-black/60 backdrop-blur-sm animate-fade-in"
       />
 
       {/* Modal content */}
       <div
         className={`
-          relative w-full ${sizes[size]} rounded-2xl border
-          animate-scale-in overflow-hidden
+          relative my-auto w-full ${sizes[size]} rounded-2xl border
+          animate-scale-in flex flex-col max-h-[calc(100vh-2rem)] sm:max-h-[calc(100vh-3rem)]
+          overflow-hidden shadow-2xl z-10
           ${className}
         `}
         style={{
           backgroundColor: 'var(--bg-card)',
           borderColor: 'var(--border-primary)',
         }}
+        onClick={(e) => e.stopPropagation()}
       >
-        {/* Header */}
-        {title && (
+        {/* Header - Stays sticky at top of modal */}
+        {title ? (
           <div
-            className="flex items-center justify-between px-6 py-4 border-b"
-            style={{ borderColor: 'var(--border-primary)' }}
+            className="flex items-center justify-between px-6 py-4 border-b flex-shrink-0 sticky top-0 z-20"
+            style={{
+              borderColor: 'var(--border-primary)',
+              backgroundColor: 'var(--bg-card)',
+            }}
           >
             <h2
               className="text-lg font-semibold"
@@ -83,17 +90,29 @@ export default function Modal({
               {title}
             </h2>
             <button
+              type="button"
               onClick={onClose}
               className="p-1.5 rounded-lg transition-colors hover:bg-[var(--bg-tertiary)]"
               style={{ color: 'var(--text-tertiary)' }}
+              aria-label="Close modal"
             >
               <X size={18} />
             </button>
           </div>
+        ) : (
+          <button
+            type="button"
+            onClick={onClose}
+            className="absolute top-4 right-4 z-20 p-1.5 rounded-lg transition-colors hover:bg-[var(--bg-tertiary)]"
+            style={{ color: 'var(--text-tertiary)' }}
+            aria-label="Close modal"
+          >
+            <X size={18} />
+          </button>
         )}
 
-        {/* Body */}
-        <div className="p-6 max-h-[70vh] overflow-y-auto">
+        {/* Body - Scrollable content inside modal */}
+        <div className="p-6 overflow-y-auto flex-1 min-h-0">
           {children}
         </div>
       </div>
