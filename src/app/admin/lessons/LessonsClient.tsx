@@ -28,6 +28,7 @@ export default function LessonsClient({ initialLessons, skills }: Props) {
   const [search, setSearch] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   // Quick MCQ modal state
   const [mcqModalLesson, setMcqModalLesson] = useState<any | null>(null);
@@ -88,19 +89,38 @@ export default function LessonsClient({ initialLessons, skills }: Props) {
         is_active: form.is_active,
       };
 
-      const { data, error } = await supabase
-        .from('lessons')
-        .insert(newLesson)
-        .select()
-        .single();
+      let createdLesson: any = null;
 
-      if (error) {
-        throw error;
-      } else if (data) {
+      try {
+        const res = await fetch('/api/admin/lessons', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(newLesson),
+        });
+        if (res.ok) {
+          const json = await res.json();
+          createdLesson = json.data;
+        }
+      } catch {}
+
+      if (!createdLesson) {
+        const { data, error } = await supabase
+          .from('lessons')
+          .insert(newLesson)
+          .select()
+          .single();
+
+        if (error) {
+          throw error;
+        }
+        createdLesson = data;
+      }
+
+      if (createdLesson) {
         setLessons((prev) => [
           ...prev,
           {
-            ...data,
+            ...createdLesson,
             skill: { name: selectedSkill?.name || 'Skill Lesson', slug: selectedSkill?.slug || 'skill' },
           },
         ]);
@@ -182,14 +202,26 @@ export default function LessonsClient({ initialLessons, skills }: Props) {
   const handleDelete = async (id: string, title: string) => {
     if (!confirm(`Are you sure you want to delete the lesson "${title}"? This cannot be undone.`)) return;
     
+    setDeletingId(id);
     try {
-      const { error } = await supabase.from('lessons').delete().eq('id', id);
-      if (error) throw error;
+      const res = await fetch(`/api/admin/lessons/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!res.ok) {
+        const { error } = await supabase.from('lessons').delete().eq('id', id);
+        if (error) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || error.message || 'Failed to delete lesson');
+        }
+      }
       
       setLessons(prev => prev.filter(l => l.id !== id));
       addToast(`Lesson deleted successfully`, 'success');
     } catch (err: any) {
       addToast(err?.message || 'Failed to delete lesson', 'error');
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -308,10 +340,11 @@ export default function LessonsClient({ initialLessons, skills }: Props) {
                       </button>
                       <button
                         onClick={() => handleDelete(lesson.id, lesson.title)}
-                        className="text-red-500 hover:text-red-600 transition-colors text-xs font-medium ml-2"
+                        disabled={deletingId === lesson.id}
+                        className="text-red-500 hover:text-red-600 transition-colors text-xs font-medium ml-2 disabled:opacity-50"
                         title="Delete Lesson"
                       >
-                        Delete
+                        {deletingId === lesson.id ? 'Deleting...' : 'Delete'}
                       </button>
                     </div>
                   </td>

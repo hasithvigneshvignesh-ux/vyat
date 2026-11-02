@@ -1,4 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
+import { supabaseAdmin } from '@/lib/supabase/admin';
+import { cookies } from 'next/headers';
 import LessonsClient from './LessonsClient';
 
 export const metadata = {
@@ -18,17 +20,37 @@ const FALLBACK_LESSONS = [
 ];
 
 export default async function AdminLessonsPage() {
-  const supabase = await createClient();
+  const cookieStore = await cookies();
+  const deletedIds = (cookieStore.get('deleted_lessons')?.value || '')
+    .split(',')
+    .filter(Boolean);
 
-  const [{ data: lessons }, { data: skills }] = await Promise.all([
-    supabase
+  const client = process.env.SUPABASE_SERVICE_ROLE_KEY ? supabaseAdmin : await createClient();
+
+  const [{ data: lessons, error: lessonsError }, { data: skills }] = await Promise.all([
+    client
       .from('lessons')
       .select('*, skill:skills(name, slug)')
       .order('sort_order'),
-    supabase.from('skills').select('*').order('sort_order'),
+    client.from('skills').select('*').order('sort_order'),
   ]);
 
-  const effectiveLessons = (lessons && lessons.length > 0) ? lessons : FALLBACK_LESSONS;
+  let effectiveLessons: any[] = [];
+  if (!lessonsError && Array.isArray(lessons)) {
+    if (lessons.length > 0) {
+      effectiveLessons = lessons;
+    } else if (deletedIds.length > 0) {
+      effectiveLessons = [];
+    } else {
+      effectiveLessons = FALLBACK_LESSONS;
+    }
+  } else {
+    effectiveLessons = FALLBACK_LESSONS;
+  }
+
+  // Filter out any explicitly deleted lesson IDs
+  effectiveLessons = effectiveLessons.filter((l) => !deletedIds.includes(l.id));
+
   const effectiveSkills = (skills && skills.length > 0) ? skills : FALLBACK_SKILLS;
 
   return (

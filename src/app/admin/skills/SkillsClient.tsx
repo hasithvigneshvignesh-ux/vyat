@@ -222,8 +222,17 @@ export default function SkillsClient({ initialSkills, courses }: Props) {
     if (!confirm(`Are you sure you want to delete the skill "${name}"? This cannot be undone.`)) return;
     
     try {
-      const { error } = await supabase.from('skills').delete().eq('id', id);
-      if (error) throw error;
+      const res = await fetch(`/api/admin/skills/${id}`, {
+        method: 'DELETE',
+      });
+
+      if (!res.ok) {
+        const { error } = await supabase.from('skills').delete().eq('id', id);
+        if (error) {
+          const errData = await res.json().catch(() => ({}));
+          throw new Error(errData.error || error.message || 'Failed to delete skill');
+        }
+      }
       
       setSkills(prev => prev.filter(s => s.id !== id));
       addToast(`Skill deleted successfully`, 'success');

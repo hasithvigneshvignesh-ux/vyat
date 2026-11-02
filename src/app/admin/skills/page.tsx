@@ -1,4 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
+import { supabaseAdmin } from '@/lib/supabase/admin';
+import { cookies } from 'next/headers';
 import SkillsClient from './SkillsClient';
 
 export const metadata = {
@@ -18,17 +20,37 @@ const FALLBACK_SKILLS = [
 ];
 
 export default async function AdminSkillsPage() {
-  const supabase = await createClient();
+  const cookieStore = await cookies();
+  const deletedIds = (cookieStore.get('deleted_skills')?.value || '')
+    .split(',')
+    .filter(Boolean);
 
-  const [{ data: skills }, { data: courses }] = await Promise.all([
-    supabase
+  const client = process.env.SUPABASE_SERVICE_ROLE_KEY ? supabaseAdmin : await createClient();
+
+  const [{ data: skills, error: skillsError }, { data: courses }] = await Promise.all([
+    client
       .from('skills')
       .select('*, course:courses(name, branch:branches(name))')
       .order('sort_order'),
-    supabase.from('courses').select('*').order('sort_order'),
+    client.from('courses').select('*').order('sort_order'),
   ]);
 
-  const effectiveSkills = (skills && skills.length > 0) ? skills : FALLBACK_SKILLS;
+  let effectiveSkills: any[] = [];
+  if (!skillsError && Array.isArray(skills)) {
+    if (skills.length > 0) {
+      effectiveSkills = skills;
+    } else if (deletedIds.length > 0) {
+      effectiveSkills = [];
+    } else {
+      effectiveSkills = FALLBACK_SKILLS;
+    }
+  } else {
+    effectiveSkills = FALLBACK_SKILLS;
+  }
+
+  // Filter out any explicitly deleted skill IDs
+  effectiveSkills = effectiveSkills.filter((s) => !deletedIds.includes(s.id));
+
   const effectiveCourses = (courses && courses.length > 0) ? courses : FALLBACK_COURSES;
 
   return (
