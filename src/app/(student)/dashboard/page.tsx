@@ -142,6 +142,7 @@ export default async function StudentDashboardPage() {
         short_description: 'Master Arrays, Linked Lists, Trees, Graphs, Dynamic Programming & LeetCode patterns',
         difficulty_level: 'intermediate',
         duration_hours: 45,
+        estimated_hours: 45,
         price_inr: 499,
         course: {
           name: 'Core Programming & CS Foundations',
@@ -164,6 +165,7 @@ export default async function StudentDashboardPage() {
         short_description: 'NumPy, Pandas, Matplotlib, Scikit-learn, and end-to-end model development pipelines',
         difficulty_level: 'beginner',
         duration_hours: 35,
+        estimated_hours: 35,
         price_inr: 499,
         course: {
           name: 'AI Foundations & Machine Learning',
@@ -186,6 +188,7 @@ export default async function StudentDashboardPage() {
         short_description: 'Reconnaissance, vulnerability scanning, Kali Linux tools, and defensive architecture',
         difficulty_level: 'intermediate',
         duration_hours: 40,
+        estimated_hours: 40,
         price_inr: 499,
         course: {
           name: 'Ethical Hacking & Penetration Testing',

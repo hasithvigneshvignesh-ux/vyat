@@ -35,28 +35,50 @@ const jetbrains = JetBrains_Mono({
   weight: ["400", "500", "600", "700"],
 });
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vyat-v3.vercel.app';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vyatai.com';
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://vyatai.com"),
   title: {
-    default: "Vyat AI — CSE Courses, Placements & Skills for Tech Students",
-    template: "%s | Vyat AI",
+    default: "VYAt-Ai | Multilingual AI Voice Agents for Business",
+    template: "%s | VYAt-Ai",
   },
-  description: "Master CSE core subjects, DSA, Web Development, and AI. Curated skill roadmaps, courses, and interview preparation for engineering students in India.",
-  keywords: ["Vyat AI", "VyatAI", "Vyat", "CSE courses", "DSA roadmap", "AI engineering skills"],
+  description: "VYAt-Ai provides multilingual AI voice agents for businesses, supporting Telugu, Hindi, English, and more. Automate customer calls, improve customer engagement, and grow your business with AI-powered voice solutions.",
+  keywords: [
+    "VYAt-Ai",
+    "AI voice agents",
+    "multilingual voice agents",
+    "Telugu AI voice",
+    "Hindi AI voice",
+    "business voice automation",
+    "multilingual AI"
+  ],
+  alternates: {
+    canonical: "https://vyatai.com/",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-video-preview': -1,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+    },
+  },
   openGraph: {
-    title: "Vyat AI — CSE Courses & Skill Roadmaps",
-    description: "Placement preparation, DSA, Full-Stack Web Development, and AI courses for CSE students.",
-    url: "https://vyatai.com",
-    siteName: "Vyat AI",
+    title: "VYAt-Ai | Multilingual AI Voice Agents for Business",
+    description: "VYAt-Ai provides multilingual AI voice agents for businesses, supporting Telugu, Hindi, English, and more. Automate customer calls, improve customer engagement, and grow your business with AI-powered voice solutions.",
+    url: "https://vyatai.com/",
+    siteName: "VYAt-Ai",
     locale: "en_IN",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Vyat AI — CSE Courses & Skill Roadmaps",
-    description: "Placement preparation, DSA, Full-Stack Web Development, and AI courses for CSE students.",
+    title: "VYAt-Ai | Multilingual AI Voice Agents for Business",
+    description: "VYAt-Ai provides multilingual AI voice agents for businesses, supporting Telugu, Hindi, English, and more. Automate customer calls, improve customer engagement, and grow your business with AI-powered voice solutions.",
   },
 };
 

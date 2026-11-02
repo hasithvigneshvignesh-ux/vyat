@@ -1,6 +1,6 @@
 import { MetadataRoute } from 'next';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vyat-v3.vercel.app';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vyatai.com';
 
 export default function robots(): MetadataRoute.Robots {
   return {

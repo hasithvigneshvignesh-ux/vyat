@@ -56,7 +56,7 @@ export default function PublicLanding({ branches, skillsCount, coursesCount }: P
       provider: {
         '@type': 'Organization',
         name: 'Vyat',
-        sameAs: 'https://vyat-v3.vercel.app',
+        sameAs: 'https://vyatai.com',
       },
     })),
   };

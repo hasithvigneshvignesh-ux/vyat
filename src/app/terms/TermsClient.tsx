@@ -58,7 +58,7 @@ export default function TermsClient() {
         content: (
           <div className="space-y-4 text-sm sm:text-base leading-relaxed text-slate-700 dark:text-slate-300">
             <p>
-              Welcome to <strong>Vyat</strong> (&ldquo;Vyat&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;), operated as an educational technology platform dedicated to Computer Science &amp; Engineering students across India. These Terms and Conditions of Service (&ldquo;Terms&rdquo;) govern your access to and use of our website (including <code>vyat-v3.vercel.app</code> and associated domains), mobile applications, video lectures, coding exercises, doubt resolution, and credential verification services (collectively, the &ldquo;Platform&rdquo;).
+              Welcome to <strong>Vyat</strong> (&ldquo;Vyat&rdquo;, &ldquo;we&rdquo;, &ldquo;us&rdquo;, or &ldquo;our&rdquo;), operated as an educational technology platform dedicated to Computer Science &amp; Engineering students across India. These Terms and Conditions of Service (&ldquo;Terms&rdquo;) govern your access to and use of our website (including <code>vyatai.com</code> and associated domains), mobile applications, video lectures, coding exercises, doubt resolution, and credential verification services (collectively, the &ldquo;Platform&rdquo;).
             </p>
             <p>
               By signing up, logging in, or purchasing any course or curriculum on Vyat, you confirm that:
@@ -162,7 +162,7 @@ export default function TermsClient() {
             </p>
             <ul className="list-disc pl-5 space-y-2">
               <li>
-                <strong>Verifiable Public Ledger:</strong> Every certificate issued by Vyat carries a unique cryptographic identifier (e.g., <code>cert_...</code>) and a public verification URL (<code>vyat-v3.vercel.app/verify/[id]</code>) accessible by recruiters and university evaluation cells.
+                <strong>Verifiable Public Ledger:</strong> Every certificate issued by Vyat carries a unique cryptographic identifier (e.g., <code>cert_...</code>) and a public verification URL (<code>vyatai.com/verify/[id]</code>) accessible by recruiters and university evaluation cells.
               </li>
               <li>
                 <strong>Integrity &amp; Anti-Fraud:</strong> Generating mock certificates, altering student metadata, or distributing falsified credential URLs constitutes fraud. Vyat reserves the right to publicly revoke any falsified credential and notify your college placement cell.

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import TermsClient from './TermsClient';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vyat-v3.vercel.app';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vyatai.com';
 
 export const metadata: Metadata = {
   title: 'Terms and Conditions of Service',

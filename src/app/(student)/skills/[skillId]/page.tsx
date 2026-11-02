@@ -10,7 +10,7 @@ export async function generateMetadata({
   params: Promise<{ skillId: string }>;
 }): Promise<Metadata> {
   const { skillId } = await params;
-  const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vyat-v3.vercel.app';
+  const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vyatai.com';
   const supabase = await createClient();
   const { data: skill } = await supabase
     .from('skills')

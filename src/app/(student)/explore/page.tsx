@@ -2,7 +2,7 @@ import { createClient } from '@/lib/supabase/server';
 import { Metadata } from 'next';
 import ExploreClient from './ExploreClient';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vyat-v3.vercel.app';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vyatai.com';
 
 export const metadata: Metadata = {
   title: 'Courses for CSE: Placements, Core Subjects, DSA, Web Dev & AI Learning Catalog | Vyat',

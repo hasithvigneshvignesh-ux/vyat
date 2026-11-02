@@ -5,7 +5,7 @@ import { Footer } from '@/components/landing/Footer';
 import CoursesClient from './CoursesClient';
 import { branches, skills } from '@/data/branches';
 
-const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vyat-v3.vercel.app';
+const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vyatai.com';
 
 export const metadata: Metadata = {
   title: 'Browse All CSE Courses & Skills by Branch',
