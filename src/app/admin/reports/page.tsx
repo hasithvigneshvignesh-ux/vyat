@@ -19,7 +19,7 @@ export default async function AdminReportsPage() {
     .select('*', { count: 'exact', head: true })
     .eq('status', 'completed');
   
-  // We still need total enrollments (skill access count) for the completion rate calculation
+  // Total enrollments for completion rate calculation
   const { count: totalEnrollments } = await supabase
     .from('student_skill_access')
     .select('*', { count: 'exact', head: true });
@@ -32,9 +32,51 @@ export default async function AdminReportsPage() {
     .select('*', { count: 'exact', head: true })
     .eq('status', 'unlocked');
 
-  // Gross GMV
-  const { data: payments } = await supabase.from('payments').select('amount');
-  const grossGmv = payments?.reduce((sum, p) => sum + (Number(p.amount) || 0), 0) || 0;
+  // Gross GMV - Count only the total enrollment amounts given at student creation
+  const { data: allPayments } = await supabase
+    .from('payments')
+    .select('id, student_id, amount, notes, payment_status, created_at')
+    .order('created_at', { ascending: true });
+
+  // Group payments by student to pick each student's enrollment creation total
+  const studentPaymentsMap = new Map<string, any[]>();
+  (allPayments || []).forEach(p => {
+    if (!p.student_id) return;
+    if (!studentPaymentsMap.has(p.student_id)) {
+      studentPaymentsMap.set(p.student_id, []);
+    }
+    studentPaymentsMap.get(p.student_id)!.push(p);
+  });
+
+  const enrollmentPayments: any[] = [];
+  studentPaymentsMap.forEach((pList) => {
+    // 1. Look for explicit enrollment creation payment notes
+    const explicitEnrollment = pList.find(p => {
+      const notes = (p.notes || '').toLowerCase();
+      return notes.includes('paid for') ||
+             notes.includes('initial') ||
+             notes.includes('creation') ||
+             notes.includes('enrollment');
+    });
+
+    if (explicitEnrollment) {
+      if (explicitEnrollment.payment_status === 'paid' || !explicitEnrollment.payment_status) {
+        enrollmentPayments.push(explicitEnrollment);
+      }
+    } else if (pList.length > 0) {
+      // 2. Fallback to earliest payment (initial creation payment), skipping per-skill addons
+      const nonAddons = pList.filter(p => {
+        const notes = (p.notes || '').toLowerCase();
+        return !notes.includes('skill') && !notes.includes('activation fee');
+      });
+      const chosen = nonAddons[0] || pList[0];
+      if (chosen && (chosen.payment_status === 'paid' || !chosen.payment_status)) {
+        enrollmentPayments.push(chosen);
+      }
+    }
+  });
+
+  const grossGmv = enrollmentPayments.reduce((sum, p) => sum + (Number(p.amount) || 0), 0);
 
   // Branch Breakdown
   const { data: accessData } = await supabase
@@ -95,29 +137,23 @@ export default async function AdminReportsPage() {
     }).sort((a, b) => b.enrollments - a.enrollments).slice(0, 5);
   }
 
-  // Monthly Growth
+  // Monthly Growth (aggregated by enrollment totals)
   const monthlyGrowthData: Record<string, { revenue: number, students: number }> = {};
   
-  if (payments) {
-    // For real implementation, you would aggregate created_at dates
-    // But since we removed mock data, we can just show an empty state or the actual aggregated data.
-    // Let's do actual aggregated data for payments
-    const { data: allPayments } = await supabase.from('payments').select('amount, created_at');
-    allPayments?.forEach(p => {
-      const date = new Date(p.created_at);
-      const month = date.toLocaleString('default', { month: 'short', year: 'numeric' });
-      if (!monthlyGrowthData[month]) monthlyGrowthData[month] = { revenue: 0, students: 0 };
-      monthlyGrowthData[month].revenue += Number(p.amount) || 0;
-    });
+  enrollmentPayments.forEach(p => {
+    const date = new Date(p.created_at);
+    const month = date.toLocaleString('default', { month: 'short', year: 'numeric' });
+    if (!monthlyGrowthData[month]) monthlyGrowthData[month] = { revenue: 0, students: 0 };
+    monthlyGrowthData[month].revenue += Number(p.amount) || 0;
+  });
 
-    const { data: allStudents } = await supabase.from('profiles').select('created_at').eq('role', 'student');
-    allStudents?.forEach(s => {
-      const date = new Date(s.created_at);
-      const month = date.toLocaleString('default', { month: 'short', year: 'numeric' });
-      if (!monthlyGrowthData[month]) monthlyGrowthData[month] = { revenue: 0, students: 0 };
-      monthlyGrowthData[month].students += 1;
-    });
-  }
+  const { data: allStudents } = await supabase.from('profiles').select('created_at').eq('role', 'student');
+  allStudents?.forEach(s => {
+    const date = new Date(s.created_at);
+    const month = date.toLocaleString('default', { month: 'short', year: 'numeric' });
+    if (!monthlyGrowthData[month]) monthlyGrowthData[month] = { revenue: 0, students: 0 };
+    monthlyGrowthData[month].students += 1;
+  });
 
   const monthlyGrowth = Object.entries(monthlyGrowthData).map(([month, data]) => ({
     month,
@@ -181,7 +217,7 @@ export default async function AdminReportsPage() {
             </div>
             <div>
               <p className="text-2xl font-bold" style={{ color: 'var(--text-primary)' }}>{formatCurrency(grossGmv)}</p>
-              <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Gross GMV</p>
+              <p className="text-xs" style={{ color: 'var(--text-tertiary)' }}>Gross GMV (Enrollments)</p>
             </div>
           </div>
         </Card>

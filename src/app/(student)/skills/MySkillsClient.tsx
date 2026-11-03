@@ -22,7 +22,7 @@ export default function MySkillsClient({ skillAccess, lessonProgress, lessonCoun
     return isCurriculumDone && sa.status === 'completed';
   };
 
-  const activeSkills = skillAccess.filter(sa => !isSkillFullyCompleted(sa));
+  const activeSkills = skillAccess.filter(sa => sa.status === 'active' && !isSkillFullyCompleted(sa));
   const completedSkills = skillAccess.filter(sa => isSkillFullyCompleted(sa));
 
   const getProgress = (skillId: string, skill?: Skill) => {
@@ -33,7 +33,7 @@ export default function MySkillsClient({ skillAccess, lessonProgress, lessonCoun
     return calculateProgress(completed, total);
   };
 
-  if (skillAccess.length === 0) {
+  if (activeSkills.length === 0 && completedSkills.length === 0) {
     return (
       <div className="page-container">
         <h1 className="text-2xl font-bold mb-6" style={{ color: 'var(--text-primary)' }}>My Skills</h1>

@@ -109,6 +109,7 @@ export default async function MySkillsPage() {
       )
     `)
     .eq('student_id', userId)
+    .in('status', ['active', 'completed'])
     .order('activated_at', { ascending: false });
 
   // Fetch lesson progress
