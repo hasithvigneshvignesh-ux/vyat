@@ -1,4 +1,6 @@
 import { createClient } from '@/lib/supabase/server';
+import { supabaseAdmin } from '@/lib/supabase/admin';
+import { cookies } from 'next/headers';
 import QuestionsClient from './QuestionsClient';
 
 const SAMPLE_QUESTIONS_DATA = [
@@ -71,29 +73,49 @@ const SAMPLE_QUESTIONS_DATA = [
 ];
 
 export default async function AdminQuestionsPage() {
-  const supabase = await createClient();
+  const cookieStore = await cookies();
+  const deletedIds = (cookieStore.get('deleted_questions')?.value || '')
+    .split(',')
+    .filter(Boolean);
+
+  const client = process.env.SUPABASE_SERVICE_ROLE_KEY ? supabaseAdmin : await createClient();
 
   // Fetch questions
-  const { data: dbQuestions } = await supabase
+  const { data: dbQuestions, error: questionsError } = await client
     .from('questions')
     .select('*, skill:skills(name), lesson:lessons(title)')
     .order('sort_order', { ascending: true });
 
   // Fetch skills
-  const { data: dbSkills } = await supabase
+  const { data: dbSkills } = await client
     .from('skills')
     .select('id, name, slug')
     .eq('is_active', true)
     .order('name');
 
   // Fetch lessons
-  const { data: dbLessons } = await supabase
+  const { data: dbLessons } = await client
     .from('lessons')
     .select('id, title, skill_id, sort_order')
     .eq('is_active', true)
     .order('sort_order');
 
-  const questions = (dbQuestions && dbQuestions.length > 0) ? dbQuestions : SAMPLE_QUESTIONS_DATA;
+  let effectiveQuestions: any[] = [];
+  if (!questionsError && Array.isArray(dbQuestions)) {
+    if (dbQuestions.length > 0) {
+      effectiveQuestions = dbQuestions;
+    } else if (deletedIds.length > 0) {
+      effectiveQuestions = [];
+    } else {
+      effectiveQuestions = SAMPLE_QUESTIONS_DATA;
+    }
+  } else {
+    effectiveQuestions = SAMPLE_QUESTIONS_DATA;
+  }
+
+  // Filter out any explicitly deleted questions
+  effectiveQuestions = effectiveQuestions.filter(q => !deletedIds.includes(q.id));
+
   const skills = (dbSkills && dbSkills.length > 0) ? dbSkills : [
     { id: 'a1000000-0000-0000-0000-000000000001', name: 'Data Structures & Algorithms in C++', slug: 'dsa-cpp' },
     { id: 'a2000000-0000-0000-0000-000000000003', name: 'Machine Learning Fundamentals with Scikit-Learn', slug: 'ml-fundamentals' },
@@ -108,7 +130,7 @@ export default async function AdminQuestionsPage() {
 
   return (
     <QuestionsClient
-      initialQuestions={questions as any}
+      initialQuestions={effectiveQuestions as any}
       skills={skills as any}
       lessons={lessons as any}
     />

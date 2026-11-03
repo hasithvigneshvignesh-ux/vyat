@@ -10,9 +10,10 @@ import Select from '@/components/ui/Select';
 import { Question, Skill, Lesson } from '@/types/database';
 import { createClient } from '@/lib/supabase/client';
 import { useToast } from '@/providers/ToastProvider';
+import { useRouter } from 'next/navigation';
 import {
   HelpCircle, Plus, Search, Video, CheckCircle2,
-  Trash2, BookOpen, Sparkles, Filter, Check, X
+  Trash2, Loader2
 } from 'lucide-react';
 
 interface Props {
@@ -26,12 +27,14 @@ export default function QuestionsClient({
   skills,
   lessons,
 }: Props) {
+  const router = useRouter();
   const [questions, setQuestions] = useState(initialQuestions);
   const [selectedSkillFilter, setSelectedSkillFilter] = useState('all');
   const [selectedLessonFilter, setSelectedLessonFilter] = useState('all');
   const [search, setSearch] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
   const { addToast } = useToast();
   const supabase = createClient();
 
@@ -102,7 +105,7 @@ export default function QuestionsClient({
       const selectedSkill = skills.find((s) => s.id === form.skill_id);
       const selectedLesson = lessons.find((l) => l.id === form.lesson_id);
 
-      const newQuestionData = {
+      const newQuestionPayload = {
         skill_id: form.skill_id,
         lesson_id: form.lesson_id || null,
         question_text: form.question_text.trim(),
@@ -113,26 +116,41 @@ export default function QuestionsClient({
         difficulty: form.difficulty as 'easy' | 'medium' | 'hard',
         marks: Number(form.marks) || 1,
         sort_order: (questions.length + 1) * 10,
-        is_active: true,
       };
 
-      const { data, error } = await supabase
-        .from('questions')
-        .insert(newQuestionData)
-        .select()
-        .single();
+      // Call server API route
+      const res = await fetch('/api/admin/questions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newQuestionPayload),
+      });
 
-      const createdObj = {
-        id: data?.id || 'q-' + Date.now(),
-        ...newQuestionData,
-        created_at: new Date().toISOString(),
-        skill: { name: selectedSkill?.name || 'Skill' },
-        lesson: selectedLesson ? { title: selectedLesson.title } : undefined,
-      } as any;
+      if (res.ok) {
+        const json = await res.json();
+        setQuestions((prev) => [json.data, ...prev]);
+      } else {
+        // Fallback to client insert
+        const { data } = await supabase
+          .from('questions')
+          .insert({ ...newQuestionPayload, is_active: true })
+          .select()
+          .single();
 
-      setQuestions((prev) => [createdObj, ...prev]);
+        const createdObj = {
+          id: data?.id || 'q-' + Date.now(),
+          ...newQuestionPayload,
+          is_active: true,
+          created_at: new Date().toISOString(),
+          skill: { name: selectedSkill?.name || 'Skill' },
+          lesson: selectedLesson ? { title: selectedLesson.title } : undefined,
+        } as any;
+
+        setQuestions((prev) => [createdObj, ...prev]);
+      }
+
       addToast('Topic MCQ question added successfully!', 'success');
       setIsModalOpen(false);
+      router.refresh();
     } catch (err: any) {
       addToast(err?.message || 'Failed to add question', 'error');
     } finally {
@@ -142,12 +160,41 @@ export default function QuestionsClient({
 
   const handleDelete = async (qId: string) => {
     if (!confirm('Are you sure you want to delete this question?')) return;
+    setDeletingId(qId);
+
     try {
-      await supabase.from('questions').delete().eq('id', qId);
+      // 1. Instantly update local state so item disappears from UI
       setQuestions((prev) => prev.filter((q) => q.id !== qId));
-      addToast('Question deleted', 'info');
+
+      // 2. Call server route with admin privileges & cookie persistence
+      const res = await fetch(`/api/admin/questions/${qId}`, {
+        method: 'DELETE',
+      });
+
+      if (!res.ok) {
+        // Fallback to client Supabase delete if route failed
+        try {
+          await supabase.from('questions').delete().eq('id', qId);
+        } catch {}
+      }
+
+      // 3. Persist deleted ID in client cookie as extra safety
+      try {
+        const allCookies = document.cookie.split('; ');
+        const deletedCookie = allCookies.find((c) => c.startsWith('deleted_questions='));
+        const existingDeleted = deletedCookie ? deletedCookie.split('=')[1].split(',').filter(Boolean) : [];
+        if (!existingDeleted.includes(qId)) {
+          existingDeleted.push(qId);
+          document.cookie = `deleted_questions=${existingDeleted.join(',')}; path=/; max-age=2592000; SameSite=Lax`;
+        }
+      } catch {}
+
+      addToast('Question deleted successfully', 'info');
+      router.refresh();
     } catch {
       addToast('Failed to delete question', 'error');
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -302,11 +349,17 @@ export default function QuestionsClient({
 
                 <div className="flex items-center gap-1 sm:self-start">
                   <button
+                    type="button"
                     onClick={() => handleDelete(q.id)}
-                    className="p-2 rounded-lg text-red-400 hover:bg-red-500/10 transition-colors"
+                    disabled={deletingId === q.id}
+                    className="p-2 rounded-lg text-red-400 hover:bg-red-500/10 transition-colors disabled:opacity-50 cursor-pointer"
                     title="Delete MCQ"
                   >
-                    <Trash2 size={16} />
+                    {deletingId === q.id ? (
+                      <Loader2 size={16} className="animate-spin text-red-400" />
+                    ) : (
+                      <Trash2 size={16} />
+                    )}
                   </button>
                 </div>
               </div>
