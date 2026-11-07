@@ -36,7 +36,7 @@ export async function DELETE(
     try {
       // Disassociate / cascade delete child records
       await supabaseAdmin.from('questions').update({ lesson_id: null }).eq('lesson_id', id);
-      await supabaseAdmin.from('student_lesson_progress').delete().eq('lesson_id', id);
+      await supabaseAdmin.from('lesson_progress').delete().eq('lesson_id', id);
       await supabaseAdmin.from('lesson_resources').delete().eq('lesson_id', id);
 
       const { error: dbError } = await supabaseAdmin.from('lessons').delete().eq('id', id);

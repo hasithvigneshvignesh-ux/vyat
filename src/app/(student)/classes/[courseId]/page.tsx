@@ -1,5 +1,5 @@
 import { createClient } from '@/lib/supabase/server';
-import { redirect, notFound } from 'next/navigation';
+import { notFound } from 'next/navigation';
 import { cookies } from 'next/headers';
 import { Metadata } from 'next';
 import CourseDetailClient from './CourseDetailClient';
@@ -10,20 +10,19 @@ export async function generateMetadata({
   params: Promise<{ courseId: string }>;
 }): Promise<Metadata> {
   const { courseId } = await params;
-  const BASE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://vyatai.com';
   const supabase = await createClient();
+
   const { data: course } = await supabase
     .from('courses')
     .select('name, description, branch:branches(name)')
     .eq('id', courseId)
     .single();
 
-  const courseName = course?.name || DEMO_COURSES[courseId]?.name || 'Course Curriculum';
-  const courseDesc = course?.description || DEMO_COURSES[courseId]?.description || 'Explore structured curriculum modules, video lessons, and verified certificates.';
-  const branchName = (course?.branch as any)?.name || DEMO_COURSES[courseId]?.branch?.name || 'Computer Science';
-
-  const title = `${courseName} Course — Vyat`;
-  const canonicalUrl = `${BASE_URL}/classes/${courseId}`;
+  const courseName = course?.name || 'Course Catalog';
+  const branchName = (course?.branch as any)?.name || 'Engineering Specialization';
+  const title = `${courseName} — Master CS Syllabus & Topics | Vyat`;
+  const courseDesc = course?.description || `Explore ${courseName} under ${branchName} on Vyat. Complete lecture video modules, code implementation, and earn verified credentials.`;
+  const canonicalUrl = `https://vyatai.com/classes/${courseId}`;
 
   return {
     title,
@@ -107,24 +106,24 @@ const DEMO_COURSES: Record<string, any> = {
           {
             id: 'lesson-dsa-4',
             title: '4. Binary Trees, Traversals & Breadth-First Search (BFS)',
-            duration_minutes: 40,
-            video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+            duration_minutes: 35,
+            video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
             sort_order: 4,
             is_completed: false,
           },
           {
             id: 'lesson-dsa-5',
             title: '5. Graphs: Topological Sort, Dijkstra & Shortest Path',
-            duration_minutes: 45,
-            video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4',
+            duration_minutes: 40,
+            video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
             sort_order: 5,
             is_completed: false,
           },
           {
             id: 'lesson-dsa-6',
             title: '6. Dynamic Programming: 0/1 Knapsack & Memoization',
-            duration_minutes: 50,
-            video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerJoyBlazes.mp4',
+            duration_minutes: 45,
+            video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
             sort_order: 6,
             is_completed: false,
           },
@@ -132,8 +131,8 @@ const DEMO_COURSES: Record<string, any> = {
       },
       {
         id: 'skill-os',
-        name: 'Operating Systems',
-        short_description: 'Processes, threads, CPU scheduling, virtual memory management, and file systems architecture',
+        name: 'Operating Systems & Concurrency',
+        short_description: 'Processes, threads, mutex locks, virtual memory paging, and Linux system calls',
         difficulty: 'intermediate',
         estimated_hours: 30,
         sort_order: 2,
@@ -144,15 +143,15 @@ const DEMO_COURSES: Record<string, any> = {
         lessons: [
           {
             id: 'lesson-os-1',
-            title: '1. Introduction to Kernel Architecture & System Calls',
-            duration_minutes: 24,
+            title: '1. Process Lifecycle, Forking & PCB Structure',
+            duration_minutes: 30,
             video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
             sort_order: 1,
             is_completed: false,
           },
           {
             id: 'lesson-os-2',
-            title: '2. Process Lifecycle, Fork & Thread Concurrency',
+            title: '2. Threads, Race Conditions & Mutex Synchronization',
             duration_minutes: 35,
             video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
             sort_order: 2,
@@ -160,17 +159,17 @@ const DEMO_COURSES: Record<string, any> = {
           },
           {
             id: 'lesson-os-3',
-            title: '3. CPU Scheduling Algorithms (CFS, Round Robin, Priority)',
-            duration_minutes: 30,
+            title: '3. Virtual Memory, Paging & Translation Lookaside Buffers (TLB)',
+            duration_minutes: 32,
             video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
             sort_order: 3,
             is_completed: false,
           },
           {
             id: 'lesson-os-4',
-            title: '4. Virtual Memory, Paging & Page Replacement Policies',
-            duration_minutes: 42,
-            video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+            title: '4. Deadlocks, Banker\'s Algorithm & Resource Allocation Graphs',
+            duration_minutes: 28,
+            video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
             sort_order: 4,
             is_completed: false,
           },
@@ -194,38 +193,38 @@ const DEMO_COURSES: Record<string, any> = {
         sort_order: 1,
         is_active: true,
         _lessonCount: 4,
-        _completedLessons: 1,
+        _completedLessons: 0,
         _status: 'active',
         lessons: [
           {
             id: 'lesson-ml-1',
-            title: '1. Vectorized Operations with NumPy & Multi-Dimensional Tensors',
-            duration_minutes: 26,
+            title: '1. NumPy Vectorization & Matrix Linear Algebra',
+            duration_minutes: 25,
             video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
             sort_order: 1,
-            is_completed: true,
+            is_completed: false,
           },
           {
             id: 'lesson-ml-2',
-            title: '2. Exploratory Data Analysis & Feature Engineering with Pandas',
-            duration_minutes: 38,
+            title: '2. Exploratory Data Analysis & Feature Cleaning with Pandas',
+            duration_minutes: 30,
             video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
             sort_order: 2,
             is_completed: false,
           },
           {
             id: 'lesson-ml-3',
-            title: '3. Linear Regression & Gradient Descent Optimization',
-            duration_minutes: 45,
+            title: '3. Supervised Regression & Cost Function Optimization',
+            duration_minutes: 35,
             video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
             sort_order: 3,
             is_completed: false,
           },
           {
             id: 'lesson-ml-4',
-            title: '4. Decision Trees, Random Forests & Ensemble Methods',
-            duration_minutes: 50,
-            video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+            title: '4. Classification Models: Logistic Regression & Decision Trees',
+            duration_minutes: 40,
+            video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
             sort_order: 4,
             is_completed: false,
           },
@@ -249,38 +248,38 @@ const DEMO_COURSES: Record<string, any> = {
         sort_order: 1,
         is_active: true,
         _lessonCount: 4,
-        _completedLessons: 2,
+        _completedLessons: 0,
         _status: 'active',
         lessons: [
           {
-            id: 'lesson-sec-1',
-            title: '1. Networking Fundamentals, TCP/IP Stack & Wireshark Packet Analysis',
-            duration_minutes: 30,
+            id: 'lesson-cyber-1',
+            title: '1. OSI Model Security & Packet Sniffing with Wireshark',
+            duration_minutes: 28,
             video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
             sort_order: 1,
-            is_completed: true,
+            is_completed: false,
           },
           {
-            id: 'lesson-sec-2',
-            title: '2. Network Scanning with Nmap & Banner Grabbing',
-            duration_minutes: 35,
+            id: 'lesson-cyber-2',
+            title: '2. Port Scanning, Service Enumeration & Nmap Scripts',
+            duration_minutes: 32,
             video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
             sort_order: 2,
-            is_completed: true,
+            is_completed: false,
           },
           {
-            id: 'lesson-sec-3',
-            title: '3. Web Application Security: OWASP Top 10 Exploitation',
-            duration_minutes: 48,
+            id: 'lesson-cyber-3',
+            title: '3. Web Application Security: SQL Injection & XSS Vulnerabilities',
+            duration_minutes: 40,
             video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
             sort_order: 3,
             is_completed: false,
           },
           {
-            id: 'lesson-sec-4',
-            title: '4. Privilege Escalation & Post-Exploitation Tactics',
-            duration_minutes: 52,
-            video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+            id: 'lesson-cyber-4',
+            title: '4. Privilege Escalation Techniques & Defensive Hardening',
+            duration_minutes: 35,
+            video_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
             sort_order: 4,
             is_completed: false,
           },
@@ -299,14 +298,13 @@ export default async function CourseDetailPage({
   const cookieStore = await cookies();
   const demoRole = cookieStore.get('demo_role')?.value;
 
+  const completedFromCookies = (cookieStore.get('completed_lessons')?.value || '')
+    .split(',')
+    .concat((cookieStore.get('demo_completed_lessons')?.value || '').split(','))
+    .filter(Boolean);
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
-
-  // Demo fallback
-  if (demoRole === 'student' || (!user && DEMO_COURSES[courseId])) {
-    const demoCourse = DEMO_COURSES[courseId];
-    if (demoCourse) return <CourseDetailClient course={demoCourse} />;
-  }
 
   // Fetch course with skills
   const { data: course } = await supabase
@@ -321,7 +319,26 @@ export default async function CourseDetailPage({
 
   if (!course) {
     const fallbackCourse = DEMO_COURSES[courseId];
-    if (fallbackCourse) return <CourseDetailClient course={fallbackCourse} />;
+    if (fallbackCourse) {
+      const enrichedFallback = {
+        ...fallbackCourse,
+        skills: (fallbackCourse.skills || []).map((s: any) => {
+          const updatedLessons = (s.lessons || []).map((l: any) => ({
+            ...l,
+            is_completed: l.is_completed || completedFromCookies.includes(l.id),
+          }));
+          const completedCount = updatedLessons.filter((l: any) => l.is_completed).length;
+          const isDone = completedCount >= (s._lessonCount || updatedLessons.length);
+          return {
+            ...s,
+            _completedLessons: completedCount,
+            _status: isDone ? 'completed' : s._status,
+            lessons: updatedLessons,
+          };
+        }),
+      };
+      return <CourseDetailClient course={enrichedFallback} />;
+    }
     notFound();
   }
 
@@ -352,8 +369,8 @@ export default async function CourseDetailPage({
       .eq('is_active', true)
       .order('sort_order');
 
-    // Fetch completed lessons for current student (if logged in)
-    let completedLessonIds = new Set<string>();
+    // Fetch completed lessons for current student
+    const completedLessonIds = new Set<string>();
     if (user) {
       const { data: lessonProgress } = await supabase
         .from('lesson_progress')
@@ -362,8 +379,11 @@ export default async function CourseDetailPage({
         .in('skill_id', skillIds)
         .eq('is_completed', true);
 
-      completedLessonIds = new Set((lessonProgress || []).map(lp => lp.lesson_id));
+      (lessonProgress || []).forEach(lp => completedLessonIds.add(lp.lesson_id));
     }
+
+    // Merge completed from cookies
+    completedFromCookies.forEach(id => completedLessonIds.add(id));
 
     (lessons || []).forEach(l => {
       if (!lessonsBySkill[l.skill_id]) {
@@ -389,13 +409,20 @@ export default async function CourseDetailPage({
   const enrichedSkills = (course.skills || [])
     .filter((s: any) => s.is_active)
     .sort((a: any, b: any) => a.sort_order - b.sort_order)
-    .map((s: any) => ({
-      ...s,
-      _lessonCount: progressMap[s.id]?.total || 0,
-      _completedLessons: progressMap[s.id]?.completed || 0,
-      _status: accessMap[s.id] || null,
-      lessons: lessonsBySkill[s.id] || [],
-    }));
+    .map((s: any) => {
+      const completed = progressMap[s.id]?.completed || 0;
+      const total = progressMap[s.id]?.total || 0;
+      const targetRequired = s.total_planned_lessons || total;
+      const isDone = targetRequired > 0 && completed >= targetRequired;
+
+      return {
+        ...s,
+        _lessonCount: total,
+        _completedLessons: completed,
+        _status: isDone ? 'completed' : (accessMap[s.id] || null),
+        lessons: lessonsBySkill[s.id] || [],
+      };
+    });
 
   return (
     <CourseDetailClient

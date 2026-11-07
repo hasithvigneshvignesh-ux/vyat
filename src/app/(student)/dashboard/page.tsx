@@ -46,7 +46,13 @@ export default async function StudentDashboardPage() {
 
   if (!profile) redirect('/login');
 
-  // Concurrent parallel data fetching with Promise.all (eliminates blocking waterfall)
+  // Read completed lessons from cookies
+  const completedFromCookies = (cookieStore.get('completed_lessons')?.value || '')
+    .split(',')
+    .concat((cookieStore.get('demo_completed_lessons')?.value || '').split(','))
+    .filter(Boolean);
+
+  // Concurrent parallel data fetching with Promise.all
   const [
     { data: skillAccess },
     { data: lessonProgress },
@@ -105,20 +111,55 @@ export default async function StudentDashboardPage() {
     .map(sa => sa.skill_id);
 
   let lessonCounts: { skill_id: string; count: number }[] = [];
+  const skillLessonMap: Record<string, string> = {
+    'lesson-dsa-1': 'skill-dsa',
+    'lesson-dsa-2': 'skill-dsa',
+    'lesson-dsa-3': 'skill-dsa',
+    'lesson-dsa-4': 'skill-dsa',
+    'lesson-dsa-5': 'skill-dsa',
+    'lesson-dsa-6': 'skill-dsa',
+  };
+
   if (activeSkillIds.length > 0) {
     const { data: lessons } = await supabase
       .from('lessons')
-      .select('skill_id')
+      .select('id, skill_id')
       .in('skill_id', activeSkillIds)
       .eq('is_active', true);
 
-    // Count lessons per skill
     const countMap: Record<string, number> = {};
     (lessons || []).forEach(l => {
       countMap[l.skill_id] = (countMap[l.skill_id] || 0) + 1;
+      skillLessonMap[l.id] = l.skill_id;
     });
     lessonCounts = Object.entries(countMap).map(([skill_id, count]) => ({ skill_id, count }));
   }
+
+  // Merge completed lessons from cookies into lessonProgress
+  const lpMap = new Map<string, any>();
+  (lessonProgress || []).forEach(lp => lpMap.set(lp.lesson_id, lp));
+
+  completedFromCookies.forEach(lId => {
+    const existing = lpMap.get(lId);
+    if (existing) {
+      lpMap.set(lId, { ...existing, is_completed: true });
+    } else {
+      const matchedSkillId = skillLessonMap[lId] || activeSkillIds[0] || 'skill-dsa';
+      lpMap.set(lId, {
+        id: 'prog-cookie-' + lId,
+        student_id: profile.id,
+        lesson_id: lId,
+        skill_id: matchedSkillId,
+        is_started: true,
+        is_completed: true,
+        video_watched: true,
+        completed_at: new Date().toISOString(),
+        created_at: new Date().toISOString(),
+      });
+    }
+  });
+
+  const effectiveLessonProgress = Array.from(lpMap.values());
 
   const accessedSkillIds = (skillAccess || []).map(sa => sa.skill_id);
   const recommendedSkills = (allSkills || []).filter(
@@ -198,18 +239,38 @@ export default async function StudentDashboardPage() {
     },
   ];
 
-  const effectiveSkillAccess = (skillAccess && skillAccess.length > 0) ? skillAccess : demoFallbackSkills;
+  let rawSkillAccess = (skillAccess && skillAccess.length > 0) ? skillAccess : demoFallbackSkills;
   const effectiveLessonCounts = lessonCounts.length > 0 ? lessonCounts : [
-    { skill_id: 'skill-dsa', count: 18 },
+    { skill_id: 'skill-dsa', count: 6 },
     { skill_id: 'skill-python-ml', count: 14 },
     { skill_id: 'skill-cyber-sec', count: 16 },
   ];
+
+  // Check if any active skill has reached 100% completion based on effectiveLessonProgress
+  const lessonCountsLookup: Record<string, number> = {};
+  effectiveLessonCounts.forEach(lc => { lessonCountsLookup[lc.skill_id] = lc.count; });
+
+  const completedLessonsCountBySkill: Record<string, number> = {};
+  effectiveLessonProgress.forEach(lp => {
+    if (lp.is_completed) {
+      completedLessonsCountBySkill[lp.skill_id] = (completedLessonsCountBySkill[lp.skill_id] || 0) + 1;
+    }
+  });
+
+  const effectiveSkillAccess = rawSkillAccess.map(sa => {
+    const total = sa.skill?.total_planned_lessons || lessonCountsLookup[sa.skill_id] || 0;
+    const completed = completedLessonsCountBySkill[sa.skill_id] || 0;
+    if (total > 0 && completed >= total) {
+      return { ...sa, status: 'completed' };
+    }
+    return sa;
+  });
 
   return (
     <StudentDashboardClient
       profile={profile}
       skillAccess={effectiveSkillAccess as any}
-      lessonProgress={lessonProgress || []}
+      lessonProgress={effectiveLessonProgress}
       lessonCounts={effectiveLessonCounts}
       certificates={certificates || []}
       recentActivity={recentActivity || []}

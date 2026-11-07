@@ -181,19 +181,37 @@ export default async function SkillDetailPage({
   const cookieStore = await cookies();
   const demoRole = cookieStore.get('demo_role')?.value;
 
+  const completedFromCookies = (cookieStore.get('completed_lessons')?.value || '')
+    .split(',')
+    .concat((cookieStore.get('demo_completed_lessons')?.value || '').split(','))
+    .filter(Boolean);
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
   // Demo fallback
   if (demoRole === 'student' || (!user && DEMO_SKILL_DETAILS[skillId])) {
     const demoData = DEMO_SKILL_DETAILS[skillId] || DEMO_SKILL_DETAILS['skill-dsa'];
+    const demoProgress = [...(demoData.lessonProgress || [])];
+    completedFromCookies.forEach(lId => {
+      const idx = demoProgress.findIndex((p: any) => p.lesson_id === lId);
+      if (idx >= 0) {
+        demoProgress[idx] = { ...demoProgress[idx], is_completed: true, is_started: true };
+      } else {
+        demoProgress.push({ lesson_id: lId, is_completed: true, is_started: true });
+      }
+    });
+
+    const isAllDone = (demoData.lessons || []).length > 0 &&
+      (demoData.lessons || []).every((l: any) => demoProgress.some((p: any) => p.lesson_id === l.id && p.is_completed));
+
     return (
       <SkillDetailClient
         skill={demoData.skill as any}
-        access={demoRole === 'student' ? ({ status: 'active' } as any) : null}
+        access={demoRole === 'student' ? ({ status: isAllDone ? 'completed' : 'active' } as any) : null}
         hasAccess={demoRole === 'student'}
         lessons={demoData.lessons as any}
-        lessonProgress={demoRole === 'student' ? (demoData.lessonProgress as any) : []}
+        lessonProgress={demoRole === 'student' ? (demoProgress as any) : []}
         questions={demoData.questions as any}
         certificate={demoData.certificate}
       />
@@ -264,7 +282,33 @@ export default async function SkillDetailPage({
       .eq('student_id', user.id)
       .eq('skill_id', skillId);
 
-    lessonProgress = progressData || [];
+    const lpMap = new Map<string, any>();
+    (progressData || []).forEach(lp => lpMap.set(lp.lesson_id, lp));
+
+    completedFromCookies.forEach(lId => {
+      const existing = lpMap.get(lId);
+      if (existing) {
+        lpMap.set(lId, { ...existing, is_completed: true, is_started: true });
+      } else {
+        lpMap.set(lId, {
+          id: 'prog-cookie-' + lId,
+          student_id: user.id,
+          skill_id: skillId,
+          lesson_id: lId,
+          is_started: true,
+          is_completed: true,
+        });
+      }
+    });
+
+    lessonProgress = Array.from(lpMap.values());
+
+    // If all lessons are completed, ensure access status reflects completed
+    if (lessons.length > 0 && lessons.every(l => lpMap.get(l.id)?.is_completed)) {
+      if (access) {
+        access = { ...access, status: 'completed' };
+      }
+    }
 
     const { data: questionData } = await supabase
       .from('questions')

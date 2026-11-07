@@ -12,6 +12,11 @@ export default async function MySkillsPage() {
   const cookieStore = await cookies();
   const demoRole = cookieStore.get('demo_role')?.value;
 
+  const completedFromCookies = (cookieStore.get('completed_lessons')?.value || '')
+    .split(',')
+    .concat((cookieStore.get('demo_completed_lessons')?.value || '').split(','))
+    .filter(Boolean);
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -39,7 +44,10 @@ export default async function MySkillsPage() {
           short_description: 'Master Arrays, Linked Lists, Trees, Graphs, Dynamic Programming & LeetCode patterns',
           difficulty_level: 'intermediate',
           duration_hours: 45,
+          estimated_hours: 45,
           price_inr: 499,
+          total_planned_lessons: 6,
+          is_curriculum_complete: true,
           course: { name: 'Core Programming & CS Foundations', branch: { name: 'CSE Core' } },
         },
       },
@@ -60,6 +68,8 @@ export default async function MySkillsPage() {
           duration_hours: 35,
           estimated_hours: 35,
           price_inr: 499,
+          total_planned_lessons: 4,
+          is_curriculum_complete: true,
           course: { name: 'AI Foundations & Machine Learning', branch: { name: 'CSE AI & Machine Learning' } },
         },
       },
@@ -81,17 +91,35 @@ export default async function MySkillsPage() {
           duration_hours: 40,
           estimated_hours: 40,
           price_inr: 499,
+          total_planned_lessons: 4,
+          is_curriculum_complete: true,
           course: { name: 'Ethical Hacking & Penetration Testing', branch: { name: 'CSE Cyber Security' } },
         },
       },
     ];
 
+    const demoProgressList = [
+      { id: 'p-1', lesson_id: 'lesson-dsa-1', skill_id: 'skill-dsa', is_completed: true, is_started: true },
+      { id: 'p-2', lesson_id: 'lesson-dsa-2', skill_id: 'skill-dsa', is_completed: true, is_started: true },
+    ];
+    completedFromCookies.forEach(lId => {
+      if (!demoProgressList.some(p => p.lesson_id === lId)) {
+        demoProgressList.push({
+          id: 'p-cookie-' + lId,
+          lesson_id: lId,
+          skill_id: 'skill-dsa',
+          is_completed: true,
+          is_started: true,
+        });
+      }
+    });
+
     return (
       <MySkillsClient
         skillAccess={demoSkillAccess as any}
-        lessonProgress={[]}
+        lessonProgress={demoProgressList as any}
         lessonCounts={{
-          'skill-dsa': 18,
+          'skill-dsa': 6,
           'skill-python-ml': 14,
           'skill-cyber-sec': 16,
         }}
@@ -118,6 +146,28 @@ export default async function MySkillsPage() {
     .select('*')
     .eq('student_id', userId);
 
+  // Merge completed from cookies
+  const lpMap = new Map<string, any>();
+  (lessonProgress || []).forEach(lp => lpMap.set(lp.lesson_id, lp));
+
+  completedFromCookies.forEach(lId => {
+    const existing = lpMap.get(lId);
+    if (existing) {
+      lpMap.set(lId, { ...existing, is_completed: true });
+    } else {
+      lpMap.set(lId, {
+        id: 'prog-cookie-' + lId,
+        student_id: userId,
+        lesson_id: lId,
+        skill_id: skillAccess?.[0]?.skill_id || '',
+        is_completed: true,
+        is_started: true,
+      });
+    }
+  });
+
+  const effectiveLessonProgress = Array.from(lpMap.values());
+
   // Fetch lesson counts per skill
   const skillIds = (skillAccess || []).map(sa => sa.skill_id);
   let lessonCounts: Record<string, number> = {};
@@ -135,7 +185,7 @@ export default async function MySkillsPage() {
   return (
     <MySkillsClient
       skillAccess={skillAccess || []}
-      lessonProgress={lessonProgress || []}
+      lessonProgress={effectiveLessonProgress}
       lessonCounts={lessonCounts}
     />
   );

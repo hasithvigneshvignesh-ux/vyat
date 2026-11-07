@@ -13,6 +13,11 @@ export default async function ClassesPage() {
   const cookieStore = await cookies();
   const demoRole = cookieStore.get('demo_role')?.value;
 
+  const completedFromCookies = (cookieStore.get('completed_lessons')?.value || '')
+    .split(',')
+    .concat((cookieStore.get('demo_completed_lessons')?.value || '').split(','))
+    .filter(Boolean);
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -24,6 +29,10 @@ export default async function ClassesPage() {
 
   // Demo mode: provide rich mock data
   if (!user && demoRole === 'student') {
+    const dsaLessons = ['lesson-dsa-1', 'lesson-dsa-2', 'lesson-dsa-3', 'lesson-dsa-4', 'lesson-dsa-5', 'lesson-dsa-6'];
+    const completedDsaCount = dsaLessons.filter(id => completedFromCookies.includes(id)).length;
+    const isDsaCompleted = completedDsaCount >= dsaLessons.length;
+
     const demoCourses = [
       {
         id: 'course-core-prog',
@@ -42,6 +51,8 @@ export default async function ClassesPage() {
             difficulty: 'intermediate',
             estimated_hours: 45,
             sort_order: 1,
+            _completedLessons: completedDsaCount,
+            _totalLessons: 6,
           },
           {
             id: 'skill-os',
@@ -50,11 +61,13 @@ export default async function ClassesPage() {
             difficulty: 'intermediate',
             estimated_hours: 30,
             sort_order: 2,
+            _completedLessons: 0,
+            _totalLessons: 4,
           },
         ],
         _skillCount: 2,
-        _activeCount: 1,
-        _completedCount: 0,
+        _activeCount: isDsaCompleted ? 0 : 1,
+        _completedCount: isDsaCompleted ? 1 : 0,
       },
       {
         id: 'course-ai-ml',
@@ -73,6 +86,8 @@ export default async function ClassesPage() {
             difficulty: 'beginner',
             estimated_hours: 35,
             sort_order: 1,
+            _completedLessons: 0,
+            _totalLessons: 4,
           },
         ],
         _skillCount: 1,
@@ -96,6 +111,8 @@ export default async function ClassesPage() {
             difficulty: 'intermediate',
             estimated_hours: 40,
             sort_order: 1,
+            _completedLessons: 0,
+            _totalLessons: 4,
           },
         ],
         _skillCount: 1,
@@ -115,7 +132,7 @@ export default async function ClassesPage() {
       status,
       skill:skills(
         id, name, short_description, difficulty, estimated_hours, sort_order,
-        course_id,
+        course_id, total_planned_lessons, is_curriculum_complete,
         course:courses(
           id, name, slug, description, thumbnail_url, sort_order,
           branch:branches(name, slug, icon)
@@ -124,6 +141,23 @@ export default async function ClassesPage() {
     `)
     .eq('student_id', userId)
     .in('status', ['active', 'completed']);
+
+  // Fetch completed lessons count per skill
+  const skillIds = (skillAccess || []).map((sa: any) => sa.skill_id);
+  const completedLessonsBySkill: Record<string, number> = {};
+
+  if (skillIds.length > 0) {
+    const { data: lessonProgress } = await supabase
+      .from('lesson_progress')
+      .select('lesson_id, skill_id')
+      .eq('student_id', userId)
+      .in('skill_id', skillIds)
+      .eq('is_completed', true);
+
+    (lessonProgress || []).forEach(lp => {
+      completedLessonsBySkill[lp.skill_id] = (completedLessonsBySkill[lp.skill_id] || 0) + 1;
+    });
+  }
 
   // Group skills by course
   const courseMap = new Map<string, any>();
@@ -141,11 +175,20 @@ export default async function ClassesPage() {
         _completedCount: 0,
       });
     }
+
     const entry = courseMap.get(course.id);
     entry.skills.push(skill);
     entry._skillCount++;
-    if (sa.status === 'active') entry._activeCount++;
-    if (sa.status === 'completed') entry._completedCount++;
+
+    const totalPlanned = skill?.total_planned_lessons || 0;
+    const completedCount = completedLessonsBySkill[sa.skill_id] || 0;
+    const isCompleted = sa.status === 'completed' || (totalPlanned > 0 && completedCount >= totalPlanned);
+
+    if (isCompleted) {
+      entry._completedCount++;
+    } else {
+      entry._activeCount++;
+    }
   });
 
   const courses = Array.from(courseMap.values()).sort((a, b) => a.sort_order - b.sort_order);

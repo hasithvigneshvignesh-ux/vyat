@@ -2,15 +2,15 @@
 
 import { useState, useEffect } from 'react';
 import { Lesson, LessonProgress, Question, LessonResource } from '@/types/database';
-import { createClient } from '@/lib/supabase/client';
 import Card from '@/components/ui/Card';
 import Badge from '@/components/ui/Badge';
 import Button from '@/components/ui/Button';
 import { useToast } from '@/providers/ToastProvider';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import {
   ArrowLeft, ArrowRight, CheckCircle2, PlayCircle,
-  FileText, HelpCircle, Download, ChevronRight,
+  FileText, HelpCircle, Download,
   Menu, X, BookOpen, Sparkles, RefreshCw, Award
 } from 'lucide-react';
 import { formatGoogleDriveUrl } from '@/lib/drive-utils';
@@ -37,11 +37,12 @@ export default function LessonPageClient({
   userId,
   skillId,
 }: Props) {
-  const supabase = createClient();
+  const router = useRouter();
   const { addToast } = useToast();
   const [showSidebar, setShowSidebar] = useState(false);
   const [isCompleted, setIsCompleted] = useState(progress?.is_completed || false);
-  const [videoUrl, setVideoUrl] = useState<string | null>(null);
+  const [isMarkingComplete, setIsMarkingComplete] = useState(false);
+  const [localAllProgress, setLocalAllProgress] = useState(allProgress);
   const [selectedAnswers, setSelectedAnswers] = useState<Record<string, string>>({});
   const [showResults, setShowResults] = useState(false);
 
@@ -95,61 +96,81 @@ export default function LessonPageClient({
   const prevLesson = currentIdx > 0 ? allLessons[currentIdx - 1] : null;
   const nextLesson = currentIdx < allLessons.length - 1 ? allLessons[currentIdx + 1] : null;
 
-  // Mark lesson as started
+  // Mark lesson as started via server route
   useEffect(() => {
-    const markStarted = async () => {
-      if (!progress) {
-        await supabase.from('lesson_progress').insert({
-          student_id: userId,
+    if (!progress || !progress.is_started) {
+      fetch('/api/student/progress', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           lesson_id: lesson.id,
           skill_id: skillId,
+          is_completed: progress?.is_completed || false,
           is_started: true,
-          started_at: new Date().toISOString(),
-        });
-      }
-    };
-    markStarted();
-  }, [lesson.id]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Removed fetch video URL logic as we now use Google Drive embed links
+        }),
+      }).catch(() => {});
+    }
+  }, [lesson.id, skillId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const handleMarkComplete = async () => {
+    setIsMarkingComplete(true);
     try {
-      if (progress) {
-        await supabase.from('lesson_progress').update({
-          is_completed: true,
-          completed_at: new Date().toISOString(),
-          video_watched: true,
-        }).eq('id', progress.id);
-      } else {
-        await supabase.from('lesson_progress').insert({
-          student_id: userId,
+      const res = await fetch('/api/student/progress', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           lesson_id: lesson.id,
           skill_id: skillId,
-          is_started: true,
           is_completed: true,
           video_watched: true,
-          started_at: new Date().toISOString(),
-          completed_at: new Date().toISOString(),
-        });
-      }
-      setIsCompleted(true);
-      addToast('Lesson marked as completed!', 'success');
-
-      // Log activity
-      await supabase.from('student_activity').insert({
-        student_id: userId,
-        activity_type: 'lesson_completed',
-        description: `Completed lesson: ${lesson.title}`,
-        metadata: { lesson_id: lesson.id, skill_id: skillId },
+        }),
       });
-    } catch {
-      addToast('Failed to update progress', 'error');
+
+      const data = await res.json();
+      if (!res.ok) {
+        throw new Error(data.error || 'Failed to update progress');
+      }
+
+      setIsCompleted(true);
+
+      // Instantly update sidebar progress
+      setLocalAllProgress(prev => {
+        const exists = prev.some(p => p.lesson_id === lesson.id);
+        if (exists) {
+          return prev.map(p => p.lesson_id === lesson.id ? { ...p, is_completed: true, is_started: true } : p);
+        }
+        return [...prev, { lesson_id: lesson.id, is_completed: true, is_started: true }];
+      });
+
+      // Synchronize in document.cookie for immediate client-side guarantee
+      try {
+        const allCookies = document.cookie.split('; ');
+        const compCookie = allCookies.find(c => c.startsWith('completed_lessons='));
+        const existing = compCookie ? compCookie.split('=')[1].split(',').filter(Boolean) : [];
+        if (!existing.includes(lesson.id)) {
+          existing.push(lesson.id);
+          const val = existing.join(',');
+          document.cookie = `completed_lessons=${val}; path=/; max-age=2592000; SameSite=Lax`;
+          document.cookie = `demo_completed_lessons=${val}; path=/; max-age=2592000; SameSite=Lax`;
+        }
+      } catch {}
+
+      if (data.skill_completed) {
+        addToast('🎉 Outstanding! You completed all lessons in this skill masterclass!', 'success');
+      } else {
+        addToast('Lesson marked as completed!', 'success');
+      }
+
+      router.refresh();
+    } catch (err: any) {
+      addToast(err?.message || 'Failed to update progress', 'error');
+    } finally {
+      setIsMarkingComplete(false);
     }
   };
 
   const getProgressForLesson = (lessonId: string) =>
-    allProgress.find(p => p.lesson_id === lessonId);
+    localAllProgress.find(p => p.lesson_id === lessonId);
 
   // Compute quiz score
   const correctCount = activeQuestions.filter(
@@ -288,7 +309,6 @@ export default function LessonPageClient({
               </div>
             )}
 
-
             {/* Notes */}
             {lesson.notes_content && (
               <Card>
@@ -422,6 +442,7 @@ export default function LessonPageClient({
                           return (
                             <button
                               key={opt.id}
+                              type="button"
                               onClick={() => {
                                 if (!showResults) {
                                   setSelectedAnswers(prev => ({ ...prev, [q.id]: opt.id }));
@@ -495,6 +516,7 @@ export default function LessonPageClient({
               {!isCompleted ? (
                 <Button
                   onClick={handleMarkComplete}
+                  isLoading={isMarkingComplete}
                   icon={<CheckCircle2 size={16} />}
                   size="lg"
                   variant="success"

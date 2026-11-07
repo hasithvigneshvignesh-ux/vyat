@@ -72,6 +72,12 @@ export default async function LessonPage({
   const cookieStore = await cookies();
   const demoRole = cookieStore.get('demo_role')?.value;
 
+  const completedFromCookies = (cookieStore.get('completed_lessons')?.value || '')
+    .split(',')
+    .concat((cookieStore.get('demo_completed_lessons')?.value || '').split(','))
+    .filter(Boolean);
+  const isLessonCompletedFromCookie = completedFromCookies.includes(lessonId);
+
   const supabase = await createClient();
   const { data: { user } } = await supabase.auth.getUser();
 
@@ -98,15 +104,32 @@ export default async function LessonPage({
       },
     };
 
+    const demoProgressList = [
+      { lesson_id: 'lesson-dsa-1', is_completed: true, is_started: true },
+      { lesson_id: 'lesson-dsa-2', is_completed: true, is_started: true },
+    ];
+    completedFromCookies.forEach(lId => {
+      if (!demoProgressList.some(p => p.lesson_id === lId)) {
+        demoProgressList.push({ lesson_id: lId, is_completed: true, is_started: true });
+      }
+    });
+
     return (
       <LessonPageClient
         lesson={demoLesson}
         allLessons={ALL_DEMO_DSA_LESSONS}
-        progress={{ id: 'prog-demo', student_id: 'demo-student', lesson_id: lessonId, is_completed: false, is_started: true, created_at: '', updated_at: '', last_watched_position: 0, skill_id: skillId } as any}
-        allProgress={[
-          { lesson_id: 'lesson-dsa-1', is_completed: true, is_started: true },
-          { lesson_id: 'lesson-dsa-2', is_completed: true, is_started: true },
-        ]}
+        progress={{
+          id: 'prog-demo',
+          student_id: 'demo-student',
+          lesson_id: lessonId,
+          is_completed: isLessonCompletedFromCookie,
+          is_started: true,
+          created_at: '',
+          updated_at: '',
+          last_watched_position: 0,
+          skill_id: skillId,
+        } as any}
+        allProgress={demoProgressList}
         questions={[
           {
             id: 'q-demo-1',
@@ -174,6 +197,36 @@ export default async function LessonPage({
     .eq('student_id', user!.id)
     .eq('skill_id', skillId);
 
+  // Merge cookie progress with database progress
+  let effectiveProgress = progress;
+  if (isLessonCompletedFromCookie) {
+    effectiveProgress = effectiveProgress
+      ? { ...effectiveProgress, is_completed: true }
+      : ({
+          id: 'prog-cookie-' + lessonId,
+          student_id: user!.id,
+          lesson_id: lessonId,
+          skill_id: skillId,
+          is_completed: true,
+          is_started: true,
+          video_watched: true,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        } as any);
+  }
+
+  const progressMap = new Map<string, any>();
+  (allProgress || []).forEach(p => progressMap.set(p.lesson_id, p));
+  completedFromCookies.forEach(lId => {
+    const existing = progressMap.get(lId);
+    if (existing) {
+      progressMap.set(lId, { ...existing, is_completed: true });
+    } else {
+      progressMap.set(lId, { lesson_id: lId, is_completed: true, is_started: true });
+    }
+  });
+  const effectiveAllProgress = Array.from(progressMap.values());
+
   // Fetch questions for this lesson
   const { data: questions } = await supabase
     .from('questions')
@@ -193,8 +246,8 @@ export default async function LessonPage({
     <LessonPageClient
       lesson={lesson}
       allLessons={allLessons || []}
-      progress={progress}
-      allProgress={allProgress || []}
+      progress={effectiveProgress}
+      allProgress={effectiveAllProgress}
       questions={questions || []}
       resources={resources || []}
       userId={user!.id}
